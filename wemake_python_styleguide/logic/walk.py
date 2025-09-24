@@ -61,19 +61,26 @@ def get_subnodes_by_type(
             yield child
 
 
+def extract_deleted_names(node: ast.AST) -> set[str]:
+    """Extract all variable names deleted in the given AST node."""
+    deleted: set[str] = set()
+
+    for subnode in ast.walk(node):
+        if isinstance(subnode, ast.Delete):
+            for target in subnode.targets:
+                if isinstance(target, ast.Name):
+                    deleted.add(target.id)
+    return deleted
+
+
 def are_variables_deleted(
     variables: set[str],
     body: list[ast.stmt],
 ) -> bool:
     """Checks that given variables are deleted somewhere in the body."""
     deleted: set[str] = set()
-
-    for node in ast.walk(ast.Module(body=body, type_ignores=[])):
-        if isinstance(node, ast.Delete):
-            for target in node.targets:
-                if isinstance(target, ast.Name):
-                    deleted.add(target.id)
-
+    for stmt in body:
+        deleted.update(extract_deleted_names(stmt))
     return variables.issubset(deleted)
 
 
