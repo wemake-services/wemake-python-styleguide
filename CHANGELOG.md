@@ -17,6 +17,14 @@ Semantic versioning in our case means:
   change the client facing API, change code conventions significantly, etc.
 
 
+## WIP
+
+### Misc
+
+- Minor refactoring `wemake_python_styleguide.logic.naming.enums.has_enum_like_base_with_config`, #3518
+- Improves `--known-enum-bases` option help text and documentation, #3518
+
+
 ## 1.5.0
 
 ### Features
