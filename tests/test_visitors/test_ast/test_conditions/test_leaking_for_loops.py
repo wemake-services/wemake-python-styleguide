@@ -81,6 +81,27 @@ if True:
     del i
 """
 
+for_unpacking_with_nested_del = """
+for a, b in [(1, 2)]:
+    ...
+
+try:
+    del a, b
+except ...:
+    ...
+"""
+
+class_unpacking_with_nested_del = """
+class ClassWithNestedDel:
+    for a, b in [(1, 2)]:
+        ...
+
+    try:
+        del a, b
+    except ...:
+        ...
+"""
+
 
 @pytest.mark.parametrize(
     'code',
@@ -115,6 +136,8 @@ def test_leaking_for_loop_violation(
         for_with_del_class,
         for_unpacking_with_del,
         for_with_del_inside_if,
+        for_unpacking_with_nested_del,
+        class_unpacking_with_nested_del,
     ],
 )
 def test_for_loop_with_del_no_violation(
