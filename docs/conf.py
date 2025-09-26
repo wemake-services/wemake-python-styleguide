@@ -109,6 +109,12 @@ add_module_names = False
 # a list of builtin themes.
 html_theme = 'furo'
 
+html_theme_options = {
+    'source_repository': str(pkg_meta['urls']['Repository']),
+    'source_branch': 'master',
+    'source_directory': 'docs/',
+}
+
 # -- Extension configuration -------------------------------------------------
 
 napoleon_numpy_docstring = False
