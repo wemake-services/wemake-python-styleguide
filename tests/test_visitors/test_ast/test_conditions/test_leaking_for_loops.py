@@ -51,6 +51,24 @@ for bad in range(5):
     ...
 """
 
+for_unpacking_with_unrelated_del = """
+for a, b in [(1, 2)]:
+    ...
+
+def func(a, b):
+    del a, b
+"""
+
+
+class_for_with_del_inside_method = """
+class ClassWithFor:
+    for a in range(10):
+        ...
+
+    def cleanup(self):
+        del a
+"""
+
 
 # Correct
 
@@ -112,6 +130,8 @@ class ClassWithNestedDel:
         for_unpacking_with_partial_del,
         separate_classes_false_cleanup,
         multiple_for_mixed,
+        for_unpacking_with_unrelated_del,
+        class_for_with_del_inside_method,
     ],
 )
 def test_leaking_for_loop_violation(

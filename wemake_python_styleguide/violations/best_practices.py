@@ -2991,8 +2991,8 @@ class LeakingForLoopViolation(ASTViolation):
         and can lead to confusing bugs.
 
     Solution:
-        Use list comprehensions, 'map()', or move the logic into a method
-        or helper function. If you must use 'for', explicitly 'del'
+        Use list comprehensions, ``map()``, or move the logic into a method
+        or helper function. If you must use ``for``, explicitly ``del``
         the variable afterward.
 
     Example::
@@ -3014,7 +3014,8 @@ class LeakingForLoopViolation(ASTViolation):
         some_list = [print(y) for y in [3, 4]]
 
     .. versionadded:: 1.5.0
+
     """
 
-    error_template = 'Found a leaking `for` loop in a class or module body'
+    error_template = 'Found a leaking ``for`` loop in a class or module body'
     code = 481

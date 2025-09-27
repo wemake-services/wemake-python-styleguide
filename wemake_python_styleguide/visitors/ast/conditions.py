@@ -4,6 +4,7 @@ from collections.abc import Mapping
 from typing import ClassVar, TypeAlias, final
 
 from wemake_python_styleguide.logic import source
+from wemake_python_styleguide.logic.nodes import get_context
 from wemake_python_styleguide.logic.tree import (
     attributes,
     compares,
@@ -240,7 +241,11 @@ class LeakingForLoopVisitor(BaseNodeVisitor):
 
             loop_vars = get_names_from_target(subnode.target)
 
-            if not are_variables_deleted(loop_vars, body):
+            if not are_variables_deleted(
+                loop_vars,
+                body,
+                context=get_context(subnode),
+            ):
                 self.add_violation(
                     best_practices.LeakingForLoopViolation(subnode),
                 )
