@@ -2983,10 +2983,10 @@ class CommentInFormattedStringViolation(TokenizeViolation):
 @final
 class LeakingForLoopViolation(ASTViolation):
     """
-    Found a leaking 'for' loop in a class or module body.
+    Found a leaking ``for`` loop in a class or module body.
 
     Reasoning:
-        'for' loops in class or module bodies leak iteration variables
+        ``for`` loops in class or module bodies leak iteration variables
         into the surrounding namespace. This is almost never intended
         and can lead to confusing bugs.
 
