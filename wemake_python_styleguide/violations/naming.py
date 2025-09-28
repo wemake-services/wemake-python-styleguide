@@ -453,6 +453,20 @@ class UpperCaseAttributeViolation(ASTViolation):
         Default:
         :str:`wemake_python_styleguide.options.defaults.KNOWN_ENUM_BASES`
 
+        You can configure custom enum-like base classes that should be treated
+        as enums:
+
+        .. code:: ini
+
+            [flake8]
+            known-enum-bases = BaseEnum, constants.AnotherBaseEnum
+
+        Or via command line:
+
+        .. code:: bash
+
+            flake8 --known-enum-bases=BaseEnum,constants.AnotherBaseEnum ./
+
     Example::
 
         # Correct:
@@ -464,6 +478,14 @@ class UpperCaseAttributeViolation(ASTViolation):
         class Color(enum.Enum):
             WHITE = 0
             LIGHT_GRAY = 1
+
+        # Correct with `--known-enum-bases=BaseEnum` option:
+        class BaseEnum(enum.Enum):
+            pass
+
+        class MyEnum(BaseEnum):
+            HELLO = 'hello'
+            WORLD = 'world'
 
         # Wrong:
         class A:
