@@ -22,4 +22,4 @@ jobs:
         if: contains(github.event.issue.labels.*.name, 'help wanted')
         with:
           tg-bot-token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          tg-chat-id: ${{ secrets.TELEGRAM_CHAT_ID }}
+          tg-chat-id: "@opensource_findings_chat"
