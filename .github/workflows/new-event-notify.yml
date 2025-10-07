@@ -15,6 +15,7 @@ jobs:
   notify:
     name: "Telegram notification"
     runs-on: ubuntu-latest
+    timeout-minutes: 2
     steps:
       - name: Send Telegram notification for new issue
         uses: sehat1137/telegram-notifier@27e8505551e7806d06c7e97e41e86ac7d548b04b # v1.4.0
