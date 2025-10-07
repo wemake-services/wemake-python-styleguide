@@ -18,6 +18,7 @@ jobs:
     steps:
       - name: Send Telegram notification for new issue
         uses: sehat1137/telegram-notifier@27e8505551e7806d06c7e97e41e86ac7d548b04b # v1.4.0
+        if: contains(github.event.issue.labels.*.name, 'help wanted')
         with:
           tg-bot-token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           tg-chat-id: ${{ secrets.TELEGRAM_CHAT_ID }}
