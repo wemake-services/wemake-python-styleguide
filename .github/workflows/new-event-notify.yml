@@ -5,7 +5,7 @@ on:
     types: [opened, labeled, reopened]
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.issue.number || github.event.pull_request.number }}
+  group: ${{ github.workflow }}-${{ github.event.issue.number }}
   cancel-in-progress: true
 
 permissions:
@@ -21,4 +21,3 @@ jobs:
         with:
           tg-bot-token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           tg-chat-id: ${{ secrets.TELEGRAM_CHAT_ID }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
