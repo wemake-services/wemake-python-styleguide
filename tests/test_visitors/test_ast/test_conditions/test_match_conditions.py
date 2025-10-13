@@ -42,6 +42,14 @@ match data:
         pass
 """
 
+starred_mapping = """
+match data:
+    case {'x': 1, **value}:
+        pass
+    case _:
+        pass
+"""
+
 mapping_with_binding = """
 match data:
     case {"x": value}:
@@ -144,6 +152,7 @@ def test_simplifiable_mapping_match_violation(
         complex_sequence,
         complex_name,
         three_cases,
+        starred_mapping,
     ],
 )
 def test_not_simplifiable_structural_match(

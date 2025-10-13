@@ -58,6 +58,29 @@ def is_irrefutable_binding(pattern: ast.pattern) -> bool:
     )
 
 
+def has_binding_or_starred_patterns(pattern: ast.pattern) -> bool:
+    """Returns True if the pattern binds any variables or uses *rest/**rest."""
+    if isinstance(pattern, ast.MatchAs):
+        return pattern.name is not None
+
+    if isinstance(pattern, ast.MatchSequence):
+        return any(
+            has_binding_or_starred_patterns(pattern)
+            for pattern in pattern.patterns
+        )
+
+    if isinstance(pattern, ast.MatchMapping):
+        return (
+            any(
+                has_binding_or_starred_patterns(pattern)
+                for pattern in pattern.patterns
+            )
+            or pattern.rest is not None
+        )
+
+    return bool(isinstance(pattern, ast.MatchStar))
+
+
 def is_simple_sequence_or_mapping_pattern(pattern: ast.pattern) -> bool:
     """
     Check that all elements in sequence/mapping are simple.

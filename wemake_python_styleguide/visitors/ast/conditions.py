@@ -275,6 +275,11 @@ class SimplifiableSequenceOrMappingMatchVisitor(BaseNodeVisitor):
             if first.guard is not None:
                 return
 
+            if simple_pattern_matching.has_binding_or_starred_patterns(
+                first.pattern
+            ):
+                return
+
             if isinstance(
                 first.pattern, (ast.MatchSequence, ast.MatchMapping)
             ) and simple_pattern_matching.is_simple_sequence_or_mapping_pattern(
