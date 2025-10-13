@@ -2460,3 +2460,57 @@ class SimplifiableMatchViolation(ASTViolation):
         'Found simplifiable `match` statement that can be just `if`'
     )
     code = 365
+
+
+@final
+class SimplifiableSequenceOrMappingMatchViolation(ASTViolation):
+    """
+    Some ``match`` list/dict statements can be simplified to ``if`` statements.
+
+    Reasoning:
+        Using ``match`` to check for an exact sequence (like ``[1, 2]``)
+        or mapping (like ``{"x": 1}``)
+        pattern with no destructuring is unnecessarily verbose.
+        Such cases are better expressed
+        with a direct equality comparison (``==``),
+        which is more readable and performant.
+
+        While ``match`` excels at deconstruction and partial matching,
+        using it for full structural identity checks of literals is overkill.
+
+    Solution:
+        Replace the ``match`` statement with an ``if/else``.
+
+    When is this violation raised?
+        - There are exactly two cases, and the second is ``case _:``.
+        - The first case uses a simple sequence (e.g. ``[1, "a"]``)
+        or mapping (e.g. ``{"key": 1}``).
+        - No variable bindings (e.g. ``case [x]:``),
+        starred patterns (``*rest``),or keyword rest (``**extra``).
+        - No guards (``if ...``).
+        - All elements are literals, constants, or names (not expressions).
+
+
+    Example::
+
+        # Correct:
+        if data == [1, 2]:
+            handle_pair()
+        else:
+            ignore()
+
+        # Wrong:
+        match
+            case [1, 2]:
+                handle_pair()
+            case _:
+                ignore()
+
+    .. versionadded:: 1.5.0
+
+    """
+
+    error_template = (
+        'Found simplifiable sequence/mapping `match` that can be `if`'
+    )
+    code = 366

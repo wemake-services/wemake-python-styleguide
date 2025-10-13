@@ -29,6 +29,7 @@ Semantic versioning in our case means:
 ### Features
 
 - Adds `WPS365`: match statement can be simplified to `if`, #3520
+- Adds `WPS366`: match sequence or mapping can be simplified to `if`, #3527
 
 
 ## 1.4.0
