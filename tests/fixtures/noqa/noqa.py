@@ -622,6 +622,17 @@ match subject:  # noqa: WPS365
     case _:
         ...
 
+match subject:  # noqa: WPS366
+    case [1, 2]:  # noqa: WPS366
+        ...
+    case _:
+        ...
+
+match subject:  # noqa: WPS366
+    case {'x': 1, 'y': 2}:
+        ...
+    case _:
+        ...
 
 my_print("""
 text

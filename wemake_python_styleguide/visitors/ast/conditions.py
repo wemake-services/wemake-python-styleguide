@@ -10,7 +10,7 @@ from wemake_python_styleguide.logic.tree import (
     compares,
     ifs,
     operators,
-    pattern_matching,
+    simple_pattern_matching,
 )
 from wemake_python_styleguide.logic.walk import (
     are_variables_deleted,
@@ -211,12 +211,12 @@ class SimplifiableMatchVisitor(BaseNodeVisitor):
         if len(cases) == 2:
             first, second = cases
 
-            if not pattern_matching.is_wildcard_pattern(second):
+            if not simple_pattern_matching.is_wildcard_pattern(second):
                 return
 
-            if pattern_matching.is_irrefutable_binding(
+            if simple_pattern_matching.is_irrefutable_binding(
                 first.pattern
-            ) or pattern_matching.is_simple_pattern(first.pattern):
+            ) or simple_pattern_matching.is_simple_pattern(first.pattern):
                 self.add_violation(consistency.SimplifiableMatchViolation(node))
 
 
@@ -248,4 +248,40 @@ class LeakingForLoopVisitor(BaseNodeVisitor):
             ):
                 self.add_violation(
                     best_practices.LeakingForLoopViolation(subnode),
+                )
+
+
+@final
+class SimplifiableSequenceOrMappingMatchVisitor(BaseNodeVisitor):
+    """
+    Checks for ``match`` state that use simple sequence or mapping patterns.
+
+    Without destructuring, which can be replaced with ``if``.
+    """
+
+    def visit_Match(self, node: ast.Match) -> None:
+        """Visit match statement."""
+        self._check_simplifiable_structural_match(node)
+        self.generic_visit(node)
+
+    def _check_simplifiable_structural_match(self, node: ast.Match) -> None:
+        cases = node.cases
+        if len(cases) == 2:
+            first, second = cases
+
+            if not simple_pattern_matching.is_wildcard_pattern(second):
+                return
+
+            if first.guard is not None:
+                return
+
+            if isinstance(
+                first.pattern, (ast.MatchSequence, ast.MatchMapping)
+            ) and simple_pattern_matching.is_simple_sequence_or_mapping_pattern(
+                first.pattern
+            ):
+                self.add_violation(
+                    consistency.SimplifiableSequenceOrMappingMatchViolation(
+                        node
+                    )
                 )
