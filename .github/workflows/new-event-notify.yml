@@ -18,7 +18,7 @@ jobs:
     timeout-minutes: 2
     steps:
       - name: Send Telegram notification for new issue
-        uses: sehat1137/telegram-notifier@001d014161c5141b65608fb2ec98d815a9356425 # v1.4.1
+        uses: sehat1137/telegram-notifier@983edccef69ef9a25b97552daaeaf0f183b470f4 # v1.5.0
         if: contains(github.event.issue.labels.*.name, 'help wanted')
         with:
           tg-bot-token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
