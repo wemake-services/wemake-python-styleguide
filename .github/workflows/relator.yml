@@ -1,12 +1,8 @@
-name: Event Notifier
+name: Relator
 
 on:
   issues:
     types: [labeled]
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.event.issue.number }}
-  cancel-in-progress: true
 
 permissions:
   issues: read
@@ -14,13 +10,14 @@ permissions:
 jobs:
   notify:
     name: "Telegram notification"
+    if: github.event.label.name == 'help wanted'
     runs-on: ubuntu-latest
     timeout-minutes: 2
     steps:
       - name: Send Telegram notification for new issue
-        uses: reagento/relator@983edccef69ef9a25b97552daaeaf0f183b470f4 # v1.5.0
-        if: contains(github.event.issue.labels.*.name, 'help wanted')
+        uses: reagento/relator@0942904cfa8775e115be93f3a1e39b365178d8f0 # v1.5.1
         with:
           tg-bot-token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           tg-chat-id: "@opensource_findings_python"
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          html-template: "<b>New issue to <a href=/{repository}>{repository}</a> by <a href=/{user}>@{user}</a> </b><br/><b>{title}</b> (<a href='{url}'>#{id}</a>)<br/>{body}#wemake_python_styleguide {labels}<br/>{promo}"
