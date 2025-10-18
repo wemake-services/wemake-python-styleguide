@@ -257,3 +257,40 @@ def test_common_strings_allowed(
     visitor.run()
 
     assert_errors(visitor, [])
+
+
+@pytest.mark.parametrize(
+    'strings',
+    [
+        """
+x = f'single {1}'
+y = f'single {1}'
+        """,
+        """
+name = f'Hello, {user}'
+message = f'Hello, {world}'
+        """,
+        """
+first = f'test {value}'
+second = f'test {another_value}'
+third = f'test {yet_another}'
+        """,
+        """
+price1 = f'Cost: ${amount1:.2f}'
+price2 = f'Cost: ${amount2:.2f}'
+        """,
+    ],
+)
+def test_fstring_strings_not_counted(
+    assert_errors,
+    parse_ast_tree,
+    options,
+    strings,
+):
+    """Ensures that string literals inside f-strings are not overused."""
+    tree = parse_ast_tree(strings)
+    option_values = options(max_string_usages=1)
+    visitor = StringOveruseVisitor(option_values, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])
