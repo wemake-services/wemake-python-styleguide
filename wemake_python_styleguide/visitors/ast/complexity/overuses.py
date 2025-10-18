@@ -81,6 +81,10 @@ class StringOveruseVisitor(base.BaseNodeVisitor):
         if annotations.is_annotation(node):
             return
 
+        parent = walk.get_closest_parent(node, parents=(ast.JoinedStr,))
+        if isinstance(parent, ast.JoinedStr):
+            return
+
         # Some strings are so common, that it makes no sense to check if
         # they are overused.
         if (
