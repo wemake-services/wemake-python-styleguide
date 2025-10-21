@@ -96,6 +96,16 @@ def function() -> Dict[int, {0}]:
     ...
 """
 
+fstring_same_prefix1 = """
+x = f'Hello, {pattern}'
+y = f'Hello, {pattern}'
+"""
+
+fstring_same_prefix2 = """
+x = f'{pattern}-postfix'
+y = f'{pattern}-postfix'
+"""
+
 EXPECTED_LOCATION = (2, 8)
 
 
@@ -262,23 +272,8 @@ def test_common_strings_allowed(
 @pytest.mark.parametrize(
     'strings',
     [
-        """
-x = f'single {1}'
-y = f'single {1}'
-        """,
-        """
-name = f'Hello, {user}'
-message = f'Hello, {world}'
-        """,
-        """
-first = f'test {value}'
-second = f'test {another_value}'
-third = f'test {yet_another}'
-        """,
-        """
-price1 = f'Cost: ${amount1:.2f}'
-price2 = f'Cost: ${amount2:.2f}'
-        """,
+        fstring_same_prefix1,
+        fstring_same_prefix2,
     ],
 )
 def test_fstring_strings_not_counted(
