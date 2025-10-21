@@ -30,6 +30,10 @@ Semantic versioning in our case means:
 
 - Adds `WPS365`: match statement can be simplified to `if`, #3520
 
+### Bugfixes
+
+- Fixes `WPS226` false-positive on fstring parts, #3548
+
 
 ## 1.4.0
 

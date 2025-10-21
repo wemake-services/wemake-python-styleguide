@@ -96,6 +96,16 @@ def function() -> Dict[int, {0}]:
     ...
 """
 
+fstring_same_prefix1 = """
+x = f'Hello, {pattern}'
+y = f'Hello, {pattern}'
+"""
+
+fstring_same_prefix2 = """
+x = f'{pattern}-postfix'
+y = f'{pattern}-postfix'
+"""
+
 EXPECTED_LOCATION = (2, 8)
 
 
@@ -254,6 +264,28 @@ def test_common_strings_allowed(
     tree = parse_ast_tree(snippet)
 
     visitor = StringOveruseVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])
+
+
+@pytest.mark.parametrize(
+    'strings',
+    [
+        fstring_same_prefix1,
+        fstring_same_prefix2,
+    ],
+)
+def test_fstring_strings_not_counted(
+    assert_errors,
+    parse_ast_tree,
+    options,
+    strings,
+):
+    """Ensures that string literals inside f-strings are not overused."""
+    tree = parse_ast_tree(strings)
+    option_values = options(max_string_usages=1)
+    visitor = StringOveruseVisitor(option_values, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])
