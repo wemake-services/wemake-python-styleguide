@@ -239,6 +239,7 @@ def test_string_type_annotations(
         r'"\n"',
         '""',
         '","',
+        '"/"',
         '"."',
         "'\"'",
         '"\'"',

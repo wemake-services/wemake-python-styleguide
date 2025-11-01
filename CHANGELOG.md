@@ -24,6 +24,13 @@ Semantic versioning in our case means:
 - Adds `WPS481`: for statement not allowed in class and module scopes, #3520
 
 
+## 1.6.0
+
+### Features
+
+- Allows `/` string in `WPS226`, #3554
+
+
 ## 1.5.0
 
 ### Features
