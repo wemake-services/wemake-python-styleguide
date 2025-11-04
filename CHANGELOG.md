@@ -24,6 +24,7 @@ Semantic versioning in our case means:
 - Adds `WPS481`: for statement not allowed in class and module scopes, #3520
 - Allows `/` string in `WPS226`, #3554
 - Adds `WPS365`: match statement can be simplified to `if`, #3520
+- Adds `WPS366`: match sequence or mapping can be simplified to `if`, #3527
 
 ### Bugfixes
 
