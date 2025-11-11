@@ -2460,3 +2460,43 @@ class SimplifiableMatchViolation(ASTViolation):
         'Found simplifiable `match` statement that can be just `if`'
     )
     code = 365
+
+
+@final
+class SimplifiableIfMatchViolation(ASTViolation):
+    """
+    Single-case ``match`` statements can be simplified to ``if`` statements.
+
+    Reasoning:
+        Using ``match`` for a single case is unnecessarily complex compared to a 
+        simple ``if`` condition. The intent is clear, and using ``if`` reduces 
+        nesting and cognitive load.
+
+    Solution:
+        Replace single-case ``match ... case`` statements with ``if``.
+
+    When is this violation is raised?
+        - When there is exactly one ``case`` statement
+        - When the pattern is simple (literal, constant, enum, etc.)
+        - When no guard (``if`` ...) is used
+        - When no wildcard pattern is used
+
+    Example::
+
+        # Correct:
+        if x == 1:
+            do_something()
+
+        # Wrong:
+        match x:
+            case 1:
+                do_something()
+
+    .. versionadded:: 1.10.0
+
+    """
+
+    error_template = (
+        'Found single-case `match` statement that can be simplified to `if`'
+    )
+    code = 366

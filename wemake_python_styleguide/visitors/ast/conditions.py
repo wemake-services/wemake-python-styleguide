@@ -208,7 +208,18 @@ class SimplifiableMatchVisitor(BaseNodeVisitor):
 
     def _check_simplifiable_match(self, node: ast.Match) -> None:
         cases = node.cases
-        if len(cases) == 2:
+        
+        # Check for single-case matches with no guard
+        if len(cases) == 1:
+            case = cases[0]
+            # Check if there's no guard condition
+            if case.guard is None:
+                # Check if the pattern is simple (literal, constant, enum, etc.)
+                if pattern_matching.is_simple_pattern(case.pattern):
+                    self.add_violation(consistency.SimplifiableIfMatchViolation(node))
+        
+        # Check for two-case matches with wildcard (existing logic)
+        elif len(cases) == 2:
             first, second = cases
 
             if not pattern_matching.is_wildcard_pattern(second):
