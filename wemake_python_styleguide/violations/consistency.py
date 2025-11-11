@@ -2468,8 +2468,8 @@ class SimplifiableIfMatchViolation(ASTViolation):
     Single-case ``match`` statements can be simplified to ``if`` statements.
 
     Reasoning:
-        Using ``match`` for a single case is unnecessarily complex compared to a 
-        simple ``if`` condition. The intent is clear, and using ``if`` reduces 
+        Using ``match`` for a single case is unnecessarily complex compared to a
+        simple ``if`` condition. The intent is clear, and using ``if`` reduces
         nesting and cognitive load.
 
     Solution:
