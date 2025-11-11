@@ -71,6 +71,7 @@ PRESET: Final = (
     conditions.MatchVisitor,
     conditions.ChainedIsVisitor,
     conditions.SimplifiableMatchVisitor,
+    conditions.SimplifiableMatchWithSequenceOrMappingVisitor,
     conditions.LeakingForLoopVisitor,
     iterables.IterableUnpackingVisitor,
     blocks.AfterBlockVariablesVisitor,

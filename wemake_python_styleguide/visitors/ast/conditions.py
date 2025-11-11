@@ -221,6 +221,34 @@ class SimplifiableMatchVisitor(BaseNodeVisitor):
 
 
 @final
+class SimplifiableMatchWithSequenceOrMappingVisitor(BaseNodeVisitor):
+    """Checks for match statements with simple sequences and mappings."""
+
+    def visit_Match(self, node: ast.Match) -> None:
+        """Checks match statements with simple sequences and mappings."""
+        self._check_simplifiable_match_seq_or_map(node)
+        self.generic_visit(node)
+
+    def _check_simplifiable_match_seq_or_map(self, node: ast.Match) -> None:
+        cases = node.cases
+        if len(cases) == 2:
+            first, second = cases
+
+            if not pattern_matching.is_wildcard_pattern(second):
+                return
+
+            # Check if the first pattern is a simple sequence or mapping pattern
+            # without variable bindings AND no guard is present
+            if (
+                pattern_matching.is_simple_sequence_or_mapping_pattern(
+                    first.pattern
+                )
+                and first.guard is None  # No guard clause
+            ):
+                self.add_violation(consistency.SimplifiableMatchWithSequenceOrMappingViolation(node))
+
+
+@final
 class LeakingForLoopVisitor(BaseNodeVisitor):
     """Finds 'for' loops directly inside class or module bodies."""
 

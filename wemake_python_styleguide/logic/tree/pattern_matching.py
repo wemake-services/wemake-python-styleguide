@@ -102,3 +102,96 @@ def is_irrefutable_binding(pattern: ast.pattern) -> bool:
         and pattern.pattern is None
         and pattern.name is not None
     )
+
+
+def is_simple_sequence_or_mapping_pattern(pattern: ast.pattern) -> bool:
+    """
+    Checks if a pattern is a simple sequence or mapping without
+    variable bindings.
+
+    Supports:
+    - Simple lists: ``[1, 2]``, ``["a", "b"]``, ``[const.A, const.B]``
+    - Simple tuples: ``(1, 2)``, ``("a", "b")``
+    - Simple dicts: ``{"key": "value"}``, ``{1: 2}``
+    - No variable bindings (like ``[x, y]``) or starred patterns
+      (like ``[first, *rest]``)
+    - No guards allowed
+    """
+    # Check for simple list or tuple patterns
+    if isinstance(pattern, ast.MatchSequence):
+        # Check that there are no starred patterns (*rest)
+        if not _has_star_pattern(pattern):
+            # Check that all elements are simple patterns (not binding vars)
+            return all(
+                _is_simple_pattern_element(element)
+                for element in pattern.patterns
+            )
+
+    # Check for simple dict patterns
+    elif isinstance(pattern, ast.MatchMapping):
+        # Check that all keys are simple (not variables) and all
+        # values are simple patterns
+        if any(
+            key is None or not _is_simple_key_pattern(key)
+            for key in pattern.keys
+        ):
+            return False
+        if pattern.patterns and any(
+            not _is_simple_pattern_element(value) for value in pattern.patterns
+        ):
+            return False
+        # If rest name is present (has variable binding), it's not simple
+        return pattern.rest is None
+
+    return False
+
+
+def _has_star_pattern(pattern: ast.MatchSequence) -> bool:
+    """Check if the sequence pattern contains starred patterns."""
+    # ast.MatchStar has been added in Python 3.10 for starred patterns
+    for sub_pattern in pattern.patterns:
+        if isinstance(sub_pattern, ast.MatchStar):
+            return True
+    return False
+
+
+def _is_simple_pattern_element(pattern: ast.pattern) -> bool:
+    """Check if a pattern element is simple (not binding variables)."""
+    # Handle simple value patterns (literals, constants, attributes)
+    if isinstance(pattern, ast.MatchValue):
+        return isinstance(
+            pattern.value, (ast.Constant, ast.Name, ast.Attribute)
+        )
+
+    # Handle simple singleton patterns (True, False, None)
+    if isinstance(pattern, ast.MatchSingleton):
+        return True
+
+    # Handle simple nested patterns
+    if isinstance(pattern, (ast.MatchSequence, ast.MatchMapping)):
+        return is_simple_sequence_or_mapping_pattern(pattern)
+
+    # Handle Union patterns (| operator)
+    if isinstance(pattern, ast.MatchOr):
+        return all(_is_simple_pattern_element(sub) for sub in pattern.patterns)
+
+    # Handle MatchAs patterns - not simple if it's binding a variable
+    if isinstance(pattern, ast.MatchAs):
+        # If pattern.name is not None, it's a binding (not simple)
+        if pattern.name is not None:
+            return False
+        # If pattern.name is None but pattern.pattern is not None, 
+        # check if the inner pattern is simple
+        if pattern.pattern is not None:
+            return _is_simple_pattern_element(pattern.pattern)
+        # This case should not happen in valid Python ASTs
+        return False
+
+    # Other pattern types are not simple (like MatchClass with constructors)
+    return False
+
+
+def _is_simple_key_pattern(key: ast.expr) -> bool:
+    """Check if a mapping key is simple (not a variable)."""
+    # Keys should be constants or attributes, not variable names
+    return isinstance(key, (ast.Constant, ast.Name, ast.Attribute))
