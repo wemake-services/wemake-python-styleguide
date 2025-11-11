@@ -180,7 +180,7 @@ def _is_simple_pattern_element(pattern: ast.pattern) -> bool:
         # If pattern.name is not None, it's a binding (not simple)
         if pattern.name is not None:
             return False
-        # If pattern.name is None but pattern.pattern is not None, 
+        # If pattern.name is None but pattern.pattern is not None,
         # check if the inner pattern is simple
         if pattern.pattern is not None:
             return _is_simple_pattern_element(pattern.pattern)

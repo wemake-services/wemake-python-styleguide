@@ -135,7 +135,9 @@ def test_simplifiable_sequence_or_mapping_match(
 ):
     """Test that simple sequence and mapping matches raise a violation."""
     tree = parse_ast_tree(code)
-    visitor = SimplifiableMatchWithSequenceOrMappingVisitor(default_options, tree=tree)
+    visitor = SimplifiableMatchWithSequenceOrMappingVisitor(
+        default_options, tree=tree
+    )
     visitor.run()
     assert_errors(visitor, [SimplifiableMatchWithSequenceOrMappingViolation])
 
@@ -160,6 +162,8 @@ def test_not_simplifiable_sequence_or_mapping_match(
 ):
     """Test that complex or non-simplifiable matches do not raise violations."""
     tree = parse_ast_tree(template)
-    visitor = SimplifiableMatchWithSequenceOrMappingVisitor(default_options, tree=tree)
+    visitor = SimplifiableMatchWithSequenceOrMappingVisitor(
+        default_options, tree=tree
+    )
     visitor.run()
     assert_errors(visitor, [])

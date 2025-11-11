@@ -245,7 +245,11 @@ class SimplifiableMatchWithSequenceOrMappingVisitor(BaseNodeVisitor):
                 )
                 and first.guard is None  # No guard clause
             ):
-                self.add_violation(consistency.SimplifiableMatchWithSequenceOrMappingViolation(node))
+                self.add_violation(
+                    consistency.SimplifiableMatchWithSequenceOrMappingViolation(
+                        node
+                    )
+                )
 
 
 @final
