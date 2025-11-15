@@ -1,18 +1,4 @@
 repos:
-  - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v6.0.0
-    hooks:
-      - id: trailing-whitespace
-      - id: end-of-file-fixer
-      - id: check-yaml
-      - id: check-toml
-      - id: check-xml
-      - id: check-merge-conflict
-      - id: check-symlinks
-      - id: check-illegal-windows-names
-      - id: mixed-line-ending
-        args: ["--fix=lf"]
-      - id: check-case-conflict
   - repo: https://github.com/python-jsonschema/check-jsonschema
     rev: 0.34.1
     hooks:
@@ -33,6 +19,7 @@ repos:
         args:
           - "--config=.github/zizmor.yml"
           - "--no-progress"
+          - "--fix"
   - repo: https://github.com/shellcheck-py/shellcheck-py
     rev: v0.11.0.1
     hooks:
@@ -44,6 +31,20 @@ repos:
       - id: ruff
         args: ["--exit-non-zero-on-fix"]
       - id: ruff-format
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-toml
+      - id: check-xml
+      - id: check-merge-conflict
+      - id: check-symlinks
+      - id: check-illegal-windows-names
+      - id: mixed-line-ending
+        args: ["--fix=lf"]
+      - id: check-case-conflict
 
   # Should be the last:
   - repo: meta
