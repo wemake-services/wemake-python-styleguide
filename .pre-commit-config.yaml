@@ -35,7 +35,7 @@ repos:
     rev: v1.0.1
     hooks:
       - id: sphinx-lint
-        args: ["--enable=default-role"]
+        args: ["--enable=all"]
         files: ^docs/
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
