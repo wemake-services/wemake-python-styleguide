@@ -30,6 +30,14 @@ repos:
       - id: ruff
         args: ["--exit-non-zero-on-fix"]
       - id: ruff-format
+
+  - repo: https://github.com/sphinx-contrib/sphinx-lint
+    rev: v1.0.1
+    hooks:
+      - id: sphinx-lint
+        args: ["--enable=all"]
+        files: ^docs/
+
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
     hooks:
