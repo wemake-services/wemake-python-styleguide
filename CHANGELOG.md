@@ -24,11 +24,11 @@ Semantic versioning in our case means:
 - Adds `WPS481`: for statement not allowed in class and module scopes, #3520
 - Allows `/` string in `WPS226`, #3554
 - Adds `WPS365`: match statement can be simplified to `if`, #3520
-- Fixes false positive `WPS412` with docstring and imports in `__init__.py` #3569
 
 ### Bugfixes
 
 - Fixes `WPS226` false-positive on fstring parts, #3548
+- Fixes false positive `WPS412` with docstring and imports in `__init__.py` #3569
 
 
 ## 1.4.0
