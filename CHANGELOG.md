@@ -24,6 +24,7 @@ Semantic versioning in our case means:
 - Adds `WPS481`: for statement not allowed in class and module scopes, #3520
 - Allows `/` string in `WPS226`, #3554
 - Adds `WPS365`: match statement can be simplified to `if`, #3520
+- Fixes false positive `WPS412` with docstring and imports in `__init__.py` #3569
 
 ### Bugfixes
 
@@ -37,7 +38,6 @@ Semantic versioning in our case means:
 - Allows `__init__.py` files that consist only of imports, #3486
 - Adds `--max-conditions` option, #3493
 - Adds `--known-enum-bases` option to support custom enum-like base classes, #3513
-- Fixes false positive `WPS412` with docstring and imports in `__init__.py` #3569
 
 ### Misc
 
