@@ -24,6 +24,13 @@ from one import one_func
 from two import two_func
 """
 
+module_with_docstring_and_import = """
+'''Hi, am a docstring inside a module.'''
+
+from some_module import other
+import some_module
+"""
+
 module_with_multiple_statements = 'x = 1\ny = 2'
 module_with_logic = """
 try:
@@ -43,6 +50,7 @@ except ImportError:
         module_with_comments,
         module_with_imports,
         module_with_one_import,
+        module_with_docstring_and_import,
     ],
 )
 def test_init_without_logic(

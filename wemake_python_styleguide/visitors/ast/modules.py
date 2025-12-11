@@ -48,19 +48,21 @@ class EmptyModuleContentsVisitor(BaseNodeVisitor):
         if not self._is_init() or not node.body:
             return
 
+        body_after_doc = node.body
+        if is_doc_string(node.body[0]):
+            body_after_doc = node.body[1:]
+
+        if not body_after_doc:
+            return
+
         only_imports = all(
             isinstance(statement, (ast.Import, ast.ImportFrom))
-            for statement in node.body
+            for statement in body_after_doc
         )
         if only_imports:
             return
 
-        if len(node.body) > 1:
-            self.add_violation(InitModuleHasLogicViolation())
-            return
-
-        if not is_doc_string(node.body[0]):
-            self.add_violation(InitModuleHasLogicViolation())
+        self.add_violation(InitModuleHasLogicViolation())
 
 
 @final

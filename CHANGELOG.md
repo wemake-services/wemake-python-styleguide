@@ -28,6 +28,7 @@ Semantic versioning in our case means:
 ### Bugfixes
 
 - Fixes `WPS226` false-positive on fstring parts, #3548
+- Fixes false positive `WPS412` with docstring and imports in `__init__.py` #3569
 
 
 ## 1.4.0
