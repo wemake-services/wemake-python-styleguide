@@ -30,6 +30,10 @@ Semantic versioning in our case means:
 - Fixes `WPS226` false-positive on fstring parts, #3548
 - Fixes false positive `WPS412` with docstring and imports in `__init__.py` #3569
 
+### Misc
+
+- Improves docs: remove outdated AST online visualisation tool url
+
 
 ## 1.4.0
 
