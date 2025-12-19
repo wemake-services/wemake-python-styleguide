@@ -158,6 +158,7 @@ def test_import_from_too_many_members(
     [
         reexport_init_module,
         reexport_init_module_with_docstring,
+        module_import,
     ],
 )
 def test_init_module_reexports_no_imports(
