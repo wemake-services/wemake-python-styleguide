@@ -1,6 +1,9 @@
 import ast
 from typing import final
 
+from wemake_python_styleguide import constants
+from wemake_python_styleguide.logic.filenames import get_stem
+from wemake_python_styleguide.logic.tree.strings import is_doc_string
 from wemake_python_styleguide.options.validation import ValidatedOptions
 from wemake_python_styleguide.types import AnyImport
 from wemake_python_styleguide.violations import complexity
@@ -66,6 +69,8 @@ class ImportMembersVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_imports_count(self) -> None:
+        if _is_reexport_module(self.tree, self.filename):
+            return
         if self._imports_count > self.options.max_imports:
             self.add_violation(
                 complexity.TooManyImportsViolation(
@@ -86,3 +91,21 @@ class ImportMembersVisitor(BaseNodeVisitor):
     def _post_visit(self) -> None:
         self._check_imports_count()
         self._check_imported_names_count()
+
+
+def _is_reexport_module(tree: ast.AST, filename: str) -> bool:
+    is_init = get_stem(filename) == constants.INIT
+    if not is_init or not isinstance(tree, ast.Module):
+        return False
+
+    body = tree.body
+    if not body:
+        return False
+
+    if is_doc_string(body[0]):
+        body = body[1:]
+
+    return bool(body) and all(
+        isinstance(statement, (ast.Import, ast.ImportFrom))
+        for statement in body
+    )
