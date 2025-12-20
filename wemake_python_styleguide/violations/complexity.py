@@ -91,6 +91,10 @@ class TooManyImportsViolation(SimpleViolation):
     We do not make any distinction between
     ``import`` and ``from ... import ...``.
 
+    Corner-case:
+        ``__init__.py`` modules that only re-export imports
+        (optionally with a module docstring) are ignored by this check.
+
     Configuration:
         This rule is configurable with ``--max-imports``.
         Default: :str:`wemake_python_styleguide.options.defaults.MAX_IMPORTS`
