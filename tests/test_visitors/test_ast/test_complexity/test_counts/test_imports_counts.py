@@ -21,6 +21,15 @@ from sys import version
 """
 
 import_from_multiple_names = 'from module import name0, name1, name2'
+reexport_init_module_with_docstring = '''
+"""Reexport module."""
+from package import some as some
+from other_package import other_some as other_some
+'''
+reexport_init_module = """
+from package import some as some
+from other_package import other_some as other_some
+"""
 
 
 @pytest.mark.parametrize(
@@ -142,3 +151,31 @@ def test_import_from_too_many_members(
 
     assert_errors(visitor, [TooManyImportedModuleMembersViolation])
     assert_error_text(visitor, '3', option_values.max_import_from_members)
+
+
+@pytest.mark.parametrize(
+    'code',
+    [
+        reexport_init_module,
+        reexport_init_module_with_docstring,
+        module_import,
+    ],
+)
+def test_init_module_reexports_no_imports(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    options,
+):
+    """Violations are skipped for ``__init__.py`` reexport modules."""
+    tree = parse_ast_tree(code)
+
+    option_values = options(max_imports=1)
+    visitor = ImportMembersVisitor(
+        option_values,
+        filename='package/__init__.py',
+        tree=tree,
+    )
+    visitor.run()
+
+    assert_errors(visitor, [])
