@@ -28,7 +28,8 @@ def get_annotation_complexity(annotation_node: _Annotation) -> int:
         # try to parse string-wrapped annotations
         try:
             annotation_node = (
-                ast.parse(  # type: ignore
+                ast
+                .parse(  # type: ignore
                     annotation_node.value,
                 )
                 .body[0]

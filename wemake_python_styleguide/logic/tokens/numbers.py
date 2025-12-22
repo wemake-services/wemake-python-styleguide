@@ -23,7 +23,8 @@ def has_correct_underscores(number: str) -> bool:
     """
     assert '_' in number  # noqa: S101
     number_cleared = (
-        number.strip()
+        number
+        .strip()
         .lower()
         .removeprefix('0b')
         .removeprefix('0x')
