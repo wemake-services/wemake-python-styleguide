@@ -2424,18 +2424,18 @@ tests = ["cython", "littleutils", "pygments", "pytest", "typeguard"]
 
 [[package]]
 name = "syrupy"
-version = "4.9.1"
+version = "5.0.0"
 description = "Pytest Snapshot Test Utility"
 optional = false
-python-versions = ">=3.8.1"
+python-versions = ">=3.10"
 groups = ["dev"]
 files = [
-    {file = "syrupy-4.9.1-py3-none-any.whl", hash = "sha256:b94cc12ed0e5e75b448255430af642516842a2374a46936dd2650cfb6dd20eda"},
-    {file = "syrupy-4.9.1.tar.gz", hash = "sha256:b7d0fcadad80a7d2f6c4c71917918e8ebe2483e8c703dfc8d49cdbb01081f9a4"},
+    {file = "syrupy-5.0.0-py3-none-any.whl", hash = "sha256:c848e1a980ca52a28715cd2d2b4d434db424699c05653bd1158fb31cf56e9546"},
+    {file = "syrupy-5.0.0.tar.gz", hash = "sha256:3282fe963fa5d4d3e47231b16d1d4d0f4523705e8199eeb99a22a1bc9f5942f2"},
 ]
 
 [package.dependencies]
-pytest = ">=7.0.0,<9.0.0"
+pytest = ">=8.0.0"
 
 [[package]]
 name = "tokenize-rt"
@@ -2589,4 +2589,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.10"
-content-hash = "fa7168f36ee6939f786bbe240718aa7481bace557f2e46219d8ef0660f21a599"
+content-hash = "f46a23cbfaa672cfb49f04b28f6777200146361587b83348e6d08e2ffc513afa"
