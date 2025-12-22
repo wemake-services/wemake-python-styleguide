@@ -17,7 +17,7 @@ Semantic versioning in our case means:
   change the client facing API, change code conventions significantly, etc.
 
 
-## WIP
+## 1.5.0
 
 ### Features
 
@@ -29,7 +29,7 @@ Semantic versioning in our case means:
 ### Bugfixes
 
 - Fixes `WPS226` false-positive on fstring parts, #3548
-- Fixes false positive `WPS412` with docstring and imports in `__init__.py` #3569
+- Fixes false positive `WPS412` with docstring and imports in `__init__.py`, #3569
 
 ### Misc
 
