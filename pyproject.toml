@@ -73,7 +73,7 @@ import-linter = "^2.0"
 astpath = "^0.9"
 lxml = "^6.0"
 nbqa = "^1.2"
-ruff = "^0.13"
+ruff = ">=0.14"
 black = "^25.1"
 
 [tool.poetry.group.docs]

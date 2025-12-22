@@ -7,7 +7,8 @@ def async_wrapper():
 
     def factory(template: str) -> str:
         return (
-            template.replace(
+            template
+            .replace(
                 'def ',
                 'async def ',
             )
