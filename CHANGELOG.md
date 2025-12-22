@@ -34,6 +34,7 @@ Semantic versioning in our case means:
 ### Misc
 
 - Improves docs: remove outdated AST online visualisation tool url
+- Returns `[tool.poetry]` instead of `[project]` in `pyproject.toml`
 
 
 ## 1.4.0

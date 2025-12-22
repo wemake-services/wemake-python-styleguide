@@ -20,8 +20,6 @@ unit:
 
 .PHONY: package
 package:
-	# TODO: re-enable when poetry@2.0 support will be fixed
-	# poetry run poetry check
 	poetry run pip check
 
 .PHONY: test
