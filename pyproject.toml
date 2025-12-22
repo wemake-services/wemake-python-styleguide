@@ -74,7 +74,6 @@ astpath = "^0.9"
 lxml = "^6.0"
 nbqa = "^1.2"
 ruff = "^0.14"
-black = "^25.1"
 
 [tool.poetry.group.docs]
 optional = true
@@ -88,17 +87,6 @@ added-value = "^0.24"
 tomli = "^2.0"
 myst-parser = "^4.0"
 
-[tool.black]
-line-length = 80
-preview = true
-skip-string-normalization = true # we use '
-target-version = [ 'py310' ]
-# Exclude intentionally bad files:
-extend-exclude = '''
-(
-  tests/.*/__snapshots__/.* | tests/fixtures/.*
-)
-'''
 
 [tool.ruff]
 # Ruff config: https://docs.astral.sh/ruff/settings
