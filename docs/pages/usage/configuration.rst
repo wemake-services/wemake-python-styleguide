@@ -51,8 +51,8 @@ Example:
   # Inside `setup.cfg`:
   [flake8]
   per-file-ignores =
-    # There are multiple `assert`s in tests, we allow them:
-    tests/*.py: S101
+    # We allow to shadow functions with parameter names, because of the pytest API:
+    tests/*.py: WPS442
 
 .. rubric:: Further reading
 
