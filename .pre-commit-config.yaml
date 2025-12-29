@@ -32,7 +32,7 @@ repos:
       - id: ruff-format
 
   - repo: https://github.com/EbodShojaei/bake
-    rev: v1.4.3
+    rev: v1.4.4
     hooks:
       - id: mbake-format
         args: ["--config=.github/bake.toml"]
