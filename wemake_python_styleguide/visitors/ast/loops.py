@@ -114,6 +114,7 @@ class WrongLoopVisitor(base.BaseNodeVisitor):
         ast.Raise,
         # We only check for `try/except`, not `try/finally`:
         ast.ExceptHandler,
+        ast.Await,
     )
 
     _containers: ClassVar[_ContainerSpec] = {

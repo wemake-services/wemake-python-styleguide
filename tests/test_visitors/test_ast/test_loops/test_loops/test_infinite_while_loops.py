@@ -99,6 +99,12 @@ while 0:
     ...
 """
 
+correct_while7 = """
+async def worker():
+    while True:
+        await asyncio.sleep(1)
+"""
+
 # Do raise:
 
 wrong_while1 = """
@@ -166,6 +172,7 @@ def test_correct_while_loops_with_statements(
         correct_while4,
         correct_while5,
         correct_while6,
+        correct_while7,
     ],
 )
 def test_correct_while_loops_with_try(
