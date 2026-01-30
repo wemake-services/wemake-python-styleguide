@@ -257,8 +257,7 @@ def test_deep_whitelist_nested_functions(
     visitor = NestedComplexityVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert_errors(visitor, [NestedFunctionViolation])
-    assert_error_text(visitor, whitelist_name)
+    assert_errors(visitor, [])
 
 
 @pytest.mark.parametrize(
