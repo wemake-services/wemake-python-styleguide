@@ -58,13 +58,12 @@ class NestedComplexityVisitor(BaseNodeVisitor):
     def _check_nested_function(self, node: AnyFunctionDef) -> None:
         is_inside_function = isinstance(get_context(node), FunctionNodes)
 
+        is_not_whitelisted = node.name not in NESTED_FUNCTIONS_WHITELIST
         is_direct = isinstance(get_parent(node), FunctionNodes)
-        is_bad = is_direct and node.name not in NESTED_FUNCTIONS_WHITELIST
+        is_bad = is_direct and is_not_whitelisted
 
         if is_bad or (
-            is_inside_function
-            and not is_direct
-            and node.name not in NESTED_FUNCTIONS_WHITELIST
+            is_inside_function and not is_direct and is_not_whitelisted
         ):
             self.add_violation(NestedFunctionViolation(node, text=node.name))
 
