@@ -21,6 +21,7 @@ Semantic versioning in our case means:
 ### Bugfixes
 
 - Fixes false positive `WPS457` for ``while True`` loop with ``await`` expressions, #3753
+- Fixes false positive `WPS430` for whitelisted nested functions, #3589
 
 
 ## 1.5.0
