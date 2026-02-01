@@ -212,3 +212,6 @@ fabric.properties
 # Used for testing:
 ex.py
 setup.py
+
+# CodeRabbit logs:
+logs/
