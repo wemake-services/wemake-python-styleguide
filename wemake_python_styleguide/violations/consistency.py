@@ -1306,7 +1306,7 @@ class InconsistentReturnVariableViolation(ASTViolation):
 @final
 class WalrusViolation(ASTViolation):
     """
-    Forbid the use of the walrus operator (`:=`) outside of comprehensions.
+    Forbid the use of the walrus operator (`:=`) in most cases.
 
     Reasoning:
         Code with ``:=`` is hardly readable.
@@ -1315,7 +1315,8 @@ class WalrusViolation(ASTViolation):
         Python is not expression-based.
 
     Solution:
-        Avoid using the walrus operator outside comprehensions.
+        Avoid using the walrus operator outside comprehensions
+        or ``while`` conditions.
         Stick to traditional assignment statements for clarity.
 
     Example::
@@ -1323,6 +1324,10 @@ class WalrusViolation(ASTViolation):
         # Correct:
         some = call()
         if some:
+            print(some)
+
+        # Correct, but with care
+        while some := call():
             print(some)
 
         # Wrong:
@@ -1335,7 +1340,9 @@ class WalrusViolation(ASTViolation):
 
     """
 
-    error_template = 'Found walrus operator outside a comprehension'
+    error_template = (
+        'Found walrus operator outside a comprehension or `while` condition'
+    )
     code = 332
 
 

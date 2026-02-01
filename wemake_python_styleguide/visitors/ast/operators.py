@@ -228,27 +228,28 @@ class WrongMathOperatorVisitor(base.BaseNodeVisitor):
 class WalrusVisitor(base.BaseNodeVisitor):
     """We use this visitor to find walrus operators and ban them."""
 
-    _available_parents: ClassVar[AnyNodes] = (
+    _allowed_parents: ClassVar[AnyNodes] = (
         ast.ListComp,
         ast.SetComp,
         ast.DictComp,
         ast.GeneratorExp,
+        ast.While,
     )
 
     def visit_NamedExpr(
         self,
         node: ast.NamedExpr,
     ) -> None:
-        """Disallows walrus ``:=`` operator outside comprehensions."""
-        self._check_walrus_in_comprehesion(node)
+        """Disallows walrus ``:=`` operator in most cases."""
+        self._check_walrus_parent(node)
         self.generic_visit(node)
 
-    def _check_walrus_in_comprehesion(
+    def _check_walrus_parent(
         self,
         node: ast.NamedExpr,
     ) -> None:
-        is_comprension = walk.get_closest_parent(node, self._available_parents)
-        if is_comprension:
+        is_allowed_parent = walk.get_closest_parent(node, self._allowed_parents)
+        if is_allowed_parent:
             return
 
         self.add_violation(consistency.WalrusViolation(node))

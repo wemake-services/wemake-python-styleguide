@@ -10,6 +10,10 @@ some = call()
 if some:
     ...
 """
+correct_walrus_while_condition = """
+while some := call():
+    ...
+"""
 
 correct_comprehension = """
 some = [
@@ -46,6 +50,7 @@ if some := call():
     [
         correct_assignment,
         correct_if_condition,
+        correct_walrus_while_condition,
         correct_comprehension,
         correct_walrus_comprehension,
         correct_dict_comprehension,
