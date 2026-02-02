@@ -4,6 +4,7 @@ from typing import ClassVar, TypeAlias, final
 
 from wemake_python_styleguide.compat.aliases import TextNodes
 from wemake_python_styleguide.logic import walk
+from wemake_python_styleguide.logic.nodes import get_parent
 from wemake_python_styleguide.logic.tree.operators import (
     count_unary_operator,
     unwrap_unary_node,
@@ -228,12 +229,11 @@ class WrongMathOperatorVisitor(base.BaseNodeVisitor):
 class WalrusVisitor(base.BaseNodeVisitor):
     """We use this visitor to find walrus operators and ban them."""
 
-    _allowed_parents: ClassVar[AnyNodes] = (
+    _comprehensions: ClassVar[AnyNodes] = (
         ast.ListComp,
         ast.SetComp,
         ast.DictComp,
         ast.GeneratorExp,
-        ast.While,
     )
 
     def visit_NamedExpr(
@@ -248,9 +248,15 @@ class WalrusVisitor(base.BaseNodeVisitor):
         self,
         node: ast.NamedExpr,
     ) -> None:
-        allowed_parent = walk.get_closest_parent(node, self._allowed_parents)
-        if not allowed_parent or (
-            isinstance(allowed_parent, ast.While)
-            and node is not allowed_parent.test
-        ):
-            self.add_violation(consistency.WalrusViolation(node))
+        is_comprehension = walk.get_closest_parent(node, self._comprehensions)
+        if is_comprehension:
+            return
+
+        parent = get_parent(node)
+        is_while_condition = (
+            isinstance(parent, ast.While) and node is parent.test
+        )
+        if is_while_condition:
+            return
+
+        self.add_violation(consistency.WalrusViolation(node))
