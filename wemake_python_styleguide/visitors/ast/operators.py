@@ -251,9 +251,6 @@ class WalrusVisitor(base.BaseNodeVisitor):
         allowed_parent = walk.get_closest_parent(node, self._allowed_parents)
         if not allowed_parent or (
             isinstance(allowed_parent, ast.While)
-            and not (
-                node is allowed_parent.test
-                or walk.is_contained_by(node, allowed_parent.test)
-            )
+            and node is not allowed_parent.test
         ):
             self.add_violation(consistency.WalrusViolation(node))

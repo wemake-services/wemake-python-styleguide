@@ -1310,7 +1310,7 @@ class WalrusViolation(ASTViolation):
 
     Walrus operator is allowed inside:
         - comprehensions
-        - ``while`` conditions
+        - top level ``while`` conditions
 
     Reasoning:
         Code with ``:=`` is hardly readable.
