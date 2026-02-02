@@ -248,8 +248,12 @@ class WalrusVisitor(base.BaseNodeVisitor):
         self,
         node: ast.NamedExpr,
     ) -> None:
-        is_allowed_parent = walk.get_closest_parent(node, self._allowed_parents)
-        if is_allowed_parent:
-            return
-
-        self.add_violation(consistency.WalrusViolation(node))
+        allowed_parent = walk.get_closest_parent(node, self._allowed_parents)
+        if not allowed_parent or (
+            isinstance(allowed_parent, ast.While)
+            and not (
+                node is allowed_parent.test
+                or walk.is_contained_by(node, allowed_parent.test)
+            )
+        ):
+            self.add_violation(consistency.WalrusViolation(node))
