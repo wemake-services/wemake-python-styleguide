@@ -18,6 +18,10 @@ Semantic versioning in our case means:
 
 ## WIP
 
+### Features
+
+- Allows walrus operator in `WPS332`, #3505
+
 ### Bugfixes
 
 - Fixes false positive `WPS457` for ``while True`` loop with ``await`` expressions, #3753

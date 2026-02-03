@@ -4,6 +4,7 @@ from typing import ClassVar, TypeAlias, final
 
 from wemake_python_styleguide.compat.aliases import TextNodes
 from wemake_python_styleguide.logic import walk
+from wemake_python_styleguide.logic.nodes import get_parent
 from wemake_python_styleguide.logic.tree.operators import (
     count_unary_operator,
     unwrap_unary_node,
@@ -228,7 +229,7 @@ class WrongMathOperatorVisitor(base.BaseNodeVisitor):
 class WalrusVisitor(base.BaseNodeVisitor):
     """We use this visitor to find walrus operators and ban them."""
 
-    _available_parents: ClassVar[AnyNodes] = (
+    _comprehensions: ClassVar[AnyNodes] = (
         ast.ListComp,
         ast.SetComp,
         ast.DictComp,
@@ -239,16 +240,23 @@ class WalrusVisitor(base.BaseNodeVisitor):
         self,
         node: ast.NamedExpr,
     ) -> None:
-        """Disallows walrus ``:=`` operator outside comprehensions."""
-        self._check_walrus_in_comprehesion(node)
+        """Disallows walrus ``:=`` operator in most cases."""
+        self._check_walrus_parent(node)
         self.generic_visit(node)
 
-    def _check_walrus_in_comprehesion(
+    def _check_walrus_parent(
         self,
         node: ast.NamedExpr,
     ) -> None:
-        is_comprension = walk.get_closest_parent(node, self._available_parents)
-        if is_comprension:
+        is_comprehension = walk.get_closest_parent(node, self._comprehensions)
+        if is_comprehension:
+            return
+
+        parent = get_parent(node)
+        is_while_condition = (
+            isinstance(parent, ast.While) and node is parent.test
+        )
+        if is_while_condition:
             return
 
         self.add_violation(consistency.WalrusViolation(node))

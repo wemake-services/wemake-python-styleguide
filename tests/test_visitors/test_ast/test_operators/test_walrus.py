@@ -10,6 +10,10 @@ some = call()
 if some:
     ...
 """
+correct_walrus_while_condition = """
+while some := call():
+    ...
+"""
 
 correct_comprehension = """
 some = [
@@ -39,6 +43,14 @@ wrong_if_condition = """
 if some := call():
     ...
 """
+wrong_walrus_while_condition = """
+while any(some := call()):
+    ...
+"""
+wrong_walrus_while_body = """
+while True:
+    print(some := call())
+"""
 
 
 @pytest.mark.parametrize(
@@ -46,6 +58,7 @@ if some := call():
     [
         correct_assignment,
         correct_if_condition,
+        correct_walrus_while_condition,
         correct_comprehension,
         correct_walrus_comprehension,
         correct_dict_comprehension,
@@ -71,6 +84,8 @@ def test_not_walrus(
     [
         wrong_assignment,
         wrong_if_condition,
+        wrong_walrus_while_condition,
+        wrong_walrus_while_body,
     ],
 )
 def test_walrus(
