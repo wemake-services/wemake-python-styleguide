@@ -7,6 +7,7 @@ from wemake_python_styleguide.logic import walk
 from wemake_python_styleguide.logic.nodes import get_parent
 from wemake_python_styleguide.logic.tree.operators import (
     count_unary_operator,
+    get_reduced_unary_operators,
     unwrap_unary_node,
 )
 from wemake_python_styleguide.types import AnyNodes
@@ -31,7 +32,7 @@ _OperatorLimits: TypeAlias = Mapping[type[ast.unaryop], int]
         'visit_NameConstant',
     ),
 )
-class UselessOperatorsVisitor(base.BaseNodeVisitor):
+class UselessOperatorsVisitor(base.BaseNodeVisitor):  # noqa: WPS214
     """Checks operators used in the code."""
 
     _unary_limits: ClassVar[_OperatorLimits] = {
@@ -85,6 +86,7 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
         """Visits binary operators."""
         self._check_zero_division(node.op, node.right)
         self._check_useless_math_operator(node.op, node.left, node.right)
+        self._check_useless_symmetric_operator(node.op, node.left, node.right)
         self.generic_visit(node)
 
     def visit_AugAssign(self, node: ast.AugAssign) -> None:
@@ -135,6 +137,32 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):
             if forbidden and isinstance(op, forbidden):
                 self.add_violation(
                     consistency.MeaninglessNumberOperationViolation(number),
+                )
+
+    def _check_useless_symmetric_operator(
+        self,
+        op: ast.operator,
+        left: ast.AST,
+        right: ast.AST,
+    ) -> None:
+        real_left = unwrap_unary_node(left)
+        real_right = unwrap_unary_node(right)
+        if not (
+            isinstance(real_left, ast.Constant)
+            and isinstance(real_right, ast.Constant)
+        ):
+            return
+
+        left_unary_ops = get_reduced_unary_operators(real_left)
+        right_unary_ops = get_reduced_unary_operators(real_right)
+        if isinstance(op, (ast.BitAnd, ast.BitOr, ast.BitXor)):
+            is_identical_constants = (
+                real_left.value == real_right.value
+                and left_unary_ops == right_unary_ops
+            )
+            if is_identical_constants:
+                self.add_violation(
+                    consistency.MeaninglessNumberOperationViolation(right)
                 )
 
     def _get_non_negative_nodes(

@@ -47,3 +47,25 @@ def count_unary_operator(
     if isinstance(parent.op, operator):
         return count_unary_operator(parent, operator, amount + 1)
     return count_unary_operator(parent, operator, amount)
+
+
+def get_reduced_unary_operators(
+    node: ast.AST,
+    opchain: list[type[ast.unaryop]] | None = None,
+) -> list[type[ast.unaryop]]:
+    """Returns a sequence of significant unary operators."""
+    if opchain is None:
+        opchain = []
+
+    parent = get_parent(node)
+    if not isinstance(parent, ast.UnaryOp):
+        return opchain
+
+    if not isinstance(parent.op, ast.UAdd):
+        lastop = opchain[-1] if opchain else None
+        if lastop and isinstance(parent.op, lastop):
+            opchain.pop()
+        else:
+            opchain.append(type(parent.op))
+
+    return get_reduced_unary_operators(parent, opchain)
