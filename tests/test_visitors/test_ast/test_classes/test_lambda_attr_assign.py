@@ -50,6 +50,11 @@ class A:
         self.other.api = lambda x: x * 2
 """
 
+correct_lambda_attr_assign7 = """
+def some(other):
+    other.api = sorted([], key=lambda x: x * 2)
+"""
+
 # Wrong:
 
 wrong_lambda_assign1 = """
@@ -112,6 +117,7 @@ def test_wrong_lambda_assign(
         correct_lambda_attr_assign4,
         correct_lambda_attr_assign5,
         correct_lambda_attr_assign6,
+        correct_lambda_attr_assign7,
     ],
 )
 def test_correct_lambda_assign(

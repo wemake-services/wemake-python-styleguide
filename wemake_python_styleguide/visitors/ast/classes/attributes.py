@@ -65,10 +65,11 @@ class ClassAttributeVisitor(base.BaseNodeVisitor):
             return  # it is not assigned in a method of a class
 
         for attribute in assigned.targets:
-            if isinstance(
-                attribute,
-                ast.Attribute,
-            ) and attributes.is_special_attr(attribute):
+            if (
+                isinstance(attribute, ast.Attribute)
+                and attributes.is_special_attr(attribute)
+                and isinstance(assigned.value, ast.Lambda)
+            ):
                 self.add_violation(oop.LambdaAttributeAssignedViolation(node))
 
 
