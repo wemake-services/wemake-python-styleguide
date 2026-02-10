@@ -2,6 +2,7 @@ import pytest
 
 from wemake_python_styleguide.violations.consistency import (
     MeaninglessNumberOperationViolation,
+    UselessOperatorsViolation,
 )
 from wemake_python_styleguide.visitors.ast.operators import (
     UselessOperatorsVisitor,
@@ -103,6 +104,67 @@ def test_useful_math(
     visitor.run()
 
     assert_errors(visitor, [])
+
+
+@pytest.mark.parametrize(
+    'expression',
+    [
+        '6 & 6',
+        '1 & True',
+        '(not -3) | (not -3)',
+        '-~8 ^ -~8',
+        '+7 & +++7',
+        '-~-7 | -~-7',
+        '(not not --7) ^ 7',
+    ],
+)
+def test_meaningless_symmetric_bitwise_math(
+    assert_errors,
+    parse_ast_tree,
+    expression,
+    default_options,
+):
+    """Testing that symmetric bitwise operations are forbidden."""
+    tree = parse_ast_tree(expression)
+
+    visitor = UselessOperatorsVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(
+        visitor,
+        [MeaninglessNumberOperationViolation],
+        ignored_types=UselessOperatorsViolation,
+    )
+
+
+@pytest.mark.parametrize(
+    'expression',
+    [
+        '5 & 6',
+        '(not -2) | 3',
+        '-~7 ^ -~8',
+        'value | 2',
+        '-value & -3',
+        'value ^ -1',
+        '+6 & +++7',
+        '-~-4 | -~-7',
+        '(not not --8) ^ 7',
+        'value | ~~4',
+    ],
+)
+def test_useful_asymmetric_bitwise_math(
+    assert_errors,
+    parse_ast_tree,
+    expression,
+    default_options,
+):
+    """Testing that asymmetric bitwise operations are allowed."""
+    tree = parse_ast_tree(expression)
+
+    visitor = UselessOperatorsVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [], ignored_types=UselessOperatorsViolation)
 
 
 @pytest.mark.parametrize(

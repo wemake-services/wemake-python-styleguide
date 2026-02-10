@@ -27,6 +27,7 @@ Semantic versioning in our case means:
 - Fixes false positive `WPS457` for ``while True`` loop with ``await`` expressions, #3753
 - Fixes the false positive `WPS617` by assigning a function that receives a lambda expression as a parameter.
 - Fixes false positive `WPS430` for whitelisted nested functions, #3589
+- Fixes `WPS345` to forbid symmetric bitwise operations, #3593
 
 ### Removals
 
