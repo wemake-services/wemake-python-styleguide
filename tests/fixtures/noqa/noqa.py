@@ -122,20 +122,13 @@ def some():  # noqa: WPS110
 
     def nested():  # noqa: WPS430
         ...
-    
-    def factory():  # ok
-        if some_condition():
-            def deep_nested():  # noqa: WPS430
-                    ...
-        else:
-            def wrapper(): # ok
-                ...
-            if some_other_condition():
-                def deep_nested():  # noqa: WPS430
-                    ...
-            else:
-                def decorator(): # ok
-                    ...
+
+    if some_condition():
+        def deep_nested():  # noqa: WPS430
+            ...
+    else:
+        async def deep_nested():  # noqa: WPS430
+            ...
 
 
 del {'a': 1}['a']  # noqa: WPS420
