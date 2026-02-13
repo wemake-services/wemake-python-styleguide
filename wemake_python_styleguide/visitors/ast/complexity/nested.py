@@ -46,6 +46,9 @@ class NestedComplexityVisitor(BaseNodeVisitor):
         Used to find nested functions.
 
         Uses ``NESTED_FUNCTIONS_WHITELIST`` to respect some nested functions.
+        Only whitelisted functions are allowed, either directly inside
+        a function or inside a single function-level ``if`` / ``if-else``.
+        All other nesting is forbidden.
         """
         self._check_nested_function(node)
         self.generic_visit(node)
@@ -56,23 +59,26 @@ class NestedComplexityVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_nested_function(self, node: AnyFunctionDef) -> None:
-        if not isinstance(get_context(node), FunctionNodes):
+        context = get_context(node)
+        if not isinstance(context, FunctionNodes):
             return
 
         parent = get_parent(node)
 
         is_direct = isinstance(parent, FunctionNodes)
 
-        is_single_if = isinstance(parent, ast.If) and isinstance(
-            get_parent(parent), FunctionNodes
+        is_single_if = (
+            isinstance(parent, ast.If) and get_parent(parent) is context
         )
 
-        if node.name not in NESTED_FUNCTIONS_WHITELIST or not (
+        if node.name in NESTED_FUNCTIONS_WHITELIST and (
             is_direct or is_single_if
         ):
-            self.add_violation(
-                NestedFunctionViolation(node, text=node.name),
-            )
+            return
+
+        self.add_violation(
+            NestedFunctionViolation(node, text=node.name),
+        )
 
     def _check_nested_classes(self, node: ast.ClassDef) -> None:
         parent_context = get_context(node)
