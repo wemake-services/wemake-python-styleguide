@@ -234,6 +234,34 @@ def test_whitelist_nested_functions(
     [
         nested_function_in_if,
         nested_function_in_if_else,
+    ],
+)
+def test_deep_whitelist_nested_functions_allowed(
+    assert_errors,
+    assert_error_text,
+    parse_ast_tree,
+    whitelist_name,
+    code,
+    default_options,
+    mode,
+):
+    """
+    Test for allowed whitelisted functions inside single if(/else) block.
+
+    See: https://github.com/wemake-services/wemake-python-styleguide/issues/3589
+    """
+    tree = parse_ast_tree(mode(code.format(whitelist_name)))
+
+    visitor = NestedComplexityVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])
+
+
+@pytest.mark.parametrize('whitelist_name', NESTED_FUNCTIONS_WHITELIST)
+@pytest.mark.parametrize(
+    'code',
+    [
         nested_function_while_loop,
         nested_function_in_for_loop,
         nested_function_in_try,
@@ -251,7 +279,7 @@ def test_deep_whitelist_nested_functions(
     default_options,
     mode,
 ):
-    """Testing that it is possible to nest whitelisted functions."""
+    """Testing that it is restricted to nest even whitelisted functions."""
     tree = parse_ast_tree(mode(code.format(whitelist_name)))
 
     visitor = NestedComplexityVisitor(default_options, tree=tree)

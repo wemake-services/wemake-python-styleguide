@@ -123,6 +123,13 @@ def some():  # noqa: WPS110
     def nested():  # noqa: WPS430
         ...
 
+    if some_condition():
+        def deep_nested():  # noqa: WPS430
+            ...
+    else:
+        async def deep_nested():  # noqa: WPS430
+            ...
+
 
 del {'a': 1}['a']  # noqa: WPS420
 delattr(object, 'some')  # noqa: WPS421
