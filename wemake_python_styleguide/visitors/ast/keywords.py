@@ -22,7 +22,6 @@ from wemake_python_styleguide.violations.best_practices import (
     WrongKeywordViolation,
 )
 from wemake_python_styleguide.violations.consistency import (
-    ConsecutiveYieldsViolation,
     InconsistentReturnViolation,
     InconsistentYieldViolation,
     IncorrectYieldFromTargetViolation,
