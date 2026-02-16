@@ -204,13 +204,6 @@ class WrongContextManagerVisitor(BaseNodeVisitor):
 
 
 @final
-@alias(
-    'visit_any_function',
-    (
-        'visit_FunctionDef',
-        'visit_AsyncFunctionDef',
-    ),
-)
 class GeneratorKeywordsVisitor(BaseNodeVisitor):
     """Checks how generators are defined and used."""
 
@@ -223,26 +216,11 @@ class GeneratorKeywordsVisitor(BaseNodeVisitor):
         ast.GeneratorExp,
     )
 
-    def __init__(self, *args, **kwargs) -> None:
-        """Here we store the information about ``yield`` locations."""
-        super().__init__(*args, **kwargs)
-        self._yield_locations: dict[int, ast.Expr] = {}
-
-    def visit_any_function(self, node: AnyFunctionDef) -> None:
-        """Checks for consecutive ``yield`` nodes."""
-        self._check_consecutive_yields(node)
-        self.generic_visit(node)
-
     def visit_YieldFrom(self, node: ast.YieldFrom) -> None:
         """Checks ``yield from`` nodes."""
         self._check_yield_from_type(node)
         self._check_yield_from_empty(node)
         self.generic_visit(node)
-
-    def _check_consecutive_yields(self, node: AnyFunctionDef) -> None:
-        for sub in ast.walk(node):
-            if isinstance(sub, ast.Expr) and isinstance(sub.value, ast.Yield):
-                self._yield_locations[sub.value.lineno] = sub
 
     def _check_yield_from_type(self, node: ast.YieldFrom) -> None:
         if not isinstance(node.value, self._allowed_nodes):
@@ -251,24 +229,6 @@ class GeneratorKeywordsVisitor(BaseNodeVisitor):
     def _check_yield_from_empty(self, node: ast.YieldFrom) -> None:
         if isinstance(node.value, ast.Tuple) and not node.value.elts:
             self.add_violation(IncorrectYieldFromTargetViolation(node))
-
-    def _post_visit(self) -> None:
-        previous_line: int | None = None
-        previous_parent: ast.AST | None = None
-
-        for line, node in self._yield_locations.items():
-            parent = get_parent(node)
-
-            if (
-                previous_line is not None
-                and line - 1 == previous_line
-                and previous_parent == parent
-            ):
-                self.add_violation(ConsecutiveYieldsViolation(node.value))
-                break
-
-            previous_line = line
-            previous_parent = parent
 
 
 @final
