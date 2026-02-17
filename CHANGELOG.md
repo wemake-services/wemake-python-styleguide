@@ -28,6 +28,10 @@ Semantic versioning in our case means:
 - Fixes the false positive `WPS617` by assigning a function that receives a lambda expression as a parameter.
 - Fixes false positive `WPS430` for whitelisted nested functions, #3589
 
+### Removals
+
+- **Breaking**: Removes `WPS354`, because it is inconsistent with async code, #3601
+
 
 ## 1.5.0
 

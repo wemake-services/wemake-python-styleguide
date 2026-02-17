@@ -2086,11 +2086,15 @@ class ConsecutiveYieldsViolation(ASTViolation):
         It can be easily changed to ``yield from (...)`` format.
 
     .. versionadded:: 0.13.0
+    .. versionchanged:: 1.6.0
+       No longer produced, kept here for historic reasons.
+       It is inconsistent with async code.
 
     """
 
     error_template = 'Found consecutive `yield` expressions'
     code = 354
+    disabled_since = '1.6.0'
 
 
 @final

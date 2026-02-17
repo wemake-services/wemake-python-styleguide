@@ -534,10 +534,6 @@ def wrong_yield_from():
     yield from []  # noqa: WPS353
 
 
-def consecutive_yields():
-    yield 1
-    yield 2  # noqa: WPS354
-
 if 'key' in some_dict:
     my_print(some_dict['key'])  # noqa: WPS529
     my_print(other_dict[1.0])  # noqa: WPS449
