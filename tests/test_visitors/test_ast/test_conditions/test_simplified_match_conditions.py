@@ -1,6 +1,7 @@
 import pytest
 
 from wemake_python_styleguide.violations.consistency import (
+    SimplifiableIfMatchViolation,
     SimplifiableMatchViolation,
 )
 from wemake_python_styleguide.visitors.ast.conditions import (
@@ -183,6 +184,114 @@ def test_not_simplifiable_match_templates(
     default_options,
 ):
     """Test that complex or non-simplifiable matches do not raise violations."""
+    tree = parse_ast_tree(template)
+    visitor = SimplifiableMatchVisitor(default_options, tree=tree)
+    visitor.run()
+    assert_errors(visitor, [])
+
+
+# New tests for single-case matches:
+
+# Wrong (single case):
+single_case_match = """
+match x:
+    case {0}:
+        do_something()
+"""
+
+single_case_with_as_binding_match = """
+match x:
+    case {0} as y:
+        do_something()
+"""
+
+# Correct (not single case or has guards):
+multi_case_match = """
+match x:
+    case 1:
+        do_something()
+    case 2:
+        do_something_else()
+"""
+
+single_case_with_guard = """
+match x:
+    case y if y > 0:
+        do_something()
+"""
+
+wildcard_case = """
+match x:
+    case _:
+        do_something()
+"""
+
+pattern_with_complex_structure = """
+match x:
+    case [a, b]:
+        do_something()
+"""
+
+pattern_with_class_args = """
+match x:
+    case SomeClass(a):
+        do_something()
+"""
+
+
+@pytest.mark.parametrize(
+    'code',
+    [
+        '1',
+        'True',
+        'None',
+        '"string"',
+        'ns.CONST',
+        'State.ACCEPTED',
+    ],
+)
+def test_single_case_match(
+    code,
+    assert_errors,
+    parse_ast_tree,
+    default_options,
+):
+    """Test that single-case matches raise a violation."""
+    tree = parse_ast_tree(single_case_match.format(code))
+    visitor = SimplifiableMatchVisitor(default_options, tree=tree)
+    visitor.run()
+    assert_errors(visitor, [SimplifiableIfMatchViolation])
+
+
+def test_single_case_with_as_binding(
+    assert_errors,
+    parse_ast_tree,
+    default_options,
+):
+    """Test that single-case matches with as-binding raise a violation."""
+    tree = parse_ast_tree(single_case_with_as_binding_match.format('1'))
+    visitor = SimplifiableMatchVisitor(default_options, tree=tree)
+    visitor.run()
+    assert_errors(visitor, [SimplifiableIfMatchViolation])
+
+
+@pytest.mark.parametrize(
+    'template',
+    [
+        multi_case_match,
+        single_case_with_guard,
+        wildcard_case,
+        pattern_with_complex_structure,
+        pattern_with_class_args,
+    ],
+)
+def test_not_single_case_match(
+    template,
+    assert_errors,
+    parse_ast_tree,
+    default_options,
+):
+    """Test that non-single-case matches do not raise the single-case violation."""
     tree = parse_ast_tree(template)
     visitor = SimplifiableMatchVisitor(default_options, tree=tree)
     visitor.run()
