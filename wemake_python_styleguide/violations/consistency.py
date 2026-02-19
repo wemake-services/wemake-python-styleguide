@@ -2469,3 +2469,54 @@ class SimplifiableMatchViolation(ASTViolation):
         'Found simplifiable `match` statement that can be just `if`'
     )
     code = 365
+
+
+@final
+class SimplifiableMatchWithSequenceOrMappingViolation(ASTViolation):
+    """
+    Some ``match`` statements with simple sequences or mappings can be.
+
+    Reasoning:
+        Using ``match`` for exact structural comparisons of simple literals
+        (like lists or dicts) is unnecessarily verbose. While match excels
+        at deconstruction, using it to check for an exact list or dict value
+        is better expressed with a direct equality comparison (``==``),
+        which is more readable and performant.
+
+    Solution:
+        Replace ``match`` statements that check for simple sequences or
+        mappings (with no deconstruction) with ``if`` statements using ``==``.
+
+    When is this violation is raised?
+        - When there are exactly two ``case`` statements
+        - When the first case uses a simple sequence or mapping pattern
+        - When the second case is a wildcard: ``case _:``
+        - When the pattern contains only literals/contants (no
+      variable bindings)
+        - When there are no guards or starred patterns
+
+
+    Example::
+
+        # Correct:
+        if data == [1, 2]:
+            handle_pair()
+        else:
+            ignore()
+
+        # Wrong:
+        match data:
+            case [1, 2]:
+                handle_pair()
+            case _:
+                ignore()
+
+    .. versionadded:: 1.5.0
+
+    """
+
+    error_template = (
+        'Found simplifiable `match` statement with sequence or mapping '
+        'that can be just `if`'
+    )
+    code = 366
