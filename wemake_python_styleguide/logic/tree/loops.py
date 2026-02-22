@@ -28,7 +28,9 @@ def is_in_try_except(node: ast.AST) -> bool:
         if isinstance(parent, ast.Try) and parent.handlers:
             return True
         # Stop at function/class boundaries — don't look past them
-        if isinstance(parent, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+        if isinstance(
+            parent, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)
+        ):
             break
         parent = get_parent(parent)
     return False
@@ -54,4 +56,3 @@ def has_break(
             if not is_nested_break:
                 return True
     return False
-

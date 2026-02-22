@@ -163,7 +163,6 @@ except SomeError:
 """
 
 
-
 @pytest.mark.parametrize(
     'template',
     [
