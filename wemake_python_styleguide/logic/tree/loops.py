@@ -1,6 +1,7 @@
 import ast
 
 from wemake_python_styleguide.compat.aliases import ForNodes
+from wemake_python_styleguide.logic.nodes import get_parent
 from wemake_python_styleguide.types import AnyLoop, AnyNodes
 
 
@@ -18,6 +19,21 @@ def _does_loop_contain_node(
         return False
 
     return any(to_check is inner_node for inner_node in ast.walk(loop))
+
+
+def is_in_try_except(node: ast.AST) -> bool:
+    """Checks whether a node is directly inside a ``try/except`` block."""
+    parent = get_parent(node)
+    while parent is not None:
+        if isinstance(parent, ast.Try) and parent.handlers:
+            return True
+        # Stop at function/class boundaries — don't look past them
+        if isinstance(
+            parent, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)
+        ):
+            break
+        parent = get_parent(parent)
+    return False
 
 
 def has_break(

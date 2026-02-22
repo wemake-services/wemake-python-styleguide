@@ -126,6 +126,42 @@ while True:
         ...
 """
 
+wrong_while3 = """
+try:
+    while True:
+        do_something()
+finally:
+    cleanup()
+"""
+
+# Correct: while inside try/except
+
+correct_while8 = """
+def gen():
+    try:
+        while True:
+            yield some()
+    except StopIteration:
+        pass
+"""
+
+correct_while9 = """
+def factory():
+    try:
+        while True:
+            yield async_to_sync(anext)(iterator)
+    except StopAsyncIteration:
+        pass
+"""
+
+correct_while10 = """
+try:
+    while 1:
+        do_something()
+except SomeError:
+    handle()
+"""
+
 
 @pytest.mark.parametrize(
     'template',
@@ -173,6 +209,9 @@ def test_correct_while_loops_with_statements(
         correct_while5,
         correct_while6,
         correct_while7,
+        correct_while8,
+        correct_while9,
+        correct_while10,
     ],
 )
 def test_correct_while_loops_with_try(
@@ -259,6 +298,7 @@ def test_wrong_while_loops(
     [
         wrong_while1,
         wrong_while2,
+        wrong_while3,
     ],
 )
 def test_wrong_while_loops_with_try(
