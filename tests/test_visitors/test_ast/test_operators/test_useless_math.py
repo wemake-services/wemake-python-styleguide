@@ -34,7 +34,7 @@ usage_template = 'constant {0}'
         '% 0o1',
         '* other / 1.0',
         '* 1 * other',
-        # Boolean ops:
+        # Bitwise ops:
         '>> 0',
         '<< 0',
         '| 0b0',
@@ -78,7 +78,7 @@ def test_meaningless_math(
         '/ -1.0',
         '* other / 1.5',
         '* -1 * other',
-        # Boolean ops:
+        # Bitwise ops:
         '>> 10',
         '<< 1',
         '| 0b1',

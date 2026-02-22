@@ -469,7 +469,7 @@ CONSTANT = []  # noqa: WPS407
 
 numbers = map(lambda string: int(string), ['1'])  # noqa: WPS506
 
-if numbers and numbers:  # noqa: WPS408
+if numbers and numbers:  # noqa: WPS408, WPS366
     my_print('duplicate boolop')
 
 if numbers == CONSTANT != [2]:  # noqa: WPS409

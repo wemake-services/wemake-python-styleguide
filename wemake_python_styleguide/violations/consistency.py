@@ -2469,3 +2469,50 @@ class SimplifiableMatchViolation(ASTViolation):
         'Found simplifiable `match` statement that can be just `if`'
     )
     code = 365
+
+
+@final
+class MeaninglessBooleanOperationViolation(ASTViolation):
+    """
+    Forbid meaningless boolean operations.
+
+    Reasoning:
+        Some parts of a boolean expression may be redundant,
+        making the logic difficult to understand.
+
+    Explanation:
+        - comparison of constants can be replaced with a single constant
+        - comparison with ``True``/``False`` can be removed or replaced
+            with ``True`` or ``False`` constant
+        - comparison with constants in the ``and`` operator can lead to
+            an implicit conditional assignment, which is better done explicitly
+        - comparison with false-like constants in the ``or`` operator
+            can be removed
+        - everything after the first true-like constant in ``or`` operator
+            can be removed
+        - comparison of duplicated variables can be reduced
+
+    Solution:
+        Remove useless operations.
+
+    Example::
+
+        # Correct:
+        cond = condition or -1
+        cond = condition1 or condition2
+        cond = condition1 and condition2 and condition3
+        cond = condition or -condition
+
+        # Wrong:
+        cond = 10 and 'value'
+        cond = condition and 10
+        cond = condition or True
+        cond = condition or 'value' or 0
+        cond = condition and condition
+
+    .. versionadded:: 1.6.0
+
+    """
+
+    error_template = 'Found meaningless boolean operation'
+    code = 366
