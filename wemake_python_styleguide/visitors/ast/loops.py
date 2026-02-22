@@ -174,6 +174,9 @@ class WrongLoopVisitor(base.BaseNodeVisitor):
         if loops.has_break(node, break_nodes=self._can_break_loop):
             return
 
+        if loops.is_in_try_except(node):
+            return
+
         with suppress(ValueError):
             evaled = ast.literal_eval(node.test)
             if not isinstance(evaled, ast.Name) and bool(evaled):
