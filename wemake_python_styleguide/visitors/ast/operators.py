@@ -1,6 +1,6 @@
 import ast
 from collections import defaultdict
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from typing import ClassVar, TypeAlias, final
 
 from wemake_python_styleguide.compat.aliases import TextNodes
@@ -23,6 +23,7 @@ _MeaninglessOperators: TypeAlias = Mapping[
     tuple[type[ast.operator], ...],
 ]
 _OperatorLimits: TypeAlias = Mapping[type[ast.unaryop], int]
+_UnaryOperatorsChain: TypeAlias = Sequence[type[ast.unaryop]]
 
 
 @final
@@ -127,7 +128,7 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):  # noqa: WPS214
         op: ast.boolop,
         nodes: list[ast.expr],
     ) -> None:
-        unary_chains = defaultdict(set[tuple[type[ast.unaryop], ...]])
+        unary_chains: dict[str, set[_UnaryOperatorsChain]] = defaultdict(set)
         for position, node in enumerate(nodes, 1):
             unwrapped = unwrap_unary_node(node)
 
