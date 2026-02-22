@@ -21,6 +21,7 @@ Semantic versioning in our case means:
 ### Features
 
 - Allows walrus operator in `WPS332`, #3505
+- Forbids symmetric bitwise operations in `WPS345`, #3593
 
 ### Bugfixes
 
