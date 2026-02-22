@@ -1,4 +1,5 @@
 import ast
+from collections import defaultdict
 from collections.abc import Mapping
 from typing import ClassVar, TypeAlias, final
 
@@ -89,6 +90,11 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):  # noqa: WPS214
         self._check_useless_symmetric_operator(node.op, node.left, node.right)
         self.generic_visit(node)
 
+    def visit_BoolOp(self, node: ast.BoolOp) -> None:
+        """Visit boolean operators."""
+        self._check_useless_bool_operator(node.op, node.values)
+        self.generic_visit(node)
+
     def visit_AugAssign(self, node: ast.AugAssign) -> None:
         """Visits augmented assigns."""
         self._check_zero_division(node.op, node.value)
@@ -115,6 +121,36 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):  # noqa: WPS214
         )
         if is_zero_division:
             self.add_violation(consistency.ZeroDivisionViolation(number))
+
+    def _check_useless_bool_operator(  # noqa: WPS210
+        self,
+        op: ast.boolop,
+        nodes: list[ast.expr],
+    ) -> None:
+        unary_chains = defaultdict(set[tuple[type[ast.unaryop], ...]])
+        for position, node in enumerate(nodes, 1):
+            unwrapped = unwrap_unary_node(node)
+
+            # `and` containing at least one constant
+            # `or` containing bool or everything after non-bool constant
+            has_useless_constant = isinstance(unwrapped, ast.Constant) and (
+                isinstance(op, ast.And)
+                or isinstance(unwrapped.value, bool)
+                or position < len(nodes)
+            )
+            # `and`/`or` operators containing a duplicate name
+            # with identical unary operations
+            has_useless_name = False
+            if isinstance(unwrapped, ast.Name):
+                opchain = tuple(get_reduced_unary_operators(unwrapped))
+                has_useless_name = opchain in unary_chains[unwrapped.id]
+                unary_chains[unwrapped.id].add(opchain)
+
+            if has_useless_constant or has_useless_name:
+                self.add_violation(
+                    consistency.MeaninglessBooleanOperationViolation(node)
+                )
+                return
 
     def _check_useless_math_operator(
         self,
