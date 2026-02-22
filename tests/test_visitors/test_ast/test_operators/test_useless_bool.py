@@ -58,7 +58,7 @@ def test_useless_bool(
         'value1 or value2 or value3',
         'value1 or value2 or 4',
         'value1 and value2 and value3',
-        '(value1 and value2) or (value3 and value4)'
+        '(value1 and value2) or (value3 and value4)',
     ],
 )
 def test_useful_bool(
