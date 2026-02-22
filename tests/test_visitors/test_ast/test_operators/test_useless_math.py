@@ -140,6 +140,7 @@ def test_meaningless_symmetric_bitwise_math(
 @pytest.mark.parametrize(
     'expression',
     [
+        '7 ^ -7',
         '5 & 6',
         '(not -2) | 3',
         '-~7 ^ -~8',
