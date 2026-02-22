@@ -2480,6 +2480,18 @@ class MeaninglessBooleanOperationViolation(ASTViolation):
         Some parts of a boolean expression may be redundant,
         making the logic difficult to understand.
 
+    Explanation:
+        - comparison of constants can be replaced with a single constant
+        - comparison with ``True``/``False`` can be removed or replaced
+            with ``True`` or ``False`` constant
+        - comparison with constants in the ``and`` operator can lead to
+            an implicit conditional assignment, which is better done explicitly
+        - comparison with false-like constants in the ``or`` operator
+            can be removed
+        - everything after the first true-like constant in ``or`` operator
+            can be removed
+        - comparison of duplicated variables can be reduced
+
     Solution:
         Remove useless operations.
 

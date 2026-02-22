@@ -93,7 +93,8 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):  # noqa: WPS214
 
     def visit_BoolOp(self, node: ast.BoolOp) -> None:
         """Visit boolean operators."""
-        self._check_useless_bool_operator(node.op, node.values)
+        self._check_useless_bool_op_constants(node.op, node.values)
+        self._check_useless_bool_op_names(node.op, node.values)
         self.generic_visit(node)
 
     def visit_AugAssign(self, node: ast.AugAssign) -> None:
@@ -123,12 +124,11 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):  # noqa: WPS214
         if is_zero_division:
             self.add_violation(consistency.ZeroDivisionViolation(number))
 
-    def _check_useless_bool_operator(  # noqa: WPS210
+    def _check_useless_bool_op_constants(
         self,
         op: ast.boolop,
         nodes: list[ast.expr],
     ) -> None:
-        unary_chains: dict[str, set[_UnaryOperatorsChain]] = defaultdict(set)
         for position, node in enumerate(nodes, 1):
             unwrapped = unwrap_unary_node(node)
 
@@ -139,6 +139,21 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):  # noqa: WPS214
                 or isinstance(unwrapped.value, bool)
                 or position < len(nodes)
             )
+            if has_useless_constant:
+                self.add_violation(
+                    consistency.MeaninglessBooleanOperationViolation(node)
+                )
+                return
+
+    def _check_useless_bool_op_names(
+        self,
+        op: ast.boolop,
+        nodes: list[ast.expr],
+    ) -> None:
+        unary_chains: dict[str, set[_UnaryOperatorsChain]] = defaultdict(set)
+        for node in nodes:
+            unwrapped = unwrap_unary_node(node)
+
             # `and`/`or` operators containing a duplicate name
             # with identical unary operations
             has_useless_name = False
@@ -147,7 +162,7 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):  # noqa: WPS214
                 has_useless_name = opchain in unary_chains[unwrapped.id]
                 unary_chains[unwrapped.id].add(opchain)
 
-            if has_useless_constant or has_useless_name:
+            if has_useless_name:
                 self.add_violation(
                     consistency.MeaninglessBooleanOperationViolation(node)
                 )
