@@ -105,6 +105,36 @@ async def worker():
         await asyncio.sleep(1)
 """
 
+# Correct: while inside try/except
+
+correct_while8 = """
+def gen():
+    try:
+        while True:
+            yield some()
+    except StopIteration:
+        pass
+"""
+
+correct_while9 = """
+try:
+    while 1:
+        do_something()
+except SomeError:
+    handle()
+"""
+
+correct_while10 = """
+try:
+    while True:
+        try:
+            do_something()
+        except InnerError:
+            pass
+except OuterError:
+    handle()
+"""
+
 # Do raise:
 
 wrong_while1 = """
@@ -132,34 +162,6 @@ try:
         do_something()
 finally:
     cleanup()
-"""
-
-# Correct: while inside try/except
-
-correct_while8 = """
-def gen():
-    try:
-        while True:
-            yield some()
-    except StopIteration:
-        pass
-"""
-
-correct_while9 = """
-def factory():
-    try:
-        while True:
-            yield async_to_sync(anext)(iterator)
-    except StopAsyncIteration:
-        pass
-"""
-
-correct_while10 = """
-try:
-    while 1:
-        do_something()
-except SomeError:
-    handle()
 """
 
 
