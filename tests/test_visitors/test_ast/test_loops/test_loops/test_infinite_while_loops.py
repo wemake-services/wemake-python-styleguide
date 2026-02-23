@@ -108,12 +108,12 @@ async def worker():
 # Correct: while inside try/except
 
 correct_while8 = """
-def gen():
-    try:
+try:
+    if some:
         while True:
-            yield some()
-    except StopIteration:
-        pass
+            yield some
+except StopIteration:
+    pass
 """
 
 correct_while9 = """
@@ -132,6 +132,17 @@ try:
         except InnerError:
             pass
 except OuterError:
+    handle()
+"""
+
+# Wrong: try/except is outside a scope boundary, should not exempt the while
+
+wrong_while4 = """
+try:
+    def inner():
+        while True:
+            do_something()
+except SomeError:
     handle()
 """
 
@@ -301,6 +312,7 @@ def test_wrong_while_loops(
         wrong_while1,
         wrong_while2,
         wrong_while3,
+        wrong_while4,
     ],
 )
 def test_wrong_while_loops_with_try(

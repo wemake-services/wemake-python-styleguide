@@ -4,8 +4,6 @@ from wemake_python_styleguide.compat.aliases import ForNodes
 from wemake_python_styleguide.logic.walk import tree as walk
 from wemake_python_styleguide.types import AnyLoop, AnyNodes
 
-_SCOPE_BOUNDARIES = (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)
-
 
 def _does_loop_contain_node(
     loop: AnyLoop | None,
@@ -28,7 +26,7 @@ def is_in_try_except(node: ast.AST) -> bool:
     # Find the closest Try or scope-boundary parent, whichever comes first.
     closest = walk.get_closest_parent(
         node,
-        (*_SCOPE_BOUNDARIES, ast.Try),
+        (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef, ast.Try),
     )
     return isinstance(closest, ast.Try) and bool(closest.handlers)
 
