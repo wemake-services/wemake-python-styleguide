@@ -27,7 +27,8 @@ def is_in_try_except(node: ast.AST) -> bool:
     """Checks whether a node is directly inside a ``try/except`` block."""
     # Find the closest Try or scope-boundary parent, whichever comes first.
     closest = walk.get_closest_parent(
-        node, (*_SCOPE_BOUNDARIES, ast.Try),
+        node,
+        (*_SCOPE_BOUNDARIES, ast.Try),
     )
     return isinstance(closest, ast.Try) and bool(closest.handlers)
 
