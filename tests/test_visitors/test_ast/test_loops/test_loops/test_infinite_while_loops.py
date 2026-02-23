@@ -135,8 +135,6 @@ except OuterError:
     handle()
 """
 
-# Wrong: try/except is outside a scope boundary, should not exempt the while
-
 wrong_while4 = """
 try:
     def inner():
