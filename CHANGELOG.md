@@ -17,24 +17,28 @@ Semantic versioning in our case means:
   change the client facing API, change code conventions significantly, etc.
 
 
-## WIP
+## 1.6.0
 
 ### Features
 
+- Adds `python3.14` official support
 - Allows walrus operator in `WPS332`, #3505
 - Forbids symmetric bitwise operations in `WPS345`, #3593
 - Adds `WPS366`: forbid meaningless boolean operations, #3593
 
 ### Bugfixes
 
-- Fixes false positive `WPS457` for ``while True`` loop with ``await`` expressions, #3753
-- Fixes the false positive `WPS617` by assigning a function that receives a lambda expression as a parameter.
+- Fixes false positive `WPS457` for ``while True`` loop
+  with ``await`` expressions, #3753
+- Fixes the false positive `WPS617` by assigning a function
+  that receives a lambda expression as a parameter, #3597
 - Fixes false positive `WPS430` for whitelisted nested functions, #3589
 - Fixes false positive `WPS457` for `while True` nested in `try/except`, #3604
 
 ### Removals
 
-- **Breaking**: Removes `WPS354`, because it is inconsistent with async code, #3601
+- **Breaking**: Removes `WPS354`, because it is inconsistent
+  with async code, #3601
 
 
 ## 1.5.0

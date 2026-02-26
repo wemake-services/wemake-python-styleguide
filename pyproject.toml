@@ -4,10 +4,10 @@ requires = [ "poetry-core>=2.2" ]
 
 [tool.poetry]
 name = "wemake-python-styleguide"
-version = "1.5.0"
+version = "1.6.0"
 description = "The strictest and most opinionated python linter ever"
 license = "MIT"
-requires-poetry = ">=2.2"
+requires-poetry = ">=2.3"
 
 authors = [
   "Nikita Sobolev <mail@sobolevn.me>",
@@ -56,7 +56,7 @@ attrs = "*"
 pygments = "^2.19"
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^8.4"
+pytest = "^9.0"
 pytest-cov = "^7.0"
 pytest-randomly = "^4.0"
 pytest-xdist = "^3.8"
@@ -68,12 +68,12 @@ hypothesmith = "^0.3"
 mypy = "^1.19"
 types-flake8 = "^7.3"
 
-import-linter = "^2.0"
+import-linter = "^2.10"
 
 astpath = "^0.9"
 lxml = "^6.0"
 nbqa = "^1.2"
-ruff = "^0.14"
+ruff = "^0.15"
 
 [tool.poetry.group.docs]
 optional = true
@@ -82,7 +82,7 @@ optional = true
 sphinx = "^8.1"
 sphinx-autodoc-typehints = "^3.0"
 sphinxcontrib-mermaid = "^1.0"
-furo = "^2024.8"
+furo = "^2025.12"
 added-value = "^0.24"
 tomli = "^2.0"
 myst-parser = "^4.0"
