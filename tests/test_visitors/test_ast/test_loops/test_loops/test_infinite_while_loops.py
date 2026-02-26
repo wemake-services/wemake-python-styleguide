@@ -111,7 +111,7 @@ correct_while8 = """
 try:
     if some:
         while True:
-            yield some
+            do_something()
 except StopIteration:
     pass
 """
