@@ -456,7 +456,7 @@ class InitModuleHasLogicViolation(SimpleViolation):
 
     It is also fine when you have different users that use your code.
     And you do not want to break everything for them.
-    In this case, this rule can be configured.
+    In this case, this rule can be ignored.
 
     .. versionadded:: 0.1.0
 
