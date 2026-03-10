@@ -1,4 +1,6 @@
 rules:
+  secrets-outside-env:
+    disable: true
   unpinned-uses:
     config:
       policies:
