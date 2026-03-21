@@ -128,3 +128,7 @@ todo_include_todos = True
 
 # sphinx_llms_txt configuration
 llms_txt_uri_template = '{base_url}{docname}.html'
+
+llms_txt_code_files = [
+    '+:../wemake_python_styleguide/violations/naming.py',
+]
