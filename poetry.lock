@@ -2293,19 +2293,22 @@ docs = ["furo", "ipython", "myst-parser", "sphinx-copybutton", "sphinx-inline-ta
 
 [[package]]
 name = "sphinx-llms-txt"
-version = "0.3.2"
+version = "0.7.1"
 description = "llms-full.txt generator for Sphinx"
 optional = false
 python-versions = "*"
 groups = ["docs"]
-files = [
-    {file = "sphinx_llms_txt-0.3.2-py3-none-any.whl", hash = "sha256:ec329399dff05146f0711ade6180631fbfd4fc1084744fdb32e01e9968afc41d"},
-    {file = "sphinx_llms_txt-0.3.2.tar.gz", hash = "sha256:d07afda207fd8138144946b67c61e9599f37a7296f94c868077c02a90889a3bb"},
-]
+files = []
+develop = false
 
-[package.extras]
-dev = ["black", "flake8", "isort", "mypy", "pre-commit", "pytest (>=7.0.0)", "sphinx"]
-test = ["pytest (>=7.0.0)"]
+[package.dependencies]
+sphinx = "*"
+
+[package.source]
+type = "git"
+url = "https://github.com/jdillard/sphinx-llms-txt"
+reference = "10794dc"
+resolved_reference = "10794dce6589034bd6aa67d1f0fb1c883c0be8c6"
 
 [[package]]
 name = "sphinxcontrib-applehelp"
@@ -2618,4 +2621,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.10"
-content-hash = "018af743ff26e82f15f21a9bab479f9279efaad874a9fa28280b98a32f2c916b"
+content-hash = "3877260c79c742b5637c5e2aad60822cbb5ea3dc9b5eb5078509293c23a8923c"
