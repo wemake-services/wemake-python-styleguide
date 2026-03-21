@@ -10,7 +10,8 @@ build:
       - asdf global poetry latest
       - poetry config virtualenvs.create false
       - poetry self add poetry-plugin-export
-      - poetry export --only main --only docs --format=requirements.txt --output=requirements.txt
+      # TODO: remove `--without-hashes` once `sphinx-llms-txt` is released:
+      - poetry export --only main --only docs --format=requirements.txt --output=requirements.txt --without-hashes
 
 python:
   install:
