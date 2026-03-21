@@ -61,6 +61,8 @@ extensions = [
     'sphinxcontrib.mermaid',
     # Used to render WPS violations:
     'docs.ext.plugincodes',
+    # Used to generate llms.txt for AI agents:
+    'sphinx_llms_txt',
 ]
 
 autoclass_content = 'class'
@@ -123,3 +125,6 @@ napoleon_numpy_docstring = False
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = True
+
+# sphinx_llms_txt configuration
+llms_txt_uri_template = '{base_url}{docname}.html'

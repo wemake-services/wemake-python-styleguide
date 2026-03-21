@@ -37,6 +37,10 @@ We highly recommend to also use:
 
 - [ondivi](https://wemake-python-styleguide.rtfd.io/en/latest/pages/usage/integrations/ondivi.html) for easy integration into a **legacy** codebase
 
+Additional contexts for LLMs:
+- https://wemake-python-styleguide.readthedocs.io/llms.txt
+- https://wemake-python-styleguide.readthedocs.io/llms-full.txt
+
 
 ## Running
 
