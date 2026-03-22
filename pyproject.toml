@@ -82,7 +82,7 @@ optional = true
 sphinx = "^8.1"
 sphinx-autodoc-typehints = "^3.0"
 sphinxcontrib-mermaid = "^1.0"
-sphinx-llms-txt = { git = "https://github.com/jdillard/sphinx-llms-txt", rev = "10794dc" }
+sphinx-llms-txt = "^0.7"
 furo = "^2025.12"
 added-value = "^0.24"
 tomli = "^2.0"
