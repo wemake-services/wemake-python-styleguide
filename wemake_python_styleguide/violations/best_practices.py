@@ -1800,13 +1800,13 @@ class StringConstantRedefinedViolation(ASTViolation):
 
         # Correct:
         import string
-        UPPERCASE_ALPH = string.ascii_uppercase
-        LOWERCASE_ALPH = string.ascii_lowercase
+        UPPERCASE_ALPHA = string.ascii_uppercase
+        LOWERCASE_ALPHA = string.ascii_lowercase
 
         # Wrong:
         GUESS_MY_NAME = "abcde...WXYZ"
-        UPPERCASE_ALPH = "ABCD...WXYZ"
-        LOWERCASE_ALPH = "abcd...wxyz"
+        UPPERCASE_ALPHA = "ABCD...WXYZ"
+        LOWERCASE_ALPHA = "abcd...wxyz"
 
     .. versionadded:: 0.13.0
 

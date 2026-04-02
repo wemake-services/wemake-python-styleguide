@@ -61,7 +61,7 @@ def test_compare_with_in(
 @pytest.mark.parametrize(
     'comparators',
     [
-        ('line', 'sqaure', 'shape'),
+        ('line', 'square', 'shape'),
         ('output', 'status', {True}),
         ('letter', 'line', 'book'),
     ],

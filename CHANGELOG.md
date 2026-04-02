@@ -316,7 +316,7 @@ Our [GitHub Action](https://github.com/marketplace/actions/wemake-python-stylegu
 - Adds a new rule to forbid `lambda` assigns to special attributes, #1733
 - Adds a new rule to check problematic function params, #1343
 - Adds a new rule to detect duplicate conditions in `if`s and `elif`s, #2241
-- Adds a new rule to detect duplicate `case` pattens in `match`, #3206
+- Adds a new rule to detect duplicate `case` patterns in `match`, #3206
 - Adds a new rule to find too many `match` subjects, #3201
 - Adds a new rule to detect too many `case` statements, #3202
 - Adds a new rule to find too complex `except` with too many exceptions
@@ -1051,7 +1051,7 @@ In this release we had a little focus on:
 
 - Bumps `flake8-eradicate` version
   and solves `attrs` incompatible versions issue
-- Bumps `flake8-dosctrings` version
+- Bumps `flake8-docstrings` version
   and solved `pydocstyle` issue
 - Fixes `TryExceptMultipleReturnPathViolation` not tracking `else` and `finally`
   returns at the same time
@@ -1101,7 +1101,7 @@ In this release we had a little focus on:
 - Adds `bellybutton` to the list of other linters
 - Documents how to use `nitpick` to sync the configuration
 - Documents how to use `flakehell` to create `baseline`s for legacy integrations
-- Improves tests for binary, octal, hex, and exponentional numbers
+- Improves tests for binary, octal, hex, and exponential numbers
 - Adds new `xenon` CI check
 - Now handles exceptions in our own code, hope to never see them!
 - Now uses `coverage` checks in deepsource
@@ -1161,7 +1161,7 @@ for you to rename your violations with a script.
 - Ensures that `--diff` mode works for `flake8`
 - Renames `Incorrect` to `Wrong` where possible
 - Renames `IncorrectlyNestedTernaryViolation` to `NestedTernaryViolation`
-- Renames `IncorectLoopIterTypeViolation` to `WrongLoopIterTypeViolation`
+- Renames `IncorrectLoopIterTypeViolation` to `WrongLoopIterTypeViolation`
 
 
 ## 0.10.0 aka The Great Compare

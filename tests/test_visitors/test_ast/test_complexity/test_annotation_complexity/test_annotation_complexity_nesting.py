@@ -69,7 +69,7 @@ class Test:
         'Dict[int, str]',
         'Callable[[str, int], int]',
         'List[List[int]]',
-        '"String Annontation"',
+        '"String Annotation"',
         'typing.int',
         'typing.List[int]',
         'typing.List["typing.Tuple[int]"]',

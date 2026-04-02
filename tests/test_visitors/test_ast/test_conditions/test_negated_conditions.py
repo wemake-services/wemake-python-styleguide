@@ -188,7 +188,7 @@ def test_correctly_negated_complex_conditions(
         ('x != 1', 'y == 2', [NegatedConditionsViolation]),
     ],
 )
-def test_correctly_double_negated_condtions(
+def test_correctly_double_negated_conditions(
     first,
     second,
     violations,

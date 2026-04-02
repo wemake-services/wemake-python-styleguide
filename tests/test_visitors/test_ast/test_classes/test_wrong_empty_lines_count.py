@@ -384,7 +384,7 @@ def test_ellipsis_into_body(
     assert_errors(visitor, [WrongEmptyLinesCountViolation])
 
 
-def test_string_concatination(
+def test_string_concatenation(
     parse_tokens,
     default_options,
     assert_errors,

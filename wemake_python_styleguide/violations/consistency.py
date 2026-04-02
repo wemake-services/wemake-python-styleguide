@@ -1457,9 +1457,9 @@ class WrongLoopIterTypeViolation(ASTViolation):
 @final
 class ExplicitStringConcatViolation(ASTViolation):
     """
-    Forbid explicit string concatanation in favour of ``.format`` method.
+    Forbid explicit string concatenation in favour of ``.format`` method.
 
-    However, we still allow multiline string concatanation
+    However, we still allow multiline string concatenation
     as a way to write long strings that does not fit the 80-chars rule.
 
     Reasoning:

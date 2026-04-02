@@ -71,13 +71,13 @@ class _FileFunctions:
         function_tokens_exists: bool,
     ) -> bool:
         next_token = self._next_token(token_index)
-        is_elipsis_end = (
+        is_ellipsis_end = (
             next_token
             and next_token.exact_type == tokenize.NEWLINE
             and token.string == '...'
             and token.start[0] == function_start[0]
         )
-        if is_elipsis_end:
+        if is_ellipsis_end:
             return True
         column_valid = token.start[1] in {0, function_start[1]}
         is_dedent_token = token.type == tokenize.DEDENT
@@ -105,15 +105,15 @@ class _FileTokens:
 
     def analyze(self) -> Iterable[best_practices.WrongEmptyLinesCountViolation]:
         for function in self._file_functions.search_functions():
-            splitted_function_body = function.body().strip().split('\n')
+            split_function_body = function.body().strip().split('\n')
             empty_lines_count = len(
-                [line for line in splitted_function_body if not line],
+                [line for line in split_function_body if not line],
             )
             if not empty_lines_count:
                 continue
 
             available_empty_lines = self._available_empty_lines(
-                len(splitted_function_body),
+                len(split_function_body),
                 empty_lines_count,
             )
             if empty_lines_count > available_empty_lines:
