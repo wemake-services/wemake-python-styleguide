@@ -11,7 +11,7 @@ else:
     if number == 2: print("2")
 """
 
-code_implict_if_else = """
+code_implicit_if_else = """
 if numbers:
     my_print('first')
 else:
@@ -34,13 +34,13 @@ def test_if_else_one_line(
     assert_errors(visitor, [ImplicitElifViolation])
 
 
-def test_if_else_implict(
+def test_if_else_implicit(
     assert_errors,
     default_options,
     parse_tokens,
 ):
     """Testing to make sure implicit if works."""
-    tokens = parse_tokens(code_implict_if_else)
+    tokens = parse_tokens(code_implicit_if_else)
 
     visitor = IfElseVisitor(default_options, tokens)
     visitor.run()

@@ -19,7 +19,7 @@ statement_with_expression = 'other_var + {0}'
     ],
 )
 def primitives_usages(request):
-    """Fixture to return possible cases of promitives use cases."""
+    """Fixture to return possible cases of primitives use cases."""
     return request.param
 
 

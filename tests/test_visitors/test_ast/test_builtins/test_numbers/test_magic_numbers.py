@@ -144,9 +144,9 @@ def test_magic_number(
     parse_tokens,
 ):
     """Testing that there are no magic numbers in this code."""
-    formated_code = mode(code.format(number))
-    tree = parse_ast_tree(formated_code)
-    file_tokens = parse_tokens(formated_code)
+    formatted_code = mode(code.format(number))
+    tree = parse_ast_tree(formatted_code)
+    file_tokens = parse_tokens(formatted_code)
 
     visitor = WrongNumberVisitor(
         default_options,
@@ -197,9 +197,9 @@ def test_magic_number_whitelist(
     parse_tokens,
 ):
     """Testing that magic numbers in this code are whitelisted."""
-    formated_code = mode(code.format(number))
-    tree = parse_ast_tree(formated_code)
-    file_tokens = parse_tokens(formated_code)
+    formatted_code = mode(code.format(number))
+    tree = parse_ast_tree(formatted_code)
+    file_tokens = parse_tokens(formatted_code)
 
     visitor = WrongNumberVisitor(
         default_options,
@@ -251,9 +251,9 @@ def test_magic_number_warning(
     parse_tokens,
 ):
     """Testing that magic numbers in this code are warnings."""
-    formated_code = mode(code.format(number))
-    tree = parse_ast_tree(formated_code)
-    file_tokens = parse_tokens(formated_code)
+    formatted_code = mode(code.format(number))
+    tree = parse_ast_tree(formatted_code)
+    file_tokens = parse_tokens(formatted_code)
 
     visitor = WrongNumberVisitor(
         default_options,
@@ -303,9 +303,9 @@ def test_magic_number_octal_warning(
     parse_tokens,
 ):
     """Testing that magic numbers in this code are warnings."""
-    formated_code = mode(code.format(number))
-    tree = parse_ast_tree(formated_code)
-    file_tokens = parse_tokens(formated_code)
+    formatted_code = mode(code.format(number))
+    tree = parse_ast_tree(formatted_code)
+    file_tokens = parse_tokens(formatted_code)
 
     visitor = WrongNumberVisitor(
         default_options,

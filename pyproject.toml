@@ -274,5 +274,30 @@ module = "wemake_python_styleguide.compat.packaging"
 # We allow unused `ignore` comments, because we cannot sync it between versions:
 warn_unused_ignores = false
 
+[tool.codespell]
+# codespell configuration: https://github.com/codespell-project/codespell
+skip = [
+  "__pycache__",
+  "_build",
+  ".mypy_cache",
+  "*.lock",
+  "tests/whitelist.txt",
+]
+ignore-words-list = [
+  "NotIn",
+]
+
+
+[tool.typos.files]
+# typos configuration: https://github.com/crate-ci/typos/
+extend-exclude = [
+  "__pycache__",
+  "_build",
+  ".mypy_cache",
+  "*.lock",
+  "tests/whitelist.txt",
+]
+
+
 [tool.poetry.scripts]
 wps = "wemake_python_styleguide.cli.cli_app:main"

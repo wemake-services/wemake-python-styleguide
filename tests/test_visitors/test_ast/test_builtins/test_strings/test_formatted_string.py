@@ -54,7 +54,7 @@ f_format_var_single = "f'{value:{fmt}}'"
 f_format_var_single2 = "f'{value1:{fmt1}} {value2:{fmt2}}'"
 f_format_var_single_index = "f'{value:{fmt[0]}}'"
 f_format_var_single_call = "f'{value:{fmt()}}'"
-f_format_convertions = "f'{value1!r} {value2!s} {value3!a}'"
+f_format_conversions = "f'{value1!r} {value2!s} {value3!a}'"
 f_format_assign = "f'{value=:<8}'"
 f_format_assign_conversion = "f'{value=!r}'"
 f_format_assign_attr = "f'{value.attr=:.456e}'"
@@ -243,7 +243,7 @@ def test_complex_f_string(assert_errors, parse_ast_tree, code, default_options):
         f_format_var_single2,
         f_format_var_single_index,
         f_format_var_single_call,
-        f_format_convertions,
+        f_format_conversions,
         f_format_assign,
         f_format_assign_conversion,
         f_format_assign_attr,

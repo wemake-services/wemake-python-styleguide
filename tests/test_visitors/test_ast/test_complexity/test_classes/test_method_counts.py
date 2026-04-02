@@ -91,7 +91,7 @@ class First:
 
 # regression1779
 
-class_with_overloades = """
+class_with_overloads = """
 class First:
     @overload
     def my_method(self): ...
@@ -115,7 +115,7 @@ class First:
         class_with_async_and_usual_class_methods,
         class_with_staticmethods,
         class_with_async_staticmethods,
-        class_with_overloades,
+        class_with_overloads,
     ],
 )
 def test_method_counts_normal(
@@ -167,7 +167,7 @@ def test_method_counts_violation(
 @pytest.mark.parametrize(
     'code',
     [
-        class_with_overloades,
+        class_with_overloads,
     ],
 )
 def test_method_counts_exceptions(
