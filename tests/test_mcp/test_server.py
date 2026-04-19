@@ -37,8 +37,7 @@ class TestLintTool:
         """WPS violations include an explanation and link."""
         result = json.loads(lint('print("hello")\n'))
         wps_violations = [
-            v for v in result['violations']
-            if v['code'].startswith('WPS')
+            v for v in result['violations'] if v['code'].startswith('WPS')
         ]
         assert len(wps_violations) > 0
         for violation in wps_violations:

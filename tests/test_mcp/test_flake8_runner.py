@@ -1,6 +1,5 @@
 """Tests for the flake8 runner used by the MCP server."""
 
-
 from wemake_python_styleguide.mcp.flake8_runner import (
     _get_explanation,  # noqa: PLC2701
     _parse_violations,  # noqa: PLC2701
