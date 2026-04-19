@@ -2,12 +2,10 @@
 
 import json
 
-import pytest
-
 from wemake_python_styleguide.mcp.server import (
+    explain_rule,
     lint,
     lint_file,
-    explain_rule,
     mcp_server,
 )
 
@@ -17,7 +15,7 @@ class TestLintTool:
 
     def test_clean_code_returns_no_violations(self):
         """Clean code returns empty violations list."""
-        result = json.loads(lint('x = 1\n'))
+        result = json.loads(lint('coordinate = 1\n'))
         assert result['total_violations'] == 0
         assert result['violations'] == []
 
@@ -49,13 +47,13 @@ class TestLintTool:
 
     def test_output_is_valid_json(self):
         """Output is always valid JSON."""
-        raw = lint('x = 1\n')
+        raw = lint('coordinate = 1\n')
         parsed = json.loads(raw)
         assert isinstance(parsed, dict)
 
     def test_custom_filename(self):
         """Custom filename parameter is accepted."""
-        result = json.loads(lint('x = 1\n', filename='module.py'))
+        result = json.loads(lint('coordinate = 1\n', filename='module.py'))
         assert result['total_violations'] == 0
 
 
@@ -65,7 +63,7 @@ class TestLintFileTool:
     def test_lint_file_returns_json(self, tmp_path):
         """lint_file returns valid JSON with file key."""
         test_file = tmp_path / 'example.py'
-        test_file.write_text('x = 1\n')
+        test_file.write_text('coordinate = 1\n')
         result = json.loads(lint_file(str(test_file)))
         assert 'file' in result
         assert result['file'] == str(test_file)
@@ -101,8 +99,8 @@ class TestExplainRuleTool:
 
     def test_low_number_zero_padded(self):
         """Low-numbered codes are zero-padded to 3 digits."""
-        result = json.loads(explain_rule('1'))
-        assert result.get('code', '').startswith('WPS0')
+        result = json.loads(explain_rule('0'))
+        assert result.get('code', '') == 'WPS000'
 
 
 class TestMCPServerRegistration:

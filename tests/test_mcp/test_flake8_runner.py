@@ -1,12 +1,11 @@
 """Tests for the flake8 runner used by the MCP server."""
 
-import pytest
 
 from wemake_python_styleguide.mcp.flake8_runner import (
-    run_flake8,
+    _get_explanation,  # noqa: PLC2701
+    _parse_violations,  # noqa: PLC2701
     lint_file,
-    _parse_violations,
-    _get_explanation,
+    run_flake8,
 )
 
 
@@ -32,10 +31,10 @@ class TestParseViolations:
 
     def test_multiple_violations(self):
         """Parse multiple violation lines."""
-        raw = '\n'.join([
-            'WPS100|||1|||0|||First violation',
-            'WPS200|||2|||4|||Second violation',
-        ])
+        raw = (
+            'WPS100|||1|||0|||First violation\n'
+            'WPS200|||2|||4|||Second violation'
+        )
         source_lines = ['line one', '    line two']
         result = _parse_violations(raw, source_lines)
         assert len(result) == 2
@@ -49,7 +48,7 @@ class TestParseViolations:
         """Line numbers beyond source produce empty source_line."""
         raw = 'WPS100|||999|||0|||some error'
         result = _parse_violations(raw, ['only one line'])
-        assert result[0]['source_line'] == ''
+        assert not result[0]['source_line']
 
     def test_wps_violation_has_link(self):
         """WPS violations include a documentation link."""
@@ -89,7 +88,7 @@ class TestRunFlake8:
 
     def test_clean_code(self):
         """Clean code produces zero violations."""
-        result = run_flake8('x = 1\n')
+        result = run_flake8('coordinate = 1\n')
         assert result['total_violations'] == 0
         assert result['violations'] == []
 
@@ -113,7 +112,7 @@ class TestRunFlake8:
 
     def test_result_structure(self):
         """Result dict always has required keys."""
-        result = run_flake8('')
+        result = run_flake8('coordinate = 1\n')
         assert 'violations' in result
         assert 'total_violations' in result
 
@@ -124,7 +123,7 @@ class TestLintFile:
     def test_lint_file(self, tmp_path):
         """Lint a file on disk."""
         test_file = tmp_path / 'test_module.py'
-        test_file.write_text('x = 1\n')
+        test_file.write_text('coordinate = 1\n')
         result = lint_file(str(test_file))
         assert 'file' in result
         assert result['file'] == str(test_file)

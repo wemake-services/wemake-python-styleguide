@@ -2,8 +2,7 @@
 
 from __future__ import annotations
 
-import subprocess
-import tempfile
+import subprocess  # noqa: S404
 from pathlib import Path
 
 from wemake_python_styleguide.cli.commands.explain.violation_loader import (
@@ -35,6 +34,44 @@ def _get_explanation(code: str) -> str | None:
     return violation_info.docstring
 
 
+def _source_at(source_lines: list[str], row: int) -> str:
+    """Return the source line at the given 1-based row, or empty."""
+    if 0 < row <= len(source_lines):
+        return source_lines[row - 1].rstrip()
+    return ''
+
+
+def _enrich_wps(
+    violation: dict[str, object],
+    code: str,
+) -> None:
+    """Add explanation and link for WPS violations in-place."""
+    if not code.startswith('WPS'):
+        return
+    explanation = _get_explanation(code)
+    if explanation is not None:
+        violation['explanation'] = explanation
+    violation['link'] = SHORTLINK_TEMPLATE.format(code)
+
+
+def _build_violation(
+    parts: tuple[str, ...],
+    source_lines: list[str],
+) -> dict[str, object]:
+    """Build a single violation dict from parsed parts."""
+    code, row_str, col_str, text = parts
+
+    violation: dict[str, object] = {
+        'code': code,
+        'message': text,
+        'line': int(row_str),
+        'column': int(col_str),
+        'source_line': _source_at(source_lines, int(row_str)),
+    }
+    _enrich_wps(violation, code)
+    return violation
+
+
 def _parse_violations(
     raw_output: str,
     source_lines: list[str],
@@ -45,30 +82,9 @@ def _parse_violations(
         parts = line.split(_SEP, maxsplit=3)
         if len(parts) != 4:  # noqa: WPS432
             continue
-
-        code, row_str, col_str, text = parts
-        row = int(row_str)
-        col = int(col_str)
-
-        source_line = ''
-        if 0 < row <= len(source_lines):
-            source_line = source_lines[row - 1].rstrip()
-
-        violation: dict[str, object] = {
-            'code': code,
-            'message': text,
-            'line': row,
-            'column': col,
-            'source_line': source_line,
-        }
-
-        if code.startswith('WPS'):
-            explanation = _get_explanation(code)
-            if explanation is not None:
-                violation['explanation'] = explanation
-            violation['link'] = SHORTLINK_TEMPLATE.format(code)
-
-        violations.append(violation)
+        violations.append(
+            _build_violation(tuple(parts), source_lines),
+        )
     return violations
 
 
@@ -135,7 +151,7 @@ def lint_file(
         A dict with ``violations`` (list) and ``total_violations`` (int).
 
     """
-    source_code = Path(file_path).read_text()
+    source_code = Path(file_path).read_text(encoding='utf-8')
     cmd = [
         'flake8',
         f'--format={_FORMAT}',

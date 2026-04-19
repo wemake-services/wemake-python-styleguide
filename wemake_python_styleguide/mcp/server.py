@@ -19,7 +19,6 @@ Tools
 from __future__ import annotations
 
 import json
-import textwrap
 
 from mcp.server.fastmcp import FastMCP
 from mcp.types import ToolAnnotations
@@ -30,9 +29,10 @@ from wemake_python_styleguide.cli.commands.explain.violation_loader import (
 from wemake_python_styleguide.constants import SHORTLINK_TEMPLATE
 from wemake_python_styleguide.mcp.flake8_runner import (
     lint_file as _lint_file,
+)
+from wemake_python_styleguide.mcp.flake8_runner import (
     run_flake8,
 )
-from wemake_python_styleguide.version import pkg_version
 
 _READ_ONLY = ToolAnnotations(
     readOnlyHint=True,
@@ -41,20 +41,19 @@ _READ_ONLY = ToolAnnotations(
     openWorldHint=False,
 )
 
+_INSTRUCTIONS = (
+    'This server exposes the wemake-python-styleguide linter '
+    '(the strictest Python linter) as tools for LLMs. '
+    'Use "lint" to check Python source code for violations. '
+    'Use "lint_file" to check a file on disk. '
+    'Use "explain_rule" to get full documentation for a WPS rule. '
+    'All tools return JSON.  Violations include the error location, '
+    'the offending source line, and a detailed rule explanation.'
+)
+
 mcp_server = FastMCP(
     'wemake-python-styleguide',
-    version=pkg_version,
-    instructions=textwrap.dedent("""\
-        This server exposes the wemake-python-styleguide linter
-        (the strictest Python linter) as tools for LLMs.
-
-        Use "lint" to check Python source code for violations.
-        Use "lint_file" to check a file on disk.
-        Use "explain_rule" to get full documentation for a WPS rule.
-
-        All tools return JSON.  Violations include the error location,
-        the offending source line, and a detailed rule explanation.
-    """),
+    instructions=_INSTRUCTIONS,
 )
 
 
@@ -168,7 +167,8 @@ def explain_rule(violation_code: str) -> str:
             'error': f'Violation {violation_code!r} not found',
         })
 
-    full_code = f'WPS{str(code_num).zfill(3)}'
+    code_prefix = 'WPS'
+    full_code = code_prefix + str(code_num).zfill(3)  # noqa: WPS336
     return json.dumps({
         'code': full_code,
         'name': violation_info.identifier,
