@@ -13,13 +13,19 @@ from wemake_python_styleguide.constants import SHORTLINK_TEMPLATE
 #: Separator used in the custom flake8 format string.
 _SEP = '|||'
 
-#: Custom flake8 format string for machine-readable output.
-_FORMAT = _SEP.join((
+#: Fields produced by the custom format string.
+_FORMAT_FIELDS = (
     '%(code)s',
     '%(row)d',
     '%(col)d',
     '%(text)s',
-))
+)
+
+#: Expected number of parts when splitting a formatted output line.
+_EXPECTED_PARTS = len(_FORMAT_FIELDS)
+
+#: Custom flake8 format string for machine-readable output.
+_FORMAT = _SEP.join(_FORMAT_FIELDS)
 
 
 def _get_explanation(code: str) -> str | None:
@@ -80,7 +86,7 @@ def _parse_violations(
     violations: list[dict[str, object]] = []
     for line in raw_output.strip().splitlines():
         parts = line.split(_SEP, maxsplit=3)
-        if len(parts) != 4:  # noqa: WPS432
+        if len(parts) != _EXPECTED_PARTS:
             continue
         violations.append(
             _build_violation(tuple(parts), source_lines),
