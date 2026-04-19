@@ -1,0 +1,165 @@
+"""Run ``flake8`` as a subprocess and parse structured output."""
+
+from __future__ import annotations
+
+import subprocess
+import tempfile
+from pathlib import Path
+
+from wemake_python_styleguide.cli.commands.explain.violation_loader import (
+    get_violation,
+)
+from wemake_python_styleguide.constants import SHORTLINK_TEMPLATE
+
+#: Separator used in the custom flake8 format string.
+_SEP = '|||'
+
+#: Custom flake8 format string for machine-readable output.
+_FORMAT = _SEP.join((
+    '%(code)s',
+    '%(row)d',
+    '%(col)d',
+    '%(text)s',
+))
+
+
+def _get_explanation(code: str) -> str | None:
+    """Look up the full docstring for a WPS violation code."""
+    try:
+        code_num = int(code.removeprefix('WPS'))
+    except ValueError:
+        return None
+    violation_info = get_violation(code_num)
+    if violation_info is None:
+        return None
+    return violation_info.docstring
+
+
+def _parse_violations(
+    raw_output: str,
+    source_lines: list[str],
+) -> list[dict[str, object]]:
+    """Parse flake8 output into structured violation dicts."""
+    violations: list[dict[str, object]] = []
+    for line in raw_output.strip().splitlines():
+        parts = line.split(_SEP, maxsplit=3)
+        if len(parts) != 4:  # noqa: WPS432
+            continue
+
+        code, row_str, col_str, text = parts
+        row = int(row_str)
+        col = int(col_str)
+
+        source_line = ''
+        if 0 < row <= len(source_lines):
+            source_line = source_lines[row - 1].rstrip()
+
+        violation: dict[str, object] = {
+            'code': code,
+            'message': text,
+            'line': row,
+            'column': col,
+            'source_line': source_line,
+        }
+
+        if code.startswith('WPS'):
+            explanation = _get_explanation(code)
+            if explanation is not None:
+                violation['explanation'] = explanation
+            violation['link'] = SHORTLINK_TEMPLATE.format(code)
+
+        violations.append(violation)
+    return violations
+
+
+def run_flake8(
+    source_code: str,
+    config_path: str | None = None,
+    filename: str | None = None,
+) -> dict[str, object]:
+    """
+    Run ``flake8`` on the given source code string.
+
+    Args:
+        source_code: Python source code to lint.
+        config_path: Optional path to a ``flake8`` configuration file.
+        filename: Optional display filename for module-level checks.
+
+    Returns:
+        A dict with ``violations`` (list) and ``total_violations`` (int).
+
+    """
+    display_name = filename or 'stdin'
+    cmd = [
+        'flake8',
+        f'--format={_FORMAT}',
+        f'--stdin-display-name={display_name}',
+    ]
+
+    if config_path:
+        cmd.append(f'--config={config_path}')
+    else:
+        cmd.extend(('--isolated', '--select=WPS'))
+
+    cmd.append('-')  # read from stdin
+
+    completed = subprocess.run(  # noqa: S603
+        cmd,
+        input=source_code,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+
+    source_lines = source_code.splitlines()
+    violations = _parse_violations(completed.stdout, source_lines)
+
+    return {
+        'violations': violations,
+        'total_violations': len(violations),
+    }
+
+
+def lint_file(
+    file_path: str,
+    config_path: str | None = None,
+) -> dict[str, object]:
+    """
+    Run ``flake8`` on a file by path.
+
+    Args:
+        file_path: Path to the Python file to lint.
+        config_path: Optional path to a ``flake8`` configuration file.
+
+    Returns:
+        A dict with ``violations`` (list) and ``total_violations`` (int).
+
+    """
+    source_code = Path(file_path).read_text()
+    cmd = [
+        'flake8',
+        f'--format={_FORMAT}',
+    ]
+
+    if config_path:
+        cmd.append(f'--config={config_path}')
+    else:
+        cmd.extend(('--isolated', '--select=WPS'))
+
+    cmd.append(file_path)
+
+    completed = subprocess.run(  # noqa: S603
+        cmd,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+
+    source_lines = source_code.splitlines()
+    violations = _parse_violations(completed.stdout, source_lines)
+
+    return {
+        'file': file_path,
+        'violations': violations,
+        'total_violations': len(violations),
+    }

@@ -55,6 +55,8 @@ flake8 = "^7.3"
 attrs = "*"
 pygments = "^2.19"
 
+mcp = { version = "^1.0", optional = true }
+
 [tool.poetry.group.dev.dependencies]
 pytest = "^9.0"
 pytest-cov = "^7.0"
@@ -299,5 +301,9 @@ extend-exclude = [
 ]
 
 
+[tool.poetry.extras]
+mcp = ["mcp"]
+
 [tool.poetry.scripts]
 wps = "wemake_python_styleguide.cli.cli_app:main"
+wps-mcp = "wemake_python_styleguide.mcp.server:main"
