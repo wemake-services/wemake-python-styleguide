@@ -91,13 +91,7 @@ class ConditionsVisitor(BaseNodeVisitor):
         self.generic_visit(node)
 
     def _count_conditions(self, node: ast.BoolOp) -> int:
-        counter = 0
-        for condition in node.values:
-            if isinstance(condition, ast.BoolOp):
-                counter += self._count_conditions(condition)
-            else:
-                counter += 1
-        return counter
+        return len(node.values)
 
     def _check_conditions(self, node: ast.BoolOp) -> None:
         conditions_count = self._count_conditions(node)
