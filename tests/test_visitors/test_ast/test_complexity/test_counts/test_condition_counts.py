@@ -45,25 +45,39 @@ while True and 1 == 1:
     print(1)
 """
 
-# Real examples:
-
-complex_assignment = """
-some = zero and first or (second and last) or default()
-"""
-
-complex_condition = """
-if x == x1 and y == y1 and z == z1 or v == v1 or last():
+# 3 conditions, nested conditions are not counted.
+if_with_nested_conditions = """
+if (a is None or (func1(a) and b) or (func2(a) and c)):
     ...
 """
 
+# Real examples:
+
+complex_assignment = """
+some = zero and first or (second and last) or default() or c or d
+"""
+
+complex_condition = """
+if x == x1 and y == y1 and z == z1 or v == v1 or last() or to_be() \
+    or not_to_be():
+    ...
+"""
+
+complex_list_comprehension = """
+def example(x, y):
+    return [i for i in range(x) if i % 2 == 0 or i == y or i > 10 or \
+        y < 4 or i != 0]
+"""
+
 complex_while = """
-while (x > x1 or y < y1) or (small(z) and v) or last():
+while (x > x1 or y < y1) or (small(z) and v) or first() or second() or last():
     ...
 """
 
 complex_match = """
 match some:
-    case 1 if (x > x1 or y < y1) or (small(z) and v) or last():
+    case 1 if (x > x1 or y < y1) or (small(z) and v) or first() or \
+        second() or last():
         ...
 """
 
@@ -71,7 +85,8 @@ complex_gen_exp = """
 (
     ...
     for name in []
-    if (x > x1 or y < y1) or (small(z) and v) or last()
+    if (x > x1 or y < y1) or (small(z) and v) or (b() and g()) or \
+        second() or last()
 )
 """
 
@@ -89,6 +104,7 @@ complex_gen_exp = """
         condition_with_inline_for,
         condition_with_simple_inline_for,
         while_with_condition,
+        if_with_nested_conditions,
     ],
 )
 def test_module_condition_counts_normal(
@@ -111,6 +127,7 @@ def test_module_condition_counts_normal(
     [
         complex_assignment,
         complex_condition,
+        complex_list_comprehension,
         complex_while,
         complex_match,
         complex_gen_exp,
@@ -138,6 +155,7 @@ def test_module_condition_real_config(
     [
         complex_assignment,
         complex_condition,
+        complex_list_comprehension,
         complex_while,
         complex_match,
         complex_gen_exp,

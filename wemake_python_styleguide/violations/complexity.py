@@ -693,6 +693,8 @@ class TooManyConditionsViolation(ASTViolation):
     .. versionchanged:: 0.5.0
     .. versionchanged:: 1.4.0
         Added ``--max-conditions`` configuration options.
+    .. versionchanged:: 1.7.0
+        Stopped recursive counting of nested ``ast.BoolOp`` nodes.
     """
 
     error_template = 'Found a condition with too much logic: {0}'
