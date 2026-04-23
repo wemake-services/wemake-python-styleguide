@@ -21,6 +21,7 @@ Semantic versioning in our case means:
 ### Bugfixes
 
 - Fixes the false positive `WPS222` for nested conditions, #3630
+- Fixes the false positive `WPS529` for dict subscripts in the `else` branch, #3501
 
 
 ## 1.6.1

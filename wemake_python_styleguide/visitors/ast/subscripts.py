@@ -1,4 +1,5 @@
 import ast
+from collections.abc import Iterator
 from typing import ClassVar, final
 
 from wemake_python_styleguide.logic import source
@@ -127,6 +128,11 @@ class ImplicitDictGetVisitor(base.BaseNodeVisitor):
         self._check_implicit_get(node)
         self.generic_visit(node)
 
+    def _walk_body(self, body: list[ast.stmt]) -> Iterator[ast.AST]:
+        """Yields all nodes strictly within a list of statements."""
+        for stmt in body:
+            yield from ast.walk(stmt)
+
     def _check_implicit_get(self, node: ast.If) -> None:
         if not isinstance(node.test, ast.Compare):
             return
@@ -136,7 +142,7 @@ class ImplicitDictGetVisitor(base.BaseNodeVisitor):
         checked_key = source.node_to_string(node.test.left)
         checked_collection = source.node_to_string(node.test.comparators[0])
 
-        for sub in ast.walk(node):
+        for sub in self._walk_body(node.body):
             if not isinstance(sub, ast.Subscript):
                 continue
 
