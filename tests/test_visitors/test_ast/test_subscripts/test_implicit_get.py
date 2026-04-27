@@ -44,6 +44,13 @@ elif other:
     ...
 """
 
+else_subscripts = """
+if 'a' in kwargs:
+    pass
+else:
+    kwargs['a'] = other(kwargs)
+"""
+
 
 @pytest.mark.parametrize(
     'template',
@@ -117,6 +124,27 @@ def test_correct_if(
 ):
     """Testing that correct `if` can be used."""
     tree = parse_ast_tree(template.format(compare, expression))
+
+    visitor = ImplicitDictGetVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])
+
+
+@pytest.mark.parametrize(
+    'code',
+    [
+        else_subscripts,
+    ],
+)
+def test_no_implicit_dict_get_in_else_branch(
+    assert_errors,
+    parse_ast_tree,
+    default_options,
+    code,
+):
+    """Testing that subscripts in `else` branch do not trigger violation."""
+    tree = parse_ast_tree(code)
 
     visitor = ImplicitDictGetVisitor(default_options, tree=tree)
     visitor.run()

@@ -1135,7 +1135,6 @@ class ImplicitDictGetViolation(ASTViolation):
             print(collection[key])
 
     .. versionadded:: 0.13.0
-
     """
 
     error_template = 'Found implicit `.get()` dict usage'
