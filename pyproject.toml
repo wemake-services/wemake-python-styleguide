@@ -4,7 +4,7 @@ requires = [ "poetry-core>=2.2" ]
 
 [tool.poetry]
 name = "wemake-python-styleguide"
-version = "1.6.1"
+version = "1.6.2"
 description = "The strictest and most opinionated python linter ever"
 license = "MIT"
 requires-poetry = ">=2.3"
