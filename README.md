@@ -111,7 +111,7 @@ We are *not* planning to do the following things:
 
 0. Assume or check types, use `mypy` together with our linter
 1. Format code or produce stylistic errors, use `ruff format` for that
-2. Check for `SyntaxError` or logical bugs, write tests instead
+2. Check for all kinds of logical bugs, write tests instead
 3. Appeal to everyone. But, you can [switch off](https://wemake-python-styleguide.rtfd.io/en/latest/pages/usage/setup.html#ignoring-violations) any rules that you don't like
 
 
