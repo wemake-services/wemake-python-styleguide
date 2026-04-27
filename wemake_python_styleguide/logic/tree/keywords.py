@@ -16,7 +16,7 @@ def returning_nodes(
     for sub_node in ast.walk(node):
         context_node = get_context(sub_node)
         if isinstance(sub_node, returning_type) and context_node == node:
-            if sub_node.value:  # type: ignore
+            if sub_node.value:
                 has_values = True
-            returns.append(sub_node)  # type: ignore
+            returns.append(sub_node)
     return returns, has_values
