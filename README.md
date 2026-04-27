@@ -92,9 +92,9 @@ to make all people write **exactly** the same `Python` code.
 | Formats code?              |   ❌   |   ❌   |   ✅  |  ❌  |  ✅  |            ❌            |
 | Finds style issues?        |   🤔   |   ✅   |   🤔  |  ❌  |  ✅  |            ❌            |
 | Finds bugs?                |   🤔   |   ✅   |   ❌  |  ✅  |  ✅  |            ✅            |
-| Finds complex code?        |   ❌   |   🤔   |   ❌  |  ❌  |  ✅  |            ✅            |
+| Finds complex code?        |   ❌   |   🤔   |   ❌  |  ❌  |  ❌  |            ✅            |
 | Has a lot of strict rules? |   ❌   |   🤔   |   ❌  |  ❌  |  ✅  |            ✅            |
-| Has a lot of plugins?      |   ✅   |   ❌   |   ❌  |  🤔  |  🤔  |            ✅            |
+| Has a lot of plugins?      |   ✅   |   ❌   |   ❌  |  🤔  |  ❌  |            ✅            |
 
 We have several primary objectives:
 
