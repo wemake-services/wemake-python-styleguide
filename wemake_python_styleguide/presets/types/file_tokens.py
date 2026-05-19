@@ -5,6 +5,7 @@ from wemake_python_styleguide.visitors.tokenize import (
     conditions,
     primitives,
     statements,
+    subscripts,
     syntax,
 )
 
@@ -21,4 +22,5 @@ PRESET: Final = (
     statements.MultilineStringVisitor,
     conditions.IfElseVisitor,
     primitives.MultilineFormattedStringTokenVisitor,
+    subscripts.RedundantTrailingSliceVisitor,
 )
