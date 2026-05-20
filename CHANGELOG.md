@@ -21,6 +21,7 @@ Semantic versioning in our case means:
 ### Features
 
 - Adds `WPS367`: forbid redundant trailing colon in slice, #1071
+- Adds `WPS482`: forbid initializing multiple variables on one line, #1901
 
 ## 1.6.2
 
