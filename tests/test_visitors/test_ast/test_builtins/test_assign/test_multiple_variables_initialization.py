@@ -40,7 +40,8 @@ def test_correct_assignments(
     tree = parse_ast_tree(code)
 
     visitor = MultipleVariablesInitializationVisitor(
-        default_options, tree=tree,
+        default_options,
+        tree=tree,
     )
     visitor.run()
 
@@ -65,7 +66,8 @@ def test_multiple_variables_initialization(
     tree = parse_ast_tree(code)
 
     visitor = MultipleVariablesInitializationVisitor(
-        default_options, tree=tree,
+        default_options,
+        tree=tree,
     )
     visitor.run()
 
