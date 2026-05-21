@@ -1,5 +1,5 @@
 import tokenize
-from typing import ClassVar, Final, TypedDict, final
+from typing import Final, TypedDict, final
 
 from wemake_python_styleguide.violations import consistency
 from wemake_python_styleguide.visitors.base import BaseTokenVisitor

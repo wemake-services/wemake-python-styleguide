@@ -22,15 +22,15 @@ correct_cases = [
     'a[1:4]',
     'a[1:]',
     'a[:4]',
-    'a[::]',           # caught by NonStrictSliceOperationsViolation
+    'a[::]',  # caught by NonStrictSliceOperationsViolation
     'a[1:4:5]',
     'a[1:4:None]',
     'a[1]',
-    'a[1:4:1]',        # caught by RedundantSubscriptViolation, not ours
-    'a[b[1:4:5]]',     # nested valid slice
-    'a[b[1:4:]]',      # nested invalid — should flag inner
-    'a[{1: 2}]',       # dict literal inside subscript
-    'a[(1, 2)]',       # tuple inside subscript
+    'a[1:4:1]',  # caught by RedundantSubscriptViolation, not ours
+    'a[b[1:4:5]]',  # nested valid slice
+    'a[b[1:4:]]',  # nested invalid — should flag inner
+    'a[{1: 2}]',  # dict literal inside subscript
+    'a[(1, 2)]',  # tuple inside subscript
     'a[lambda x: x]',  # lambda inside subscript
 ]
 
