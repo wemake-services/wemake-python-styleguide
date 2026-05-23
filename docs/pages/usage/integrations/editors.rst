@@ -10,5 +10,5 @@ with ``format = default`` in your configuration.
 - `atom plugin <https://atom.io/packages/linter-flake8>`_
 - `vim plugin <https://github.com/nvie/vim-flake8>`_
 - `emacs plugin <https://github.com/flycheck/flycheck>`_
-- `pycharm plugin <https://plugins.jetbrains.com/plugin/11563-flake8-support>`_
+- :doc:`PyCharm integration <pycharm>`
 - `wing plugin <https://github.com/grahamu/flake8panel>`_
