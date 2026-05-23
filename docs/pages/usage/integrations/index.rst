@@ -10,7 +10,7 @@ WPS can integrate with lots of popular and mainstream technologies. In this sect
 
   - `vscode plugin <https://code.visualstudio.com/docs/python/linting>`_
   - `vim plugin <https://github.com/nvie/vim-flake8>`_
-  - `pycharm plugin <https://plugins.jetbrains.com/plugin/11563-flake8-support>`_
+  - :doc:`PyCharm integration <pycharm>`
 
 - :doc:`Run WPS linting in GitHub Actions pipelines <github-actions>`
 
@@ -27,3 +27,4 @@ WPS can integrate with lots of popular and mainstream technologies. In this sect
   stubs.rst
   extras.rst
   jupyter_notebooks.rst
+  pycharm.rst
