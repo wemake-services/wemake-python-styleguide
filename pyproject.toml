@@ -81,7 +81,7 @@ optional = true
 [tool.poetry.group.docs.dependencies]
 sphinx = "^8.1"
 sphinx-autodoc-typehints = "^3.0"
-sphinxcontrib-mermaid = "^1.0"
+sphinxcontrib-mermaid = ">=1,<3"
 sphinx-llms-txt = "^0.7"
 furo = "^2025.12"
 added-value = "^0.24"
