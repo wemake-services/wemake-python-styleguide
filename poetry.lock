@@ -752,7 +752,7 @@ version = "3.15"
 description = "Internationalized Domain Names in Applications (IDNA)"
 optional = false
 python-versions = ">=3.8"
-groups = ["dev", "docs"]
+groups = ["docs"]
 files = [
     {file = "idna-3.15-py3-none-any.whl", hash = "sha256:048adeaf8c2d788c40fee287673ccaa74c24ffd8dcf09ffa555a2fbb59f10ac8"},
     {file = "idna-3.15.tar.gz", hash = "sha256:ca962446ea538f7092a95e057da437618e886f4d349216d2b1e294abfdb65fdc"},
@@ -2414,17 +2414,18 @@ test = ["flake8", "mypy", "pytest"]
 
 [[package]]
 name = "sphinxcontrib-mermaid"
-version = "1.2.3"
-description = "Mermaid diagrams in yours Sphinx powered docs"
+version = "2.0.2"
+description = "Mermaid diagrams in your Sphinx-powered docs"
 optional = false
-python-versions = ">=3.8"
+python-versions = ">=3.10"
 groups = ["docs"]
 files = [
-    {file = "sphinxcontrib_mermaid-1.2.3-py3-none-any.whl", hash = "sha256:5be782b27026bef97bfb15ccb2f7868b674a1afc0982b54cb149702cfc25aa02"},
-    {file = "sphinxcontrib_mermaid-1.2.3.tar.gz", hash = "sha256:358699d0ec924ef679b41873d9edd97d0773446daf9760c75e18dc0adfd91371"},
+    {file = "sphinxcontrib_mermaid-2.0.2-py3-none-any.whl", hash = "sha256:d862e514991279fb4816302c5cfe167d2557bf3ce7125ae0cb47dac80a0f46ce"},
+    {file = "sphinxcontrib_mermaid-2.0.2.tar.gz", hash = "sha256:f09576c78ca93fa0e3034fd9c45aaffa7c44ab449de9c43b8b8d262afe52bc66"},
 ]
 
 [package.dependencies]
+jinja2 = "*"
 pyyaml = "*"
 sphinx = "*"
 
@@ -2657,4 +2658,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.10"
-content-hash = "e4c755b75c65d37ec1fc384806ac1d8e36239aaae998956f85973d04d3789f1d"
+content-hash = "c2ec65ab66e59ada8cbe155af78327bd47569af4677a16e61c15d91f66334e2d"
