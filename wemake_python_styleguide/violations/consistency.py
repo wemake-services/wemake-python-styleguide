@@ -2511,3 +2511,36 @@ class MeaninglessBooleanOperationViolation(ASTViolation):
 
     error_template = 'Found meaningless boolean operation'
     code = 366
+
+
+@final
+class RedundantTrailingSliceViolation(TokenizeViolation):
+    """
+    Forbid redundant trailing colon in subscript slice.
+
+    Reasoning:
+        Trailing colon inside a subscript slice does not change behavior.
+        For example, ``a[1:4:]`` is parsed identically to ``a[1:4]``.
+        It adds visual noise for no reason.
+
+    Solution:
+        Remove the trailing colon.
+
+    Example::
+
+        # Correct:
+        a[1:4]
+        a[1:]
+        a[:4]
+
+        # Wrong:
+        a[1:4:]
+        a[1::]
+        a[:4:]
+
+    .. versionadded:: 1.7.0
+
+    """
+
+    error_template = 'Found redundant trailing slice colon'
+    code = 367
