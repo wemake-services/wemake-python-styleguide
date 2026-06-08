@@ -2530,14 +2530,14 @@ tests = ["cython", "littleutils", "pygments", "pytest", "typeguard"]
 
 [[package]]
 name = "syrupy"
-version = "5.2.0"
+version = "5.3.1"
 description = "Pytest Snapshot Test Utility"
 optional = false
 python-versions = ">=3.10"
 groups = ["dev"]
 files = [
-    {file = "syrupy-5.2.0-py3-none-any.whl", hash = "sha256:798cb493a6e20f4839e58ea8f10eb1b0d85684c676442f79786e219bf32618e6"},
-    {file = "syrupy-5.2.0.tar.gz", hash = "sha256:0e6b7abf1e04f060f6c797bed8bca96f2468954168328041e02634a68fc11ff0"},
+    {file = "syrupy-5.3.1-py3-none-any.whl", hash = "sha256:d755c2bb9b78692de1db5efa7b452ebff727df3a8290f740bda5c55a4ea5d7d5"},
+    {file = "syrupy-5.3.1.tar.gz", hash = "sha256:449fb2997176e4ccae0e852ce23748239e1a224b4797a63173da02d6df682340"},
 ]
 
 [package.dependencies]
