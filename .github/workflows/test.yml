@@ -43,7 +43,7 @@ jobs:
       - name: Run tests
         run: make test
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v6.0.1
+        uses: codecov/codecov-action@v7.0.0
         with:
           files: ./coverage.xml
           token: ${{ secrets.CODECOV_TOKEN }}
