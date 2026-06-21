@@ -137,7 +137,6 @@ VARIABLE_NAMES_BLACKLIST: Final = frozenset(
         'ham',
         'tmp',
         'temp',
-        'total',
     ),
 )
 
