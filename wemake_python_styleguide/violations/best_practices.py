@@ -3019,3 +3019,35 @@ class LeakingForLoopViolation(ASTViolation):
 
     error_template = 'Found a leaking ``for`` loop in a class or module body'
     code = 481
+
+
+@final
+class MultipleVariablesInitializationViolation(ASTViolation):
+    """
+    Forbid initializing multiple variables on a single line.
+
+    Reasoning:
+        Assigning multiple variables in one line reduces readability.
+        It is harder to see where each variable is initialized.
+
+    Solution:
+        Use separate assignment statements for each variable.
+
+    Example::
+
+        # Correct:
+        ab = []
+        cd = []
+        a, b = some_tuple()
+        x, y = y, x
+
+        # Wrong:
+        ab, cd = [], []
+        x, y = (1, 2)
+
+    .. versionadded:: 1.7.0
+
+    """
+
+    error_template = 'Found multiple variables initialized on one line'
+    code = 482

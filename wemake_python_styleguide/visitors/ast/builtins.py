@@ -375,6 +375,34 @@ class WrongAssignmentVisitor(base.BaseNodeVisitor):
 
 
 @final
+class MultipleVariablesInitializationVisitor(base.BaseNodeVisitor):
+    """Ensures that multiple variables are not initialized on one line."""
+
+    def visit_Assign(self, node: ast.Assign) -> None:
+        """Checks assignments for multiple variables initialization."""
+        self._check_multiple_variables_initialization(node)
+        self.generic_visit(node)
+
+    def _check_multiple_variables_initialization(
+        self,
+        node: ast.Assign,
+    ) -> None:
+        if len(node.targets) != 1:
+            return
+        target = node.targets[0]
+        if not isinstance(target, ast.Tuple):
+            return
+        if not isinstance(node.value, ast.Tuple):
+            return
+        # Allow swapping: x, y = y, x (all elements in value are ast.Name)
+        if all(isinstance(elt, ast.Name) for elt in node.value.elts):
+            return
+        self.add_violation(
+            best_practices.MultipleVariablesInitializationViolation(node),
+        )
+
+
+@final
 class WrongCollectionVisitor(base.BaseNodeVisitor):
     """Ensures that collection definitions are correct."""
 
