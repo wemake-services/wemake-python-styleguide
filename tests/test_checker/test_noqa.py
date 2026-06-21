@@ -317,13 +317,13 @@ def _assert_errors_count_in_output(
     errors,
     all_violations,
     *,
-    total: bool = True,
+    check_all_violations: bool = True,
 ):
     found_errors = Counter(
         (match.group(0) for match in ERROR_PATTERN.finditer(output)),
     )
 
-    if total:  # pragma: no cover
+    if check_all_violations:  # pragma: no cover
         for violation in all_violations:
             key = f'WPS{str(violation.code).zfill(3)}'  # noqa: WPS237
             assert key in errors, 'Unlisted #noqa violation'
@@ -386,7 +386,7 @@ def test_noqa_fixture_disabled(
         stdout,
         violations,
         all_violations,
-        total=filename == 'noqa.py',
+        check_all_violations=filename == 'noqa.py',
     )
 
 
