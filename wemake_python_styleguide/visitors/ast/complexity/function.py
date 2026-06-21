@@ -244,9 +244,9 @@ class CognitiveComplexityVisitor(BaseNodeVisitor):
         if not self._functions:
             return  # module can be empty
 
-        total = 0
+        total_score = 0
         for function, score in self._functions.items():
-            total += score
+            total_score += score
 
             if score > self.options.max_cognitive_score:
                 self.add_violation(
@@ -260,7 +260,7 @@ class CognitiveComplexityVisitor(BaseNodeVisitor):
         if len(self._functions) <= 1:
             return  # We don't check module average for a single function.
 
-        average = total / len(self._functions)
+        average = total_score / len(self._functions)
         if average > self.options.max_cognitive_average:
             self.add_violation(
                 complexity.CognitiveModuleComplexityViolation(
