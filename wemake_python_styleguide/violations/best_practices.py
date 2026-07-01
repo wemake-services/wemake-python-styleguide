@@ -2933,7 +2933,7 @@ class MultilineFormattedStringViolation(TokenizeViolation):
 
     Example::
 
-        # Correct
+        # Correct:
         x = f''' { 1
         ...}'''
 
@@ -2997,20 +2997,20 @@ class LeakingForLoopViolation(ASTViolation):
 
     Example::
 
-        # bad
+        # Correct:
         class Some:
             for x in [1, 2]:
                 print(x)
 
-        # bad
+        # Wrong:
         for y in [3, 4]:
             print(y)
 
-        # good
+        # Correct:
         class Some:
             _ = [print(x) for x in [1, 2]]
 
-        # good
+        # Correct:
         some_list = [print(y) for y in [3, 4]]
 
     .. versionadded:: 1.5.0
