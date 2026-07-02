@@ -625,6 +625,67 @@ match subject:  # noqa: WPS365
     case _:
         ...
 
+def too_many_locals():  # noqa: WPS482
+    # comment 1
+    abcd = 1
+    # comment 2
+    abcdx = 2
+    # comment 3
+    # comment 4
+    # comment 5
+    # comment 6
+    # comment 7
+    # comment 8
+    # comment 9
+    # comment 10
+    # comment 11
+    # comment 12
+    # comment 13
+    # comment 14
+    # comment 15
+    # comment 16
+
+    ...
+
+def too_many_nested():
+    # comment 1
+    abcd = 1
+    # comment 2
+    abcdx = 2
+    def factory():
+        # this is a edge case
+        # comment 2
+        # comment 3
+        # comment 4
+        # comment 5
+        # comment 6
+        # comment 7
+        # comment 8
+        # comment 9
+        # comment 10
+        # comment 11
+        # comment 12
+        # comment 13
+        # comment 14
+        # comment 15
+        ...
+    def decorator():
+        # comment 1
+        # comment 2
+        # comment 3
+        # comment 4
+        # comment 5
+        # comment 6
+        # comment 7
+        # comment 8
+        ...
+    # comment 6
+    # comment 7
+    # comment 8
+    # comment 9
+    # comment 10
+    ...
+
 
 my_print("""
 text
