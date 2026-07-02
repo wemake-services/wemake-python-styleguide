@@ -3019,3 +3019,32 @@ class LeakingForLoopViolation(ASTViolation):
 
     error_template = 'Found a leaking ``for`` loop in a class or module body'
     code = 481
+
+
+@final
+class TooManyCommentsViolation(ASTViolation):
+    """
+    Forbid using too many comments.
+
+    Reasoning:
+        Excessive comments clutter the codebase, degrade readability,
+        and increase cognitive load for maintainers. They often indicate
+        that the logic is unnecessarily complex.
+
+    Solution:
+        Use comments sparingly and only when they genuinely add value.
+        Prefer writing self-documenting code through clear variable and
+        function names. If a comment exists to describe *what* the code
+        does, consider refactoring the logic or moving the explanation
+        into a docstring.
+
+    Configuration:
+        This rule is configurable with ``--max-comments-in-function``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.MAX_COMMENTS_IN_FUNCTION`.
+
+    .. versionadded:: 1.7.0
+    """
+
+    error_template = 'Found too many comments: {0}'
+    code = 482

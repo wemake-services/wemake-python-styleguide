@@ -165,3 +165,6 @@ MAX_CONDITIONS: Final = 4  # reasonable enough
 
 #: Whether to show violation shortlinks in the formatter output.
 SHOW_VIOLATION_LINKS: Final = False
+
+#: Maximum amount of comments in a single function.
+MAX_COMMENTS_IN_FUNCTION: Final = 15
