@@ -4,6 +4,7 @@ from wemake_python_styleguide.presets.topics import classes, complexity, naming
 from wemake_python_styleguide.visitors.ast import (  # noqa: WPS235
     blocks,
     builtins,
+    comments,
     compares,
     conditions,
     decorators,
@@ -81,6 +82,7 @@ PRESET: Final = (
     decorators.WrongDecoratorVisitor,
     redundancy.RedundantEnumerateVisitor,
     pm.MatchSubjectVisitor,
+    comments.FunctionCommentsVisitor,
     # Modules:
     modules.EmptyModuleContentsVisitor,
     modules.MagicModuleFunctionsVisitor,

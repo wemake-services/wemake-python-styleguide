@@ -106,6 +106,7 @@ class ValidatedOptions:
     max_conditions: int = attr.ib(validator=[_min_max(min=1)])
     show_violation_links: bool
     exps_for_one_empty_line: int
+    max_comments_in_function: int = attr.ib(validator=[_min_max(min=1)])
 
 
 def validate_options(options: Any) -> ValidatedOptions:
