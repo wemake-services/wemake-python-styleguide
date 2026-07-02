@@ -2,7 +2,6 @@ SHELL := /usr/bin/env bash
 POETRY ?= poetry
 .DEFAULT_GOAL := help
 
-
 .PHONY: help
 help: ## Show the help message
 	@echo 'Usage: make [target]'
