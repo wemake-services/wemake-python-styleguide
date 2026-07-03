@@ -741,6 +741,12 @@ class TryExceptMultipleReturnPathViolation(ASTViolation):
        No longer produced, kept here for historic reasons.
        This is covered with ``ruff`` linter. See ``B012`` and ``SIM107``.
 
+    .. note::
+        Starting from **Python 3.14**, interpreter will emit a ``SyntaxWarning``
+        for ``return``, ``break``, or ``continue`` inside a ``finally`` block,
+        as per **PEP 765**. This makes such code officially discouraged at the
+        language level, and it may become a ``SyntaxError`` in future versions.
+
     """
 
     error_template = 'Found `try`/`else`/`finally` with multiple return paths'
@@ -2015,6 +2021,12 @@ class LoopControlFinallyViolation(ASTViolation):
     .. versionchanged:: 1.0.0
        No longer produced, kept here for historic reasons.
        This is covered with ``ruff`` linter. See ``B012``.
+
+    .. note::
+        Starting from **Python 3.14**, interpreter will emit a ``SyntaxWarning``
+        for ``return``, ``break``, or ``continue`` inside a ``finally`` block,
+        as per **PEP 765**. This makes such code officially discouraged at the
+        language level, and it may become a ``SyntaxError`` in future versions.
 
     """
 

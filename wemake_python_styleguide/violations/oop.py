@@ -121,6 +121,19 @@ class StaticMethodViolation(ASTViolation):
     Solution:
         Use instance methods, ``@classmethod``, or functions instead.
 
+    Example::
+
+        # Correct:
+        def add(a, b):
+            return a + b
+
+        # Wrong:
+        class Calculator:
+
+            @staticmethod
+            def add(a, b):
+                return a + b
+
     .. versionadded:: 0.1.0
     .. versionchanged:: 0.11.0
 
