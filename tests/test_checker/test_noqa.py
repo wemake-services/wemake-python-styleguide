@@ -250,6 +250,7 @@ SHOULD_BE_RAISED = types.MappingProxyType(
         'WPS479': 0,
         'WPS480': 0,  # only triggers on 3.12+
         'WPS481': 10,
+        'WPS482': 1,
         'WPS500': 1,
         'WPS501': 1,
         'WPS502': 0,  # disabled since 1.0.0

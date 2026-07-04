@@ -8,6 +8,7 @@ import pytest
 from wemake_python_styleguide.checker import Checker
 from wemake_python_styleguide.visitors.base import (
     BaseFilenameVisitor,
+    BaseNodeTokenVisitor,
     BaseNodeVisitor,
     BaseTokenVisitor,
     BaseVisitor,
@@ -18,6 +19,7 @@ def _is_visitor_class(cls) -> bool:
     base_classes = {
         BaseFilenameVisitor,
         BaseNodeVisitor,
+        BaseNodeTokenVisitor,
         BaseTokenVisitor,
         BaseVisitor,
     }

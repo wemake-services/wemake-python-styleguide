@@ -166,6 +166,9 @@ You can also show all options that ``flake8`` supports by running:
     expression.
     defaults to
     :str:`wemake_python_styleguide.options.defaults.MAX_CONDITIONS`
+- ``max-comments-in-function`` - maximum number of comments in a single
+    function, defaults to
+    :str:`wemake_python_styleguide.options.defaults.MAX_COMMENTS_IN_FUNCTION`
 
 .. rubric:: Formatter options
 
@@ -238,6 +241,11 @@ class Configuration:
             '--max-noqa-comments',
             defaults.MAX_NOQA_COMMENTS,
             'Maximum amount of `noqa` comments per module.',
+        ),
+        _Option(
+            '--max-comments-in-function',
+            defaults.MAX_COMMENTS_IN_FUNCTION,
+            'Maximum number of comments in a single function.',
         ),
         _Option(
             '--nested-classes-whitelist',
