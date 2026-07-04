@@ -2511,3 +2511,36 @@ class MeaninglessBooleanOperationViolation(ASTViolation):
 
     error_template = 'Found meaningless boolean operation'
     code = 366
+
+
+@final
+class SingleCaseMatchViolation(ASTViolation):
+    """
+    Some ``match`` statements with a single case can be simplified to ``if``.
+
+    Reasoning:
+        Using ``match`` for a single case is unnecessarily verbose
+        and less readable than a simple ``if`` statement.
+        A single ``case`` with no wildcard/default adds no value
+        over a plain ``if`` condition.
+
+    Solution:
+        Replace ``match ... case`` with ``if``.
+
+    Example::
+
+        # Correct:
+        if x == 1:
+            do_something()
+
+        # Wrong:
+        match x:
+            case 1:
+                do_something()
+
+    .. versionadded:: 1.7.0
+
+    """
+
+    error_template = 'Found single-case `match` that can be just `if`'
+    code = 367

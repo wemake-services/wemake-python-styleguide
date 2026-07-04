@@ -208,6 +208,11 @@ class SimplifiableMatchVisitor(BaseNodeVisitor):
 
     def _check_simplifiable_match(self, node: ast.Match) -> None:
         cases = node.cases
+
+        if len(cases) == 1:
+            self.add_violation(consistency.SingleCaseMatchViolation(node))
+            return
+
         if len(cases) == 2:
             first, second = cases
 
