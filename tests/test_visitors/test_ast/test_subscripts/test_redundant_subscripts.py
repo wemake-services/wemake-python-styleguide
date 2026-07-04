@@ -17,6 +17,8 @@ usage_template = 'constant[{0}]'
         '3:None:2',
         '3:7:None',
         '3:7:1',
+        '::1',
+        '1::1',
     ],
 )
 def test_one_redundant_subscript(
@@ -44,6 +46,7 @@ def test_one_redundant_subscript(
         'None:None',
         '3:None:1',
         ':None:None',
+        '0::1',
     ],
 )
 def test_two_redundant_subscript(

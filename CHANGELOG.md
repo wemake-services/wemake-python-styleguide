@@ -16,6 +16,13 @@ Semantic versioning in our case means:
   But, in the future we might change the configuration names/logic,
   change the client facing API, change code conventions significantly, etc.
 
+## Unreleased
+
+### Features
+
+- Adds `WPS367`: forbid redundant trailing colon in slice, #1071
+- Adds `WPS482`: forbid initializing multiple variables on one line, #1901
+
 ## 1.6.2
 
 ### Bugfixes
