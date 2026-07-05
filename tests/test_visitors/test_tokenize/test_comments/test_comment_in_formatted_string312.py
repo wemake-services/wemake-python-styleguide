@@ -219,7 +219,7 @@ def test_wrong_formatted_string(
     'code',
     [
         'foo = t"test{a}"',
-        'foo = t\'test {a} # testing\'',
+        "foo = t'test {a} # testing'",
     ],
 )
 def test_correct_t_string_comments(

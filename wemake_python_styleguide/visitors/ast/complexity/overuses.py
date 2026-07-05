@@ -85,7 +85,9 @@ class StringOveruseVisitor(base.BaseNodeVisitor):
             return
 
         # Part of the f-string or t-string:
-        if walk.get_closest_parent(node, parents=(ast.JoinedStr, nodes.TemplateStr)):
+        if walk.get_closest_parent(
+            node, parents=(ast.JoinedStr, nodes.TemplateStr)
+        ):
             return
 
         # Some strings are so common, that it makes no sense to check if

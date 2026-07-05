@@ -67,4 +67,3 @@ else:  # pragma: <3.14 cover
         value: ast.expr  # noqa: WPS110
         conversion: int
         format_spec: ast.expr | None
-

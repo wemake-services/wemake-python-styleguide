@@ -26,7 +26,8 @@ def has_fstring_conversion(component: ast.AST) -> bool:
         or component
     )
     return (
-        isinstance(formatted_component, (ast.FormattedValue, nodes.Interpolation))
+        isinstance(
+            formatted_component, (ast.FormattedValue, nodes.Interpolation)
+        )
         and formatted_component.conversion != -1
     )
-
