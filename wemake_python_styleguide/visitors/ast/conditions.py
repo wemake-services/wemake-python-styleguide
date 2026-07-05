@@ -219,6 +219,9 @@ class SimplifiableMatchVisitor(BaseNodeVisitor):
             ) or pattern_matching.is_simple_pattern(first.pattern):
                 self.add_violation(consistency.SimplifiableMatchViolation(node))
 
+        elif len(cases) == 1:
+            self.add_violation(consistency.SimplifiableMatchViolation(node))
+
 
 @final
 class LeakingForLoopVisitor(BaseNodeVisitor):
