@@ -2439,12 +2439,13 @@ class SimplifiableMatchViolation(ASTViolation):
 
     Solution:
         Replace violating ``match ... case _`` statements with ``if ... else``.
+        Replace single-case ``match`` statements with a plain ``if``
 
     When is this violation is raised?
         - When there are exactly two ``case`` statements
         - When the first case uses a literal pattern
         - When the second case is a wildcard: ``case _:``
-
+        - When there is exactly one  ``case`` statement
 
     Example::
 
@@ -2462,6 +2463,7 @@ class SimplifiableMatchViolation(ASTViolation):
                 user = 'active'
 
     .. versionadded:: 1.5.0
+    .. versionchanged:: 1.7.0
 
     """
 

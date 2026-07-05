@@ -599,6 +599,10 @@ except (TypeError, ValueError, LookupError, KeyboardInterrupt):  # noqa: WPS239
 match inst1, inst2, inst3, inst4, inst5, inst6, inst7, inst8:  # noqa: WPS241
     case 1:
         my_print('except')
+    case 2:
+        my_print('except')
+    case 3:
+        my_print('except')
 
 
 match x:  # noqa: WPS242
@@ -623,6 +627,10 @@ match subject:  # noqa: WPS365
     case 1:
         ...
     case _:
+        ...
+
+match subject:  # noqa: WPS365
+    case 1:
         ...
 
 
@@ -677,6 +685,10 @@ match some_value:  # noqa: WPS535
 match [some_value]:  # noqa: WPS536
     case SomeClass():
         my_print('first')
+    case secondary_slice:
+        my_print('second')
+    case first:
+        my_print('third')
 
 class Baseline:
     def method(self, number):

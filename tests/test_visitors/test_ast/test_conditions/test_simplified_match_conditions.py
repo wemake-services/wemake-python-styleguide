@@ -32,6 +32,30 @@ match subject:
         pass
 """
 
+single_case_sequence = """
+match subject:
+    case [1, 2, 3]:
+        pass
+"""
+
+single_case_wildcard = """
+match subject:
+    case _:
+        pass
+"""
+
+single_case_literal = """
+match subject:
+    case '1':
+        pass
+"""
+
+single_case_guard = """
+match subject:
+    case x if x > 0:
+        pass
+"""
+
 # Correct:
 complex_match = """
 match subject:
@@ -90,6 +114,28 @@ match subject:
     case _:
         pass
 """
+
+
+@pytest.mark.parametrize(
+    'code',
+    [
+        single_case_sequence,
+        single_case_literal,
+        single_case_guard,
+        single_case_wildcard,
+    ],
+)
+def test_simplifiable_single_case_match(
+    assert_errors,
+    parse_ast_tree,
+    default_options,
+    code,
+):
+    """Test that match with only one case."""
+    tree = parse_ast_tree(code)
+    visitor = SimplifiableMatchVisitor(default_options, tree=tree)
+    visitor.run()
+    assert_errors(visitor, [SimplifiableMatchViolation])
 
 
 @pytest.mark.parametrize(
