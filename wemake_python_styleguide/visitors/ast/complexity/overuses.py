@@ -3,6 +3,7 @@ from collections import defaultdict
 from collections.abc import Callable
 from typing import ClassVar, TypeAlias, final
 
+from wemake_python_styleguide.compat import nodes
 from wemake_python_styleguide.compat.aliases import FunctionNodes
 from wemake_python_styleguide.logic import source, walk
 from wemake_python_styleguide.logic.complexity import overuses
@@ -83,8 +84,8 @@ class StringOveruseVisitor(base.BaseNodeVisitor):
         if annotations.is_annotation(node):
             return
 
-        # Part of the f-string:
-        if walk.get_closest_parent(node, parents=(ast.JoinedStr,)):
+        # Part of the f-string or t-string:
+        if walk.get_closest_parent(node, parents=(ast.JoinedStr, nodes.TemplateStr)):
             return
 
         # Some strings are so common, that it makes no sense to check if

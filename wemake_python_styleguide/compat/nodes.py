@@ -49,3 +49,22 @@ else:  # pragma: <3.13 cover
         """Used to define `TypeVarTuple` nodes from `python3.12+`."""
 
         name: str
+
+
+if sys.version_info >= (3, 14):  # pragma: >=3.14 cover
+    from ast import Interpolation as Interpolation
+    from ast import TemplateStr as TemplateStr
+else:  # pragma: <3.14 cover
+
+    class TemplateStr(ast.expr):
+        """Used to define `TemplateStr` nodes in `python3.14+`."""
+
+        values: list[ast.expr]
+
+    class Interpolation(ast.expr):
+        """Used to define `Interpolation` nodes in `python3.14+`."""
+
+        value: ast.expr  # noqa: WPS110
+        conversion: int
+        format_spec: ast.expr | None
+

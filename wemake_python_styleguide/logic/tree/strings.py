@@ -1,5 +1,6 @@
 import ast
 
+from wemake_python_styleguide.compat import nodes
 from wemake_python_styleguide.logic.walk import get_closest_parent
 
 
@@ -19,11 +20,13 @@ def is_doc_string(node: ast.AST) -> bool:
 
 
 def has_fstring_conversion(component: ast.AST) -> bool:
-    """Checks whether f-string with the component has a conversion specifier."""
+    """Checks whether f/t-string with the component has a conversion specifier."""
     formatted_component = (
-        get_closest_parent(component, ast.FormattedValue) or component
+        get_closest_parent(component, (ast.FormattedValue, nodes.Interpolation))
+        or component
     )
     return (
-        isinstance(formatted_component, ast.FormattedValue)
+        isinstance(formatted_component, (ast.FormattedValue, nodes.Interpolation))
         and formatted_component.conversion != -1
     )
+

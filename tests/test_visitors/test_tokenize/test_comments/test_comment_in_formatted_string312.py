@@ -1,3 +1,5 @@
+import sys
+
 import pytest
 
 from wemake_python_styleguide.compat.constants import PY312
@@ -198,6 +200,64 @@ def test_wrong_formatted_string(
     code,
 ) -> None:
     """Checking that the wrong string has violations."""
+    file_tokens = parse_tokens(code)
+
+    visitor = CommentInFormattedStringVisitor(
+        default_options,
+        file_tokens=file_tokens,
+    )
+    visitor.run()
+
+    assert_errors(visitor, [CommentInFormattedStringViolation])
+
+
+@pytest.mark.skipif(
+    sys.version_info < (3, 14),
+    reason='t-strings are only in Python 3.14+',
+)
+@pytest.mark.parametrize(
+    'code',
+    [
+        'foo = t"test{a}"',
+        'foo = t\'test {a} # testing\'',
+    ],
+)
+def test_correct_t_string_comments(
+    parse_tokens,
+    assert_errors,
+    default_options,
+    code,
+) -> None:
+    """Checking that valid t-strings have no comment violations."""
+    file_tokens = parse_tokens(code)
+
+    visitor = CommentInFormattedStringVisitor(
+        default_options,
+        file_tokens=file_tokens,
+    )
+    visitor.run()
+
+    assert_errors(visitor, [])
+
+
+@pytest.mark.skipif(
+    sys.version_info < (3, 14),
+    reason='t-strings are only in Python 3.14+',
+)
+@pytest.mark.parametrize(
+    'code',
+    [
+        'foo = t"test{a # comment\n}"',
+        'foo = rt"test{a # comment\n}"',
+    ],
+)
+def test_wrong_t_string_comments(
+    parse_tokens,
+    assert_errors,
+    default_options,
+    code,
+) -> None:
+    """Checking that comments inside t-string expressions cause violations."""
     file_tokens = parse_tokens(code)
 
     visitor = CommentInFormattedStringVisitor(

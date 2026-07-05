@@ -5,6 +5,7 @@ from collections.abc import Sequence
 from typing import ClassVar, Final, TypeAlias, final
 
 from wemake_python_styleguide import constants
+from wemake_python_styleguide.compat import nodes
 from wemake_python_styleguide.compat.aliases import (
     AssignNodesWithWalrus,
     FunctionNodes,
@@ -106,13 +107,24 @@ class WrongFormatStringVisitor(base.BaseNodeVisitor):
         self._check_complex_formatted_string(node)
         self.generic_visit(node)
 
-    def _check_complex_formatted_string(self, node: ast.JoinedStr) -> None:
-        """Allows all simple uses of `f` strings."""
-        parent = walk.get_closest_parent(node, ast.JoinedStr)
+    def visit_TemplateStr(self, node: nodes.TemplateStr) -> None:
+        """Forbids use of ``t`` strings that are too complex."""
+        self._check_complex_formatted_string(node)
+        self.generic_visit(node)
+
+    def _check_complex_formatted_string(
+        self,
+        node: ast.JoinedStr | nodes.TemplateStr,
+    ) -> None:
+        """Allows all simple uses of `f` and `t` strings."""
+        parent = walk.get_closest_parent(
+            node,
+            (ast.JoinedStr, nodes.TemplateStr),
+        )
         for string_component in node.values:
             # check component complexity
             is_component_complex = False
-            if isinstance(string_component, ast.FormattedValue):
+            if isinstance(string_component, ast.FormattedValue | nodes.Interpolation):
                 is_component_complex = not self._is_valid_formatted_value(
                     string_component.value
                 )

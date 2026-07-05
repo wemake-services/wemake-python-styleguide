@@ -321,7 +321,7 @@ class CommentInFormattedStringVisitor(BaseTokenVisitor):  # pragma: >=3.12 cover
     _comment_in_fstring: ClassVar[re.Pattern[str]] = re.compile(
         r"""
         .*                  # (1) anything before the f-string
-        fr?(['"])           # (2) `f` or `fr`prefix + a single or double quote
+        (?:[ft]r?|r[ft])(['"]) # (2) f/t prefix + a single or double quote
         .*                  # (3) any characters up to…
         \{                  # (4) opening brace
         [^}]*               # (5) any characters except closing braces
@@ -333,6 +333,10 @@ class CommentInFormattedStringVisitor(BaseTokenVisitor):  # pragma: >=3.12 cover
 
     def visit_fstring_start(self, token: tokenize.TokenInfo) -> None:
         """Performs fstring check."""
+        self._check_is_fstring_ends_with_comment(token)
+
+    def visit_tstring_start(self, token: tokenize.TokenInfo) -> None:
+        """Performs t-string check."""
         self._check_is_fstring_ends_with_comment(token)
 
     def _check_is_fstring_ends_with_comment(
