@@ -1144,13 +1144,23 @@ class TooComplexFormattedStringViolation(ASTViolation):
     """
     Forbids ``f`` strings that are too complex.
 
-    A complex format string is defined as use of any formatted value
-    that is not:
+    Formatting expressions that we consider simple:
 
-    - the value of a variable
-    - the value of a collection through lookup with a variable, number, or
-      string as the key
-    - the return value of a function / method call with 3 arguments maximum
+    - A variable name: ``x``
+    - A collection lookup with a literal or variable key:
+      ``my_dict["key"]``, ``my_list[0]``
+    - A single attribute access: ``obj.attr``
+    - An attribute access followed by a collection lookup:
+      ``obj.nums[0]``, ``obj.dict["key"]``
+    - A function or method call with 3 or fewer arguments:
+      ``func(a, b, c)``
+
+    Everything else is considered complex and restricted.
+    The following chained expressions are not allowed:
+
+    - ``obj.attr.method()``
+    - ``x.y.z``
+    - ``x.y.nums[0]``
 
     Using format specifiers also increases complexity, so you should avoid
     using more than one specifier for a single value.
