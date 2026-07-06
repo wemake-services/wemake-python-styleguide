@@ -276,6 +276,13 @@ class TooManyLocalsViolation(ASTViolation):
 
     .. versionadded:: 0.1.0
 
+    .. note::
+        This rule is also covered by ``ruff``'s ``PLR0914`` rule.
+        However, ``ruff`` has different default values.
+        If you want to use ``ruff`` instead of this rule,
+        configure ``ruff`` with ``--max-locals`` set to
+        :str:`wemake_python_styleguide.options.defaults.MAX_LOCAL_VARIABLES`.
+
     """
 
     error_template = 'Found too many local variables: {0}'
@@ -330,6 +337,13 @@ class TooManyReturnsViolation(ASTViolation):
         Default: :str:`wemake_python_styleguide.options.defaults.MAX_RETURNS`
 
     .. versionadded:: 0.1.0
+
+    .. note::
+        This rule is also covered by ``ruff``'s ``PLR0911`` rule.
+        However, ``ruff`` has different default values.
+        If you want to use ``ruff`` instead of this rule,
+        configure ``ruff`` with ``--max-returns`` set to
+        :str:`wemake_python_styleguide.options.defaults.MAX_RETURNS`.
 
     """
 
