@@ -36,6 +36,9 @@ from wemake_python_styleguide.visitors import base, decorators
 #: Items that can be inside a hash.
 _HashItems: TypeAlias = Sequence[ast.AST | None]
 
+#: Any formatted string node (f-string or t-string).
+_AnyFormattedString: TypeAlias = ast.JoinedStr | nodes.TemplateStr
+
 
 @final
 @decorators.alias(
@@ -110,7 +113,7 @@ class WrongFormatStringVisitor(base.BaseNodeVisitor):
     _max_chained_items = 3
 
     def visit_any_formatted_string(
-        self, node: ast.JoinedStr | nodes.TemplateStr
+        self, node: _AnyFormattedString
     ) -> None:
         """Forbids use of ``f`` and ``t`` strings that are too complex."""
         self._check_complex_formatted_string(node)
@@ -118,7 +121,7 @@ class WrongFormatStringVisitor(base.BaseNodeVisitor):
 
     def _check_complex_formatted_string(
         self,
-        node: ast.JoinedStr | nodes.TemplateStr,
+        node: _AnyFormattedString,
     ) -> None:
         """Allows all simple uses of `f` and `t` strings."""
         parent = walk.get_closest_parent(
