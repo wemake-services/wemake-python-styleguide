@@ -84,8 +84,15 @@ class WrongStringVisitor(base.BaseNodeVisitor):
 
 
 @final
-class WrongFormatStringVisitor(base.BaseNodeVisitor):  # noqa: WPS214
-    """Restricts usage of ``f`` strings."""
+@decorators.alias(
+    'visit_any_formatted_string',
+    (
+        'visit_JoinedStr',
+        'visit_TemplateStr',
+    ),
+)
+class WrongFormatStringVisitor(base.BaseNodeVisitor):
+    """Restricts usage of ``f`` and ``t`` strings."""
 
     _valid_format_index: ClassVar[AnyNodes] = (
         ast.Constant,
@@ -102,13 +109,10 @@ class WrongFormatStringVisitor(base.BaseNodeVisitor):  # noqa: WPS214
     )
     _max_chained_items = 3
 
-    def visit_JoinedStr(self, node: ast.JoinedStr) -> None:
-        """Forbids use of ``f`` strings and too complex ``f`` strings."""
-        self._check_complex_formatted_string(node)
-        self.generic_visit(node)
-
-    def visit_TemplateStr(self, node: nodes.TemplateStr) -> None:
-        """Forbids use of ``t`` strings that are too complex."""
+    def visit_any_formatted_string(
+        self, node: ast.JoinedStr | nodes.TemplateStr
+    ) -> None:
+        """Forbids use of ``f`` and ``t`` strings that are too complex."""
         self._check_complex_formatted_string(node)
         self.generic_visit(node)
 
