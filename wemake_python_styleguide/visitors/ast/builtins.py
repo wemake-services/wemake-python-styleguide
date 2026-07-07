@@ -84,7 +84,7 @@ class WrongStringVisitor(base.BaseNodeVisitor):
 
 
 @final
-class WrongFormatStringVisitor(base.BaseNodeVisitor):
+class WrongFormatStringVisitor(base.BaseNodeVisitor):  # noqa: WPS214
     """Restricts usage of ``f`` strings."""
 
     _valid_format_index: ClassVar[AnyNodes] = (

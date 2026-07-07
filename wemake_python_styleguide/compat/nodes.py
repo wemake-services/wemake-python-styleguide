@@ -59,7 +59,7 @@ else:  # pragma: <3.14 cover
     class TemplateStr(ast.expr):
         """Used to define `TemplateStr` nodes in `python3.14+`."""
 
-        values: list[ast.expr]
+        values: list[ast.expr]  # noqa: WPS110
 
     class Interpolation(ast.expr):
         """Used to define `Interpolation` nodes in `python3.14+`."""
