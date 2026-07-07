@@ -112,9 +112,7 @@ class WrongFormatStringVisitor(base.BaseNodeVisitor):
     )
     _max_chained_items = 3
 
-    def visit_any_formatted_string(
-        self, node: _AnyFormattedString
-    ) -> None:
+    def visit_any_formatted_string(self, node: _AnyFormattedString) -> None:
         """Forbids use of ``f`` and ``t`` strings that are too complex."""
         self._check_complex_formatted_string(node)
         self.generic_visit(node)
