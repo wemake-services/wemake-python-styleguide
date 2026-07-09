@@ -90,6 +90,7 @@ def test_incorrectly_formatted_string(
         default_options,
         file_tokens=tokens,
     )
+    visitor.run()
     assert_errors(visitor, [MultilineFormattedStringViolation])
 
 
