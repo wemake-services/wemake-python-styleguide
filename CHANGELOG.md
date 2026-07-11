@@ -20,7 +20,7 @@ Semantic versioning in our case means:
 
 ### Features
 
-- Extends `WPS365`: match with a single case statement is now also considered simplifiable
+- Extends `WPS365`: match with a single case statement is now also considered simplifiable. Match with simple sequence and mapping patterns are now also considered simplifiable
 
 
 ## 1.6.2

@@ -2446,6 +2446,11 @@ class SimplifiableMatchViolation(ASTViolation):
         - When the first case uses a literal pattern
         - When the second case is a wildcard: ``case _:``
         - When there is exactly one  ``case`` statement
+        - When the first case uses a simple sequence (``[1, 2, 3]``)
+          or mapping (``{"x": 1}``) pattern
+          with only literals, constants, or names
+        - Keys and values in mappings are constants (not variables)
+        - No starred patterns (``*args, **kwargs``) or has guards
 
     Example::
 
@@ -2455,12 +2460,23 @@ class SimplifiableMatchViolation(ASTViolation):
         else:
             user = 'active'
 
+        if data == [1, 2]:
+            handle_pair()
+        else:
+            ignore()
+
         # Wrong:
         match state:
             case EventType.REJECT:
                 user = 'rejected'
             case _:
                 user = 'active'
+
+        match data:
+            case [1, 2]:
+                handle_pair()
+            case _:
+                ignore()
 
     .. versionadded:: 1.5.0
     .. versionchanged:: 1.7.0
