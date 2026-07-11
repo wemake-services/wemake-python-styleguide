@@ -128,7 +128,8 @@ class PlugincodesDirective(SphinxDirective):
         return local_autodoc.run()
 
     def _filter_autoclass_nodes(
-        self, nodes_to_filter: Sequence[nodes.Node]
+        self,
+        nodes_to_filter: Sequence[nodes.Node],
     ) -> Sequence[nodes.Node]:
         all_nodes = (
             inner_node
@@ -148,7 +149,8 @@ class PlugincodesDirective(SphinxDirective):
                 node.parent.remove(node)
 
             if isinstance(node, nodes.paragraph) and re.match(
-                r'^Bases: [A-Za-z.]+$', text_node
+                r'^Bases: [A-Za-z.]+$',
+                text_node,
             ):
                 node.parent.remove(node)
 

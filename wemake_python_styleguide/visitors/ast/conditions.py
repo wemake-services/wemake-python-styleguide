@@ -224,7 +224,7 @@ class SimplifiableMatchVisitor(BaseNodeVisitor):
             for check in simplifiable_checks:
                 if check(first.pattern):
                     self.add_violation(
-                        consistency.SimplifiableMatchViolation(node)
+                        consistency.SimplifiableMatchViolation(node),
                     )
                     return
 

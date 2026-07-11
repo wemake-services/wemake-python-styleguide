@@ -144,7 +144,10 @@ _NON_SIMPLIFIABLE_PATTERNS = (
 
 @pytest.mark.parametrize('pattern', _SIMPLIFIABLE_PATTERNS)
 def test_simplifiable_sequence(
-    assert_errors, parse_ast_tree, default_options, pattern
+    assert_errors,
+    parse_ast_tree,
+    default_options,
+    pattern,
 ):
     """Test that patterns with sequence/mapping require simplification."""
     tree = parse_ast_tree(sequence_mapping_template.format(pattern=pattern))
@@ -155,7 +158,10 @@ def test_simplifiable_sequence(
 
 @pytest.mark.parametrize('pattern', _NON_SIMPLIFIABLE_PATTERNS)
 def test_non_simplifiable_patterns(
-    assert_errors, parse_ast_tree, default_options, pattern
+    assert_errors,
+    parse_ast_tree,
+    default_options,
+    pattern,
 ):
     """Test that patterns do not require simplification."""
     tree = parse_ast_tree(sequence_mapping_template.format(pattern=pattern))
@@ -239,7 +245,7 @@ def test_simplifiable_union_match(
 ):
     """Test that union pattern raises violation."""
     tree = parse_ast_tree(
-        simplifiable_union_match_match.format(left, right, as_binding)
+        simplifiable_union_match_match.format(left, right, as_binding),
     )
     visitor = SimplifiableMatchVisitor(default_options, tree=tree)
     visitor.run()
