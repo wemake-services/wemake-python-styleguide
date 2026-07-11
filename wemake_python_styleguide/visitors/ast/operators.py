@@ -139,7 +139,7 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):  # noqa: WPS214
             )
             if has_useless_constant:
                 self.add_violation(
-                    consistency.MeaninglessBooleanOperationViolation(node)
+                    consistency.MeaninglessBooleanOperationViolation(node),
                 )
                 return
 
@@ -162,7 +162,7 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):  # noqa: WPS214
 
             if has_useless_name:
                 self.add_violation(
-                    consistency.MeaninglessBooleanOperationViolation(node)
+                    consistency.MeaninglessBooleanOperationViolation(node),
                 )
                 return
 
@@ -212,7 +212,7 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):  # noqa: WPS214
             )
             if is_identical_constants:
                 self.add_violation(
-                    consistency.MeaninglessNumberOperationViolation(right)
+                    consistency.MeaninglessNumberOperationViolation(right),
                 )
 
     def _get_non_negative_nodes(

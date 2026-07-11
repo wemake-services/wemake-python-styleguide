@@ -150,7 +150,6 @@ select = [
 ]
 ignore = [
   "A005",   # allow to shadow stdlib and builtin module names
-  "COM812", # trailing comma, conflicts with `ruff format`
   # Different doc rules that we don't really care about:
   "D100",
   "D104",
