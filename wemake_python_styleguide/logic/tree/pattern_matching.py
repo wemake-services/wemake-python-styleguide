@@ -58,9 +58,9 @@ def is_wildcard_pattern(case: ast.match_case) -> bool:
 
 
 def is_simple_pattern(pattern: ast.pattern) -> bool:
-    """Returns True if the pattern is simple enough to replace with `==`."""
+    """Returns True if the pattern is simple enough to replace with ``==``."""
     return _is_simple_value_or_singleton(pattern) or _is_simple_composite(
-        pattern
+        pattern,
     )
 
 
@@ -86,7 +86,8 @@ def _is_simple_value_or_singleton(pattern: ast.pattern) -> bool:
         return True
     if isinstance(pattern, ast.MatchValue):
         return isinstance(
-            pattern.value, (ast.Constant, ast.Name, ast.Attribute)
+            pattern.value,
+            (ast.Constant, ast.Name, ast.Attribute),
         )
     return False
 

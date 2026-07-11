@@ -24,13 +24,6 @@ match subject:
         pass
 """
 
-simplifiable_guard_match = """
-match subject:
-    case x if x > 0:
-        pass
-    case _:
-        pass
-"""
 
 single_case_sequence = """
 match subject:
@@ -115,6 +108,61 @@ match subject:
         pass
 """
 
+sequence_mapping_template = """
+match subject:
+    case {pattern}:
+        pass
+    case _:
+        pass
+"""
+
+# Wrong sequence:
+_SIMPLIFIABLE_PATTERNS = (
+    "['a', False, ['b'], {'c': 2, 'x': None}]",
+    "{'a': '1', 'b': {'2': [1]}}",
+    '[1, 2, 3]',
+    "['a', 'b', 'c']",
+    '[True, False]',
+    "[1, 'a', 2]",
+    '[True, 1, False]',
+    "[True, 'a', False]",
+    "[True, 1, 'a', None]",
+)
+
+# Correct sequence:
+_NON_SIMPLIFIABLE_PATTERNS = (
+    '[x, y, z]',
+    '{"key": x}',
+    '{"key": [x]}',
+    '{"key": 1, **kwargs}',
+    "[{'a': x}]",
+    "{'a': '1', 'b': {'2': x}}",
+    '[1, [x]]',
+    '[1, *rest]',
+)
+
+
+@pytest.mark.parametrize('pattern', _SIMPLIFIABLE_PATTERNS)
+def test_simplifiable_sequence(
+    assert_errors, parse_ast_tree, default_options, pattern
+):
+    """Test that patterns with sequence/mapping require simplification."""
+    tree = parse_ast_tree(sequence_mapping_template.format(pattern=pattern))
+    visitor = SimplifiableMatchVisitor(default_options, tree=tree)
+    visitor.run()
+    assert_errors(visitor, [SimplifiableMatchViolation])
+
+
+@pytest.mark.parametrize('pattern', _NON_SIMPLIFIABLE_PATTERNS)
+def test_non_simplifiable_patterns(
+    assert_errors, parse_ast_tree, default_options, pattern
+):
+    """Test that patterns do not require simplification."""
+    tree = parse_ast_tree(sequence_mapping_template.format(pattern=pattern))
+    visitor = SimplifiableMatchVisitor(default_options, tree=tree)
+    visitor.run()
+    assert_errors(visitor, [])
+
 
 @pytest.mark.parametrize(
     'code',
@@ -162,18 +210,6 @@ def test_simplifiable_single_match(
 ):
     """Test that simple single-case match raises a violation."""
     tree = parse_ast_tree(simplifiable_match_match.format(code, as_binding))
-    visitor = SimplifiableMatchVisitor(default_options, tree=tree)
-    visitor.run()
-    assert_errors(visitor, [SimplifiableMatchViolation])
-
-
-def test_simplifiable_guarded_match(
-    assert_errors,
-    parse_ast_tree,
-    default_options,
-):
-    """Test that guarded irrefutable match is simplified."""
-    tree = parse_ast_tree(simplifiable_guard_match)
     visitor = SimplifiableMatchVisitor(default_options, tree=tree)
     visitor.run()
     assert_errors(visitor, [SimplifiableMatchViolation])
