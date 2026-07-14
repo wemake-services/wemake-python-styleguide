@@ -72,6 +72,12 @@ class _ImportFromValidator(_BaseImportValidator):
 
     def _check_vague_alias(self, node: ast.ImportFrom) -> None:
         for alias in node.names:
+            is_imported_as_domain_name = (
+                alias.asname
+                and alias.asname in self._options.allowed_domain_names
+            )
+            if is_imported_as_domain_name:
+                continue
             for name in filter(None, (alias.name, alias.asname)):
                 is_regular_import = (
                     alias.asname and name != alias.asname
