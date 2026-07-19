@@ -58,7 +58,6 @@ class SubscriptVisitor(base.BaseNodeVisitor):
         if not isinstance(node.slice, ast.Slice):
             return
 
-        indexes: list[ast.expr | None] = []
         lower_ok = node.slice.lower is None or (
             not self._is_zero(node.slice.lower)
             and not self._is_none(node.slice.lower)
@@ -71,17 +70,15 @@ class SubscriptVisitor(base.BaseNodeVisitor):
             and not self._is_none(node.slice.step)
         )
 
-        if not lower_ok:
-            indexes.append(node.slice.lower)
-
-        if not upper_ok:
-            indexes.append(node.slice.upper)
-
-        if not step_ok:
-            indexes.append(node.slice.step)
-
-        for index in indexes:
-            self.add_violation(consistency.RedundantSubscriptViolation(index))
+        for check, index in (
+            (lower_ok, node.slice.lower),
+            (upper_ok, node.slice.upper),
+            (step_ok, node.slice.step),
+        ):
+            if not check:
+                self.add_violation(
+                    consistency.RedundantSubscriptViolation(index),
+                )
 
     def _check_slice_assignment(self, node: ast.Subscript) -> None:
         if not isinstance(node.ctx, ast.Store):
