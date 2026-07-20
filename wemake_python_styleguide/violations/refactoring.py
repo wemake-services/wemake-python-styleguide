@@ -1384,8 +1384,8 @@ class LenGeneratorViolation(ASTViolation):
 
         # Wrong:
         len(x for x in items)
-        
-    .. versionadded:: 1.0.0    
+
+    .. versionadded:: 1.0.0
 
     """
 
