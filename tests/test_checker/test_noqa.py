@@ -287,6 +287,7 @@ SHOULD_BE_RAISED = types.MappingProxyType(
         'WPS534': 1,
         'WPS535': 1,
         'WPS536': 1,
+        'WPS537': 0,
         'WPS600': 1,
         'WPS601': 1,
         'WPS602': 2,
@@ -309,7 +310,7 @@ SHOULD_BE_RAISED = types.MappingProxyType(
 )
 
 #: Number and count of violations that would be raised.
-SHOULD_BE_RAISED3_13 = types.MappingProxyType({'WPS477': 1})
+SHOULD_BE_RAISED3_13 = types.MappingProxyType({'WPS477': 1, 'WPS537': 0})
 
 
 def _assert_errors_count_in_output(

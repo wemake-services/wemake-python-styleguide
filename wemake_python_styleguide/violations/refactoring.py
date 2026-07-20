@@ -1364,6 +1364,7 @@ class ExtraMatchSubjectSyntaxViolation(ASTViolation):
     error_template = 'Found `match` subject with extra syntax: {0}'
     code = 536
 
+
 @final
 class LenGeneratorViolation(ASTViolation):
     """
@@ -1383,10 +1384,10 @@ class LenGeneratorViolation(ASTViolation):
 
         # Wrong:
         len(x for x in items)
+        
+    .. versionadded:: 1.0.0    
 
     """
 
-    error_template = (
-        'Found `len()` used with a generator expression'
-    )
+    error_template = 'Found `len()` used with a generator expression'
     code = 537

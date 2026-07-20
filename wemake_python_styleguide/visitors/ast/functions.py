@@ -37,10 +37,10 @@ from wemake_python_styleguide.violations.best_practices import (
 from wemake_python_styleguide.violations.refactoring import (
     ImplicitEnumerateViolation,
     ImplicitPrimitiveViolation,
+    LenGeneratorViolation,
     OpenWithoutContextManagerViolation,
     TypeCompareViolation,
     UselessLambdaViolation,
-    LenGeneratorViolation,
 )
 from wemake_python_styleguide.visitors import base, decorators
 
