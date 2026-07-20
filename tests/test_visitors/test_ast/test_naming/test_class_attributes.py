@@ -127,7 +127,7 @@ def test_upper_case_class_attributes(
 
 @pytest.mark.parametrize(
     'base_class',
-    enums._ENUM_LIKE_NAMES,  # noqa: SLF001
+    enums._ENUM_LIKE_NAMES,  # ruff:ignore[private-member-access]
 )
 @pytest.mark.parametrize(
     'attribute',

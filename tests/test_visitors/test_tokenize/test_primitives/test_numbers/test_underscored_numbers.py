@@ -116,7 +116,9 @@ def test_numbers_do_not_error(
 ):  # pragma: no cover
     """Ensures that correct numbers are fine."""
     try:
-        from test.test_grammar import VALID_UNDERSCORE_LITERALS  # noqa: PLC0415
+        from test.test_grammar import (
+            VALID_UNDERSCORE_LITERALS,
+        )
     except Exception:
         pytest.skip('VALID_UNDERSCORE_LITERALS did not import')
     for number in VALID_UNDERSCORE_LITERALS:

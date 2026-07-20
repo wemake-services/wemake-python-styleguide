@@ -16,7 +16,7 @@ PATTERN: Final = """
 /FunctionDef[re:match('visit_.*', @name)
 and not(child::body/Expr[last()]/value/Call/func/Attribute[@attr='generic_visit'] or
 child::body/With[last()]/body/Expr[last()]/value/Call/func/Attribute[@attr='generic_visit'])]
-"""  # noqa: E501
+"""  # ruff:ignore[line-too-long]
 
 # This is needed to stop linter from spewing WPS421 errors.
 report = print

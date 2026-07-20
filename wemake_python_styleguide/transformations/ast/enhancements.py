@@ -39,7 +39,7 @@ def set_node_context(tree: ast.AST) -> ast.AST:
     """
     for statement in ast.walk(tree):
         current_context = _find_context(statement, _CONTEXTS)
-        setattr(statement, 'wps_context', current_context)  # noqa: B010
+        setattr(statement, 'wps_context', current_context)  # ruff:ignore[set-attr-with-constant]
     return tree
 
 

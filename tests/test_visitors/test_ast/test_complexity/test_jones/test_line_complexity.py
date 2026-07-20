@@ -162,9 +162,9 @@ def test_same_complexity(parse_ast_tree, default_options):
     simple_visitor.run()
     typed_visitor.run()
 
-    assert len(simple_visitor._lines) == 1  # noqa: SLF001
-    assert len(simple_visitor._lines[1]) == 3  # noqa: SLF001
-    assert len(typed_visitor._lines[1]) == 3  # noqa: SLF001
+    assert len(simple_visitor._lines) == 1  # ruff:ignore[private-member-access]
+    assert len(simple_visitor._lines[1]) == 3  # ruff:ignore[private-member-access]
+    assert len(typed_visitor._lines[1]) == 3  # ruff:ignore[private-member-access]
 
 
 @pytest.mark.parametrize(
@@ -183,8 +183,8 @@ def test_exact_complexity(parse_ast_tree, default_options, code, complexity):
     visitor = JonesComplexityVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert len(visitor._lines) == 1  # noqa: SLF001
-    assert len(visitor._lines[1]) == complexity  # noqa: SLF001
+    assert len(visitor._lines) == 1  # ruff:ignore[private-member-access]
+    assert len(visitor._lines[1]) == complexity  # ruff:ignore[private-member-access]
 
 
 @pytest.mark.parametrize(
@@ -210,4 +210,4 @@ def test_that_some_nodes_are_ignored(
     visitor = JonesComplexityVisitor(default_options, tree=tree)
     visitor.run()
 
-    assert len(visitor._lines) == number_of_lines  # noqa: SLF001
+    assert len(visitor._lines) == number_of_lines  # ruff:ignore[private-member-access]

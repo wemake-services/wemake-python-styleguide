@@ -49,8 +49,8 @@ def test_violation_on_approximate_constants(
         3.0,
         3.1,
         3.13,
-        3.142,  # noqa: FURB152
-        3.1416,  # noqa: FURB152
+        3.142,  # ruff:ignore[math-constant]
+        3.1416,  # ruff:ignore[math-constant]
         3.15,
         6.2,
         6.3,

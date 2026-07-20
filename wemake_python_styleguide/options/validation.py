@@ -6,8 +6,8 @@ from wemake_python_styleguide.options import defaults
 
 
 def _min_max(
-    min: int | None = None,  # noqa: A002
-    max: int | None = None,  # noqa: A002
+    min: int | None = None,  # ruff:ignore[builtin-argument-shadowing]
+    max: int | None = None,  # ruff:ignore[builtin-argument-shadowing]
 ):
     """Validator to check that value is in bounds."""
 

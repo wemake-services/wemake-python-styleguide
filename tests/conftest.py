@@ -30,7 +30,7 @@ def options():
     """Returns the options builder."""
     default_values = {
         option.long_option_name[2:].replace('-', '_'): option.default
-        for option in Configuration._options  # noqa: SLF001
+        for option in Configuration._options  # ruff:ignore[private-member-access]
     }
 
     Options = namedtuple('options', default_values.keys())

@@ -63,7 +63,7 @@ class WrongStringVisitor(base.BaseNodeVisitor):
 
     def visit_any_string(self, node: ast.Constant) -> None:
         """Forbids incorrect usage of strings."""
-        assert isinstance(node.value, str | bytes)  # for mypy  # noqa: S101
+        assert isinstance(node.value, str | bytes)  # for mypy  # ruff:ignore[assert]
         text_data = source.render_string(node.value)
         self._check_is_alphabet(node, text_data)
         self.generic_visit(node)
