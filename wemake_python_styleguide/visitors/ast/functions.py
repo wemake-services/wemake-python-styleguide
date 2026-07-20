@@ -40,6 +40,7 @@ from wemake_python_styleguide.violations.refactoring import (
     OpenWithoutContextManagerViolation,
     TypeCompareViolation,
     UselessLambdaViolation,
+    LenGeneratorViolation,
 )
 from wemake_python_styleguide.visitors import base, decorators
 
@@ -112,6 +113,7 @@ class WrongFunctionCallContextVisitor(base.BaseNodeVisitor):
         self._check_open_call_context(node)
         self._check_type_compare(node)
         self._check_range_len(node)
+        self._check_len_generator(node)
         self.generic_visit(node)
 
     def _check_open_call_context(self, node: ast.Call) -> None:
@@ -171,6 +173,16 @@ class WrongFunctionCallContextVisitor(base.BaseNodeVisitor):
         )
         if any([is_one_arg_range, is_two_args_range, is_three_args_range]):
             self.add_violation(ImplicitEnumerateViolation(node))
+
+    def _check_len_generator(self, node: ast.Call) -> None:
+        if not functions.given_function_called(node, {'len'}):
+            return
+
+        if len(node.args) != 1:
+            return
+
+        if isinstance(node.args[0], ast.GeneratorExp):
+            self.add_violation(LenGeneratorViolation(node))
 
     def _is_multiple_args_range_with_len(self, node: ast.Call) -> bool:
         return bool(

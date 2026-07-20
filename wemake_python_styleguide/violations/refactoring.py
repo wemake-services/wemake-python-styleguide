@@ -1363,3 +1363,30 @@ class ExtraMatchSubjectSyntaxViolation(ASTViolation):
 
     error_template = 'Found `match` subject with extra syntax: {0}'
     code = 536
+
+@final
+class LenGeneratorViolation(ASTViolation):
+    """
+    Forbid using ``len()`` on generator expressions.
+
+    Reasoning:
+        Generator expressions do not have a length.
+        Calling ``len()`` on them raises ``TypeError``.
+
+    Solution:
+        Use a list comprehension if you really need the length.
+
+    Example::
+
+        # Correct:
+        len([x for x in items])
+
+        # Wrong:
+        len(x for x in items)
+
+    """
+
+    error_template = (
+        'Found `len()` used with a generator expression'
+    )
+    code = 537
