@@ -17,18 +17,23 @@ usage_template = 'constant[{0}]'
         '3:None:2',
         '3:7:None',
         '3:7:1',
+        '3::',
+        '1:4:',
     ],
 )
 def test_one_redundant_subscript(
     assert_errors,
     parse_ast_tree,
+    parse_tokens,
     expression,
     default_options,
 ):
     """Testing that redundant subscripts are forbidden."""
-    tree = parse_ast_tree(usage_template.format(expression))
+    code = usage_template.format(expression)
+    tree = parse_ast_tree(code)
+    tokens = parse_tokens(code)
 
-    visitor = SubscriptVisitor(default_options, tree=tree)
+    visitor = SubscriptVisitor(default_options, tree=tree, file_tokens=tokens)
     visitor.run()
 
     assert_errors(visitor, [RedundantSubscriptViolation])
@@ -49,13 +54,16 @@ def test_one_redundant_subscript(
 def test_two_redundant_subscript(
     assert_errors,
     parse_ast_tree,
+    parse_tokens,
     expression,
     default_options,
 ):
     """Testing that redundant subscripts are forbidden."""
-    tree = parse_ast_tree(usage_template.format(expression))
+    code = usage_template.format(expression)
+    tree = parse_ast_tree(code)
+    tokens = parse_tokens(code)
 
-    visitor = SubscriptVisitor(default_options, tree=tree)
+    visitor = SubscriptVisitor(default_options, tree=tree, file_tokens=tokens)
     visitor.run()
 
     assert_errors(
@@ -79,13 +87,16 @@ def test_two_redundant_subscript(
 def test_three_redundant_subscript(
     assert_errors,
     parse_ast_tree,
+    parse_tokens,
     expression,
     default_options,
 ):
     """Testing that redundant subscripts are forbidden."""
-    tree = parse_ast_tree(usage_template.format(expression))
+    code = usage_template.format(expression)
+    tree = parse_ast_tree(code)
+    tokens = parse_tokens(code)
 
-    visitor = SubscriptVisitor(default_options, tree=tree)
+    visitor = SubscriptVisitor(default_options, tree=tree, file_tokens=tokens)
     visitor.run()
 
     assert_errors(
@@ -107,25 +118,25 @@ def test_three_redundant_subscript(
         '3:',
         ':7',
         '3::2',
-        '3:7:',
         ':7:2',
-        '3::',
         ':7:',
         '::2',
         ':',
-        '::',
     ],
 )
 def test_correct_subscripts(
     assert_errors,
     parse_ast_tree,
+    parse_tokens,
     expression,
     default_options,
 ):
     """Testing that non-redundant subscripts are allowed."""
-    tree = parse_ast_tree(usage_template.format(expression))
+    code = usage_template.format(expression)
+    tree = parse_ast_tree(code)
+    tokens = parse_tokens(code)
 
-    visitor = SubscriptVisitor(default_options, tree=tree)
+    visitor = SubscriptVisitor(default_options, tree=tree, file_tokens=tokens)
     visitor.run()
 
     assert_errors(visitor, [])
