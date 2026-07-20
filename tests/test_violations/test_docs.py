@@ -26,7 +26,7 @@ def test_configuration(all_violations):
     """Ensures that all configuration options are listed in the docs."""
     option_listed = {
         option.long_option_name: False
-        for option in Configuration._options  # noqa: SLF001
+        for option in Configuration._options  # ruff:ignore[private-member-access]
         if option.long_option_name not in FORMATTING_OPTIONS
     }
 

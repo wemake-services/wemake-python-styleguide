@@ -21,7 +21,7 @@ def has_correct_underscores(number: str) -> bool:
     >>> has_correct_underscores('10000_000_00')
     False
     """
-    assert '_' in number  # noqa: S101
+    assert '_' in number  # ruff:ignore[assert]
     number_cleared = (
         number
         .strip()

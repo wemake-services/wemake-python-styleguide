@@ -64,7 +64,7 @@ def test_all_visitors_contained_in_checker(all_visitors):
     """Ensures that all visitors are contained in a checker."""
     checker_visitors = {
         klass.__qualname__
-        for klass in Checker._visitors  # noqa: SLF001
+        for klass in Checker._visitors  # ruff:ignore[private-member-access]
         if not klass.__qualname__.startswith('_')
     }
 

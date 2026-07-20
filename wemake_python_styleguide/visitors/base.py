@@ -116,7 +116,7 @@ class BaseVisitor(abc.ABC):
     def add_violation(self, violation: BaseViolation) -> None:
         """Adds violation to the visitor."""
         # It is not allowed to add disabled violations:
-        assert violation.disabled_since is None, violation.code  # noqa: S101
+        assert violation.disabled_since is None, violation.code  # ruff:ignore[assert]
         self.violations.append(violation)
 
     @abc.abstractmethod
@@ -128,7 +128,7 @@ class BaseVisitor(abc.ABC):
         to do when it was told to ``run``.
         """
 
-    def _post_visit(self) -> None:  # noqa: B027
+    def _post_visit(self) -> None:  # ruff:ignore[empty-method-without-abstract-decorator]
         """
         Executed after all nodes have been visited.
 

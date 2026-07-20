@@ -123,7 +123,7 @@ class _SimpleNameValidator:
 
 class _RegularNameValidator(_SimpleNameValidator):
     _naming_predicates: ClassVar[Iterable[_NamingPredicate]] = (
-        *_SimpleNameValidator._naming_predicates,  # noqa: SLF001
+        *_SimpleNameValidator._naming_predicates,  # ruff:ignore[private-member-access]
         _NamingPredicate(
             builtins.is_wrong_alias,
             naming.TrailingUnderscoreViolation,

@@ -36,7 +36,7 @@ def _safe_output(output: str) -> str:
     """
     assert pkg_version, 'Looks like version is broken'
 
-    current_version_url = WemakeFormatter._doc_url  # noqa: SLF001
+    current_version_url = WemakeFormatter._doc_url  # ruff:ignore[private-member-access]
     general_version_url = current_version_url.replace(pkg_version, 'xx.xx')
     return output.replace(current_version_url, general_version_url)
 

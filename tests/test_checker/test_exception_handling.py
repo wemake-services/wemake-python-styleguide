@@ -18,7 +18,7 @@ def test_exception_handling(
     """Ensures that checker works with module names."""
     Checker.parse_options(default_options)
     checker = Checker(tree=ast.parse(''), file_tokens=[], filename='test.py')
-    checker._visitors = [_BrokenVisitor]  # noqa: SLF001
+    checker._visitors = [_BrokenVisitor]  # ruff:ignore[private-member-access]
 
     with suppress(StopIteration):
         violation = next(checker.run())

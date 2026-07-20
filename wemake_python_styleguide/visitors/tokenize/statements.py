@@ -41,7 +41,7 @@ class MultilineStringVisitor(BaseTokenVisitor):
             # ```python
             # class Example:
             #     """Docstring."""  # <- this should be allowed
-            #     x: int  # noqa: ERA001
+            #     x: int  # ruff:ignore[commented-out-code]
             #     """Attr docs."""  # <- this should be allowed
             # ```
             return

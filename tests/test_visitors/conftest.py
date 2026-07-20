@@ -57,8 +57,8 @@ def assert_errors():
             assert expected_errors[index].disabled_since is None
             assert error.code == expected_errors[index].code
             if isinstance(error, ASTViolation | TokenizeViolation):
-                assert error._node is not None  # noqa: SLF001
-                assert error._location() != (0, 0)  # noqa: SLF001
+                assert error._node is not None  # ruff:ignore[private-member-access]
+                assert error._location() != (0, 0)  # ruff:ignore[private-member-access]
 
     return factory
 
@@ -93,7 +93,7 @@ def assert_error_text():
         assert violation.error_template.endswith(_ERROR_FORMAT)
 
         reproduction = violation.__class__(
-            node=violation._node,  # noqa: SLF001
+            node=violation._node,  # ruff:ignore[private-member-access]
             text=text,
             baseline=baseline,
         )
@@ -112,6 +112,6 @@ def assert_error_location():
     ) -> None:
         assert len(visitor.violations) == 1
         violation = visitor.violations[0]
-        assert violation._location() == expected  # noqa: SLF001
+        assert violation._location() == expected  # ruff:ignore[private-member-access]
 
     return factory
