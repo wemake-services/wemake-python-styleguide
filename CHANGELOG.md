@@ -21,6 +21,7 @@ Semantic versioning in our case means:
 ### Features
 
 - Extends `WPS365`: match with a single case statement is now also considered simplifiable. Match with simple sequence and mapping patterns are now also considered simplifiable
+- Extends `WPS349`: Slices with a trailing colon (empty step) like ``array[start:stop:]`` and ``array[start::]`` are now considered as redundant, #1071
 
 
 ## 1.6.2
