@@ -1929,13 +1929,18 @@ class RedundantSubscriptViolation(ASTViolation):
         # Correct:
         array[:7]
         array[3:]
+        array[2:10]
 
         # Wrong:
-        x[0:7]
-        x[3:None]
+        array[0:7]
+        array[3:None]
+        array[2:10:]
+        array[2::]
 
     .. versionadded:: 0.13.0
-
+    .. versionchanged:: 1.7.0
+        Slices with a trailing colon (empty step) like ``array[2:10:]``
+        and ``array[2::]`` are now flagged as redundant.
     """
 
     error_template = 'Found redundant subscript slice'

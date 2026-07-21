@@ -3,6 +3,9 @@ from collections.abc import Iterator
 from typing import ClassVar, final
 
 from wemake_python_styleguide.logic import source
+from wemake_python_styleguide.logic.tokens.subscripts import (
+    has_redundant_step,
+)
 from wemake_python_styleguide.logic.tree import functions, operators, slices
 from wemake_python_styleguide.violations import (
     best_practices,
@@ -13,7 +16,7 @@ from wemake_python_styleguide.visitors import base
 
 
 @final
-class SubscriptVisitor(base.BaseNodeVisitor):
+class SubscriptVisitor(base.BaseNodeTokenVisitor):
     """Checks subscripts used in the code."""
 
     _marked_slices: ClassVar[set[ast.Subscript]] = set()
@@ -57,6 +60,9 @@ class SubscriptVisitor(base.BaseNodeVisitor):
     def _check_redundant_subscript(self, node: ast.Subscript) -> None:
         if not isinstance(node.slice, ast.Slice):
             return
+
+        if has_redundant_step(node, self.file_tokens):
+            self.add_violation(consistency.RedundantSubscriptViolation(node))
 
         lower_ok = node.slice.lower is None or (
             not self._is_zero(node.slice.lower)

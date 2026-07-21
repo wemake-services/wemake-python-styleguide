@@ -21,13 +21,16 @@ usage_template = 'constant[{0}]'
 def test_forbidden_consecutive_slices(
     assert_errors,
     parse_ast_tree,
+    parse_tokens,
     expression,
     default_options,
 ):
     """Testing that consecutive slices are forbidden."""
-    tree = parse_ast_tree(usage_template.format(expression))
+    code = usage_template.format(expression)
+    tree = parse_ast_tree(code)
+    tokens = parse_tokens(code)
 
-    visitor = SubscriptVisitor(default_options, tree=tree)
+    visitor = SubscriptVisitor(default_options, tree=tree, file_tokens=tokens)
     visitor.run()
 
     assert_errors(visitor, [ConsecutiveSlicesViolation])
@@ -43,13 +46,16 @@ def test_forbidden_consecutive_slices(
 def test_forbidden_multiple_consecutive_slices(
     assert_errors,
     parse_ast_tree,
+    parse_tokens,
     expression,
     default_options,
 ):
     """Testing that consecutive slices are forbidden."""
-    tree = parse_ast_tree(usage_template.format(expression))
+    code = usage_template.format(expression)
+    tree = parse_ast_tree(code)
+    tokens = parse_tokens(code)
 
-    visitor = SubscriptVisitor(default_options, tree=tree)
+    visitor = SubscriptVisitor(default_options, tree=tree, file_tokens=tokens)
     visitor.run()
 
     assert_errors(
@@ -76,13 +82,16 @@ def test_forbidden_multiple_consecutive_slices(
 def test_nonconsecutive_slices(
     assert_errors,
     parse_ast_tree,
+    parse_tokens,
     expression,
     default_options,
 ):
     """Testing that non-consecutive slices are allowed."""
-    tree = parse_ast_tree(usage_template.format(expression))
+    code = usage_template.format(expression)
+    tree = parse_ast_tree(code)
+    tokens = parse_tokens(code)
 
-    visitor = SubscriptVisitor(default_options, tree=tree)
+    visitor = SubscriptVisitor(default_options, tree=tree, file_tokens=tokens)
     visitor.run()
 
     assert_errors(visitor, [])
