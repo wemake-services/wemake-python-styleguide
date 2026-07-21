@@ -1930,7 +1930,6 @@ class RedundantSubscriptViolation(ASTViolation):
         array[:7]
         array[3:]
         array[2:10]
-        array[2:]
 
         # Wrong:
         array[0:7]
@@ -1940,9 +1939,8 @@ class RedundantSubscriptViolation(ASTViolation):
 
     .. versionadded:: 0.13.0
     .. versionchanged:: 1.7.0
-        Added ``array[2:10]`` and ``array[2:]`` to the list of correct
-        subscript slices.
-
+        Slices with a trailing colon (empty step) like ``array[2:10:]``
+        and ``array[2::]`` are now flagged as redundant.
     """
 
     error_template = 'Found redundant subscript slice'
