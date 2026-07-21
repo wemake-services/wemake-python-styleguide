@@ -1929,12 +1929,19 @@ class RedundantSubscriptViolation(ASTViolation):
         # Correct:
         array[:7]
         array[3:]
+        array[2:10]
+        array[2:]
 
         # Wrong:
-        x[0:7]
-        x[3:None]
+        array[0:7]
+        array[3:None]
+        array[2:10:]
+        array[2::]
 
     .. versionadded:: 0.13.0
+    .. versionchanged:: 1.7.0
+        Added ``array[2:10]`` and ``array[2:]`` to the list of correct
+        subscript slices.
 
     """
 
