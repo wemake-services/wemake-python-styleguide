@@ -171,10 +171,10 @@ class WrongLoopVisitor(base.BaseNodeVisitor):
         if not isinstance(node, ast.While):
             return
 
-        if loops.has_break(node, break_nodes=self._can_break_loop):
-            return
-
-        if loops.is_in_try_except(node):
+        if loops.is_in_try_except(node) or loops.has_break(
+            node,
+            break_nodes=self._can_break_loop,
+        ):
             return
 
         with suppress(ValueError):
