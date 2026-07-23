@@ -1,3 +1,5 @@
+import sys
+
 import pytest
 
 from wemake_python_styleguide.compat.constants import PY312
@@ -83,6 +85,62 @@ def test_incorrectly_formatted_string(
     code,
 ):
     """Ensures that correct formatting works."""
+    tokens = parse_tokens(code)
+    visitor = MultilineFormattedStringTokenVisitor(
+        default_options,
+        file_tokens=tokens,
+    )
+    visitor.run()
+    assert_errors(visitor, [MultilineFormattedStringViolation])
+
+
+@pytest.mark.skipif(
+    sys.version_info < (3, 14),
+    reason='t-strings are only in Python 3.14+',
+)
+@pytest.mark.parametrize(
+    'code',
+    [
+        "x = t'''{1}'''",
+        'x = t"""{1}"""',
+        "x = tr'''{1}'''",
+    ],
+)
+def test_correctly_formatted_t_string(
+    parse_tokens,
+    assert_errors,
+    default_options,
+    code,
+):
+    """Ensures that correct multiline t-string formatting works."""
+    tokens = parse_tokens(code)
+    visitor = MultilineFormattedStringTokenVisitor(
+        default_options,
+        file_tokens=tokens,
+    )
+    visitor.run()
+    assert_errors(visitor, [])
+
+
+@pytest.mark.skipif(
+    sys.version_info < (3, 14),
+    reason='t-strings are only in Python 3.14+',
+)
+@pytest.mark.parametrize(
+    'code',
+    [
+        "x = t'{1\n}'",
+        'x = t"{1\n}"',
+        "x = tr'{1\n}'",
+    ],
+)
+def test_incorrectly_formatted_t_string(
+    parse_tokens,
+    assert_errors,
+    default_options,
+    code,
+):
+    """Ensures that multiline single-quote t-strings cause violations."""
     tokens = parse_tokens(code)
     visitor = MultilineFormattedStringTokenVisitor(
         default_options,

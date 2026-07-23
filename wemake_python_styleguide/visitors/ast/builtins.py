@@ -5,6 +5,7 @@ from collections.abc import Sequence
 from typing import ClassVar, Final, TypeAlias, final
 
 from wemake_python_styleguide import constants
+from wemake_python_styleguide.compat import nodes
 from wemake_python_styleguide.compat.aliases import (
     AssignNodesWithWalrus,
     FunctionNodes,
@@ -34,6 +35,9 @@ from wemake_python_styleguide.visitors import base, decorators
 
 #: Items that can be inside a hash.
 _HashItems: TypeAlias = Sequence[ast.AST | None]
+
+#: Any formatted string node (f-string or t-string).
+_AnyFormattedString: TypeAlias = ast.JoinedStr | nodes.TemplateStr
 
 
 @final
@@ -83,8 +87,15 @@ class WrongStringVisitor(base.BaseNodeVisitor):
 
 
 @final
+@decorators.alias(
+    'visit_any_formatted_string',
+    (
+        'visit_JoinedStr',
+        'visit_TemplateStr',
+    ),
+)
 class WrongFormatStringVisitor(base.BaseNodeVisitor):
-    """Restricts usage of ``f`` strings."""
+    """Restricts usage of ``f`` and ``t`` strings."""
 
     _valid_format_index: ClassVar[AnyNodes] = (
         ast.Constant,
@@ -101,18 +112,26 @@ class WrongFormatStringVisitor(base.BaseNodeVisitor):
     )
     _max_chained_items = 3
 
-    def visit_JoinedStr(self, node: ast.JoinedStr) -> None:
-        """Forbids use of ``f`` strings and too complex ``f`` strings."""
+    def visit_any_formatted_string(self, node: _AnyFormattedString) -> None:
+        """Forbids use of ``f`` and ``t`` strings that are too complex."""
         self._check_complex_formatted_string(node)
         self.generic_visit(node)
 
-    def _check_complex_formatted_string(self, node: ast.JoinedStr) -> None:
-        """Allows all simple uses of `f` strings."""
-        parent = walk.get_closest_parent(node, ast.JoinedStr)
+    def _check_complex_formatted_string(
+        self,
+        node: _AnyFormattedString,
+    ) -> None:
+        """Allows all simple uses of `f` and `t` strings."""
+        parent = walk.get_closest_parent(
+            node,
+            (ast.JoinedStr, nodes.TemplateStr),
+        )
         for string_component in node.values:
             # check component complexity
             is_component_complex = False
-            if isinstance(string_component, ast.FormattedValue):
+            if isinstance(
+                string_component, ast.FormattedValue | nodes.Interpolation
+            ):
                 is_component_complex = not self._is_valid_formatted_value(
                     string_component.value,
                 )

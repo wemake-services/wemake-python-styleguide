@@ -1,3 +1,5 @@
+import sys
+
 import pytest
 
 from wemake_python_styleguide.violations.complexity import (
@@ -259,3 +261,50 @@ def test_simple_f_string(assert_errors, parse_ast_tree, code, default_options):
     visitor.run()
 
     assert_errors(visitor, [])
+
+
+@pytest.mark.skipif(
+    sys.version_info < (3, 14),
+    reason='t-strings are only in Python 3.14+',
+)
+@pytest.mark.parametrize(
+    'code',
+    [
+        't"smth {value}"',
+        't"smth {user.get_full_name()}"',
+        't""',
+    ],
+)
+def test_simple_t_string(assert_errors, parse_ast_tree, code, default_options):
+    """Testing that non complex ``t`` strings are allowed."""
+    tree = parse_ast_tree(code)
+
+    visitor = WrongFormatStringVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])
+
+
+@pytest.mark.skipif(
+    sys.version_info < (3, 14),
+    reason='t-strings are only in Python 3.14+',
+)
+@pytest.mark.parametrize(
+    'code',
+    [
+        't"smth {value1 + value2}"',
+        't"smth {math_func(1, 2, 3, 4)}"',
+        't"smth {value=:{filler}^{padding}.{precision}f}"',
+    ],
+)
+def test_complex_t_string(assert_errors, parse_ast_tree, code, default_options):
+    """Testing that complex ``t`` strings are not allowed."""
+    tree = parse_ast_tree(code)
+
+    visitor = WrongFormatStringVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(
+        visitor,
+        [TooComplexFormattedStringViolation],
+    )
