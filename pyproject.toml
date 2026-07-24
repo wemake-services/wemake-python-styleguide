@@ -73,7 +73,7 @@ import-linter = "^2.10"
 astpath = "^0.9"
 lxml = "^6.0"
 nbqa = "^1.2"
-ruff = "^0.15"
+ruff = "^0.16"
 
 [tool.poetry.group.docs]
 optional = true
@@ -166,6 +166,8 @@ ignore = [
   "PLR2004", # do not report magic numbers
   "PLR6301", # do not require classmethod / staticmethod when self not used
   "RUF067",  # wps handles `__init__.py` logic better
+  "RUF105",  # keep old `noqa` comments style
+  "RUF201",  # keep old rule codes instead of verbose names
   "TRY003",  # long exception messages from `tryceratops`
 ]
 external = [ "WPS" ]
