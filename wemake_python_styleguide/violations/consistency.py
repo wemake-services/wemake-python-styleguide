@@ -1864,8 +1864,16 @@ class VagueImportViolation(ASTViolation):
         # Wrong:
         from json import loads
 
+    Configuration:
+        This rule is configurable with ``--allowed-domain-names``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.ALLOWED_DOMAIN_NAMES`
+
     .. versionadded:: 0.13.0
     .. versionchanged:: 0.14.0
+    .. versionchanged:: 1.7.0
+       Imports aliased with names from ``--allowed-domain-names``
+       are now allowed.
 
     """
 
