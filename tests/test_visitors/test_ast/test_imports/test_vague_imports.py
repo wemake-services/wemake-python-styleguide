@@ -8,6 +8,7 @@ import_template = 'import {0}'
 from_import_template = 'from mod import {0}'
 alias_import_template1 = 'from mod import something as {0}'
 alias_import_template2 = 'from mod import {0} as correct'
+allowed_domain_names = 'from collections import abc as _c'
 
 
 @pytest.mark.parametrize(
@@ -111,6 +112,21 @@ def test_regular_import(
     tree = parse_ast_tree(code.format(import_name))
 
     visitor = WrongImportVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])
+
+
+def test_allowed_domain_name_skips_vague_check(
+    assert_errors,
+    parse_ast_tree,
+    options,
+):
+    """Testing that when alias is in allowed_domain_names."""
+    tree = parse_ast_tree(allowed_domain_names)
+
+    option_values = options(allowed_domain_names=('_c',))
+    visitor = WrongImportVisitor(option_values, tree=tree)
     visitor.run()
 
     assert_errors(visitor, [])

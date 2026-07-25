@@ -72,13 +72,24 @@ class _ImportFromValidator(_BaseImportValidator):
 
     def _check_vague_alias(self, node: ast.ImportFrom) -> None:
         for alias in node.names:
-            for name in filter(None, (alias.name, alias.asname)):
-                is_regular_import = (
-                    alias.asname and name != alias.asname
-                ) or not imports.is_vague_import(name)
+            is_imported_as_domain_name = (
+                alias.asname
+                and alias.asname in self._options.allowed_domain_names
+            )
 
-                if not is_regular_import:
-                    self._error_callback(VagueImportViolation(node, text=name))
+            if is_imported_as_domain_name:
+                continue
+
+            self._check_is_regular_import(alias, node)
+
+    def _check_is_regular_import(self, alias: ast.alias, node: ast.ImportFrom):
+        for name in filter(None, (alias.name, alias.asname)):
+            is_regular_import = (
+                alias.asname and name != alias.asname
+            ) or not imports.is_vague_import(name)
+
+            if not is_regular_import:
+                self._error_callback(VagueImportViolation(node, text=name))
 
 
 @final
