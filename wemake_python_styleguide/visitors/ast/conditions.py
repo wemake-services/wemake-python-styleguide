@@ -95,14 +95,12 @@ class IfStatementVisitor(BaseNodeVisitor):
         if not isinstance(comp, ast.Compare) or len(comp.ops) > 1:
             return  # We only check for compares with exactly one op
 
-        if not attributes.only_consists_of_parts(
-            node.body,
-            self._nodes_to_check,
-        ) or not attributes.only_consists_of_parts(
-            node.orelse,
-            self._nodes_to_check,
-        ):
-            return  # Only simple nodes are allowed on left and right parts
+        for branch in (node.body, node.orelse):
+            if not attributes.only_consists_of_parts(
+                branch,
+                self._nodes_to_check,
+            ):
+                return  # Only simple nodes are allowed on left and right parts
 
         if compares.is_useless_ternary(
             node,
