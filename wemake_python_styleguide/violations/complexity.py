@@ -1144,6 +1144,8 @@ class TooComplexFormattedStringViolation(ASTViolation):
     """
     Forbids ``f`` and ``t`` strings that are too complex.
 
+    ``t``-strings are only checked on ``python3.14+``.
+
     A complex format string is defined as use of any formatted value
     that is not:
 

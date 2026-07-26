@@ -2936,6 +2936,8 @@ class MultilineFormattedStringViolation(TokenizeViolation):
     """
     Forbid using multi-line formatted string with single and double quotes.
 
+    Is only emitted on ``python3.12+`` (``t``-strings on ``python3.14+``).
+
     Reasoning:
         Multiline f-strings and t-strings must use triple quotes for clarity.
         Single f-strings and t-strings may not span lines.
@@ -2966,7 +2968,7 @@ class CommentInFormattedStringViolation(TokenizeViolation):
     """
     Forbid using comments inside formatted strings.
 
-    Is only emitted on ``python3.12+``.
+    Is only emitted on ``python3.12+`` (``t``-strings on ``python3.14+``).
 
     Reasoning:
         Comments make f-strings and t-strings implicitly multiline.
