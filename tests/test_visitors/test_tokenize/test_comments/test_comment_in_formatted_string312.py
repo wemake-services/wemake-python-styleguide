@@ -222,7 +222,7 @@ def test_wrong_formatted_string(
         "foo = t'test {a} # testing'",
     ],
 )
-def test_correct_t_string_comments(
+def test_correct_t_string_comments(  # pragma: >=3.14 cover
     parse_tokens,
     assert_errors,
     default_options,
@@ -251,7 +251,7 @@ def test_correct_t_string_comments(
         'foo = rt"test{a # comment\n}"',
     ],
 )
-def test_wrong_t_string_comments(
+def test_wrong_t_string_comments(  # pragma: >=3.14 cover
     parse_tokens,
     assert_errors,
     default_options,

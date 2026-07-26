@@ -253,7 +253,10 @@ class MultilineFormattedStringTokenVisitor(
         """Performs check."""
         self._check_fstring_is_multi_lined(token)
 
-    def visit_tstring_start(self, token: tokenize.TokenInfo) -> None:
+    def visit_tstring_start(  # pragma: >=3.14 cover
+        self,
+        token: tokenize.TokenInfo,
+    ) -> None:
         """Performs check for t-strings."""
         self._check_fstring_is_multi_lined(token)
 

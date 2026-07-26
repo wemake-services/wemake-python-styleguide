@@ -335,7 +335,10 @@ class CommentInFormattedStringVisitor(BaseTokenVisitor):  # pragma: >=3.12 cover
         """Performs fstring check."""
         self._check_is_fstring_ends_with_comment(token)
 
-    def visit_tstring_start(self, token: tokenize.TokenInfo) -> None:
+    def visit_tstring_start(  # pragma: >=3.14 cover
+        self,
+        token: tokenize.TokenInfo,
+    ) -> None:
         """Performs t-string check."""
         self._check_is_fstring_ends_with_comment(token)
 

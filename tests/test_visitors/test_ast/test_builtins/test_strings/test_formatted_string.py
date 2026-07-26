@@ -275,7 +275,12 @@ def test_simple_f_string(assert_errors, parse_ast_tree, code, default_options):
         't""',
     ],
 )
-def test_simple_t_string(assert_errors, parse_ast_tree, code, default_options):
+def test_simple_t_string(  # pragma: >=3.14 cover
+    assert_errors,
+    parse_ast_tree,
+    code,
+    default_options,
+):
     """Testing that non complex ``t`` strings are allowed."""
     tree = parse_ast_tree(code)
 
@@ -297,7 +302,12 @@ def test_simple_t_string(assert_errors, parse_ast_tree, code, default_options):
         't"smth {value=:{filler}^{padding}.{precision}f}"',
     ],
 )
-def test_complex_t_string(assert_errors, parse_ast_tree, code, default_options):
+def test_complex_t_string(  # pragma: >=3.14 cover
+    assert_errors,
+    parse_ast_tree,
+    code,
+    default_options,
+):
     """Testing that complex ``t`` strings are not allowed."""
     tree = parse_ast_tree(code)
 

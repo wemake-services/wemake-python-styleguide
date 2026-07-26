@@ -106,7 +106,7 @@ def test_incorrectly_formatted_string(
         "x = tr'''{1}'''",
     ],
 )
-def test_correctly_formatted_t_string(
+def test_correctly_formatted_t_string(  # pragma: >=3.14 cover
     parse_tokens,
     assert_errors,
     default_options,
@@ -134,7 +134,7 @@ def test_correctly_formatted_t_string(
         "x = tr'{1\n}'",
     ],
 )
-def test_incorrectly_formatted_t_string(
+def test_incorrectly_formatted_t_string(  # pragma: >=3.14 cover
     parse_tokens,
     assert_errors,
     default_options,
