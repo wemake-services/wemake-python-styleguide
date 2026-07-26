@@ -86,7 +86,8 @@ class StringOveruseVisitor(base.BaseNodeVisitor):
 
         # Part of the f-string or t-string:
         if walk.get_closest_parent(
-            node, parents=(ast.JoinedStr, nodes.TemplateStr)
+            node,
+            parents=(ast.JoinedStr, nodes.TemplateStr),
         ):
             return
 

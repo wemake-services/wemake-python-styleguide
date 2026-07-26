@@ -130,7 +130,8 @@ class WrongFormatStringVisitor(base.BaseNodeVisitor):
             # check component complexity
             is_component_complex = False
             if isinstance(
-                string_component, ast.FormattedValue | nodes.Interpolation
+                string_component,
+                ast.FormattedValue | nodes.Interpolation,
             ):
                 is_component_complex = not self._is_valid_formatted_value(
                     string_component.value
