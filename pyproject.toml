@@ -4,7 +4,7 @@ requires = [ "poetry-core>=2.2" ]
 
 [tool.poetry]
 name = "wemake-python-styleguide"
-version = "1.6.2"
+version = "1.7.0"
 description = "The strictest and most opinionated python linter ever"
 license = "MIT"
 requires-poetry = ">=2.3"
@@ -65,7 +65,7 @@ syrupy = "^5.0"
 hypothesis = "^6.135"
 hypothesmith = "^0.3"
 
-mypy = ">=1.19,<3.0"
+mypy = "^2.3"
 types-flake8 = "^7.3"
 
 import-linter = "^2.10"
@@ -166,7 +166,8 @@ ignore = [
   "PLR2004", # do not report magic numbers
   "PLR6301", # do not require classmethod / staticmethod when self not used
   "RUF067",  # wps handles `__init__.py` logic better
-  "RUF105",  # keep old `noqa` comments style
+  "RUF105",  # keep old `# noqa` comments style, not `# ruff` comments
+  "RUF106",  # we prefer old error codes
   "RUF201",  # keep old rule codes instead of verbose names
   "TRY003",  # long exception messages from `tryceratops`
 ]
