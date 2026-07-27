@@ -106,7 +106,7 @@ class StringOveruseVisitor(base.BaseNodeVisitor):
                 string_value = source.render_string(string)
                 self.add_violation(
                     complexity.OverusedStringViolation(
-                        text=f'{string_value} {usage_count}',
+                        text=f'{string_value!r} {usage_count}',
                         baseline=self.options.max_string_usages,
                         node=self._string_constants_first_node[string],
                     ),

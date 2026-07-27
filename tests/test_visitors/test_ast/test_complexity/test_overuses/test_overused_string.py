@@ -190,7 +190,7 @@ def test_string_overuse(
     string_value = string_value.replace('"', '')
     assert_error_text(
         visitor,
-        f'{string_value} {_USAGE_COUNT}',
+        f'{string_value!r} {_USAGE_COUNT}',
         default_options.max_string_usages,
     )
     assert_error_location(visitor, EXPECTED_LOCATION)
