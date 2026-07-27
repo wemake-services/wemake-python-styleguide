@@ -7,6 +7,8 @@ from wemake_python_styleguide.visitors.ast.complexity.overuses import (
     StringOveruseVisitor,
 )
 
+_USAGE_COUNT = 5
+
 string_actions = """
 first = {0}
 second({0})
@@ -184,9 +186,11 @@ def test_string_overuse(
     visitor.run()
 
     assert_errors(visitor, [OverusedStringViolation])
+
+    error_string = string_value.replace('"', '') or "''"
     assert_error_text(
         visitor,
-        string_value.replace('"', '') or "''",
+        f'{error_string} {_USAGE_COUNT}',
         default_options.max_string_usages,
     )
     assert_error_location(visitor, EXPECTED_LOCATION)
