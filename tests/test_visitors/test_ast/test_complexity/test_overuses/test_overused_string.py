@@ -187,7 +187,7 @@ def test_string_overuse(
 
     assert_errors(visitor, [OverusedStringViolation])
 
-    string_value = string_value.replace('"', '') or "''"
+    string_value = string_value.replace('"', '')
     assert_error_text(
         visitor,
         f'{string_value} {_USAGE_COUNT}',
