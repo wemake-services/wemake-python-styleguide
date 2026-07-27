@@ -244,7 +244,7 @@ patch = [
 # The mypy configurations: http://bit.ly/2zEl9WI
 ignore_missing_imports = true
 strict = true
-local_partial_types = true
+strict_equality_for_none = true
 warn_unreachable = true
 
 enable_error_code = [
