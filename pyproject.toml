@@ -4,7 +4,7 @@ requires = [ "poetry-core>=2.2" ]
 
 [tool.poetry]
 name = "wemake-python-styleguide"
-version = "1.6.2"
+version = "1.7.0"
 description = "The strictest and most opinionated python linter ever"
 license = "MIT"
 requires-poetry = ">=2.3"
@@ -65,7 +65,7 @@ syrupy = "^5.0"
 hypothesis = "^6.135"
 hypothesmith = "^0.3"
 
-mypy = ">=1.19,<3.0"
+mypy = "^2.3"
 types-flake8 = "^7.3"
 
 import-linter = "^2.10"
@@ -73,7 +73,7 @@ import-linter = "^2.10"
 astpath = "^0.9"
 lxml = "^6.0"
 nbqa = "^1.2"
-ruff = "^0.15"
+ruff = "^0.16"
 
 [tool.poetry.group.docs]
 optional = true
@@ -81,7 +81,7 @@ optional = true
 [tool.poetry.group.docs.dependencies]
 sphinx = "^8.1"
 sphinx-autodoc-typehints = "^3.0"
-sphinxcontrib-mermaid = "^1.0"
+sphinxcontrib-mermaid = ">=1,<3"
 sphinx-llms-txt = "^0.7"
 furo = "^2025.12"
 added-value = "^0.24"
@@ -150,7 +150,6 @@ select = [
 ]
 ignore = [
   "A005",   # allow to shadow stdlib and builtin module names
-  "COM812", # trailing comma, conflicts with `ruff format`
   # Different doc rules that we don't really care about:
   "D100",
   "D104",
@@ -167,6 +166,9 @@ ignore = [
   "PLR2004", # do not report magic numbers
   "PLR6301", # do not require classmethod / staticmethod when self not used
   "RUF067",  # wps handles `__init__.py` logic better
+  "RUF105",  # keep old `# noqa` comments style, not `# ruff` comments
+  "RUF106",  # we prefer old error codes
+  "RUF201",  # keep old rule codes instead of verbose names
   "TRY003",  # long exception messages from `tryceratops`
 ]
 external = [ "WPS" ]

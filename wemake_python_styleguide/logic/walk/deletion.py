@@ -8,7 +8,9 @@ from wemake_python_styleguide.types import ContextNodes
 
 
 def extract_deleted_names(
-    node: ast.AST, *, context: ContextNodes | None = None
+    node: ast.AST,
+    *,
+    context: ContextNodes | None = None,
 ) -> set[str]:
     """Extract all variable names deleted in the given AST node."""
     deleted: set[str] = set()

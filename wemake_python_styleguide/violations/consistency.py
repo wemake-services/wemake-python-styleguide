@@ -1864,8 +1864,16 @@ class VagueImportViolation(ASTViolation):
         # Wrong:
         from json import loads
 
+    Configuration:
+        This rule is configurable with ``--allowed-domain-names``.
+        Default:
+        :str:`wemake_python_styleguide.options.defaults.ALLOWED_DOMAIN_NAMES`
+
     .. versionadded:: 0.13.0
     .. versionchanged:: 0.14.0
+    .. versionchanged:: 1.7.0
+       Imports aliased with names from ``--allowed-domain-names``
+       are now allowed.
 
     """
 
@@ -1929,13 +1937,18 @@ class RedundantSubscriptViolation(ASTViolation):
         # Correct:
         array[:7]
         array[3:]
+        array[2:10]
 
         # Wrong:
-        x[0:7]
-        x[3:None]
+        array[0:7]
+        array[3:None]
+        array[2:10:]
+        array[2::]
 
     .. versionadded:: 0.13.0
-
+    .. versionchanged:: 1.7.0
+        Slices with a trailing colon (empty step) like ``array[2:10:]``
+        and ``array[2::]`` are now flagged as redundant.
     """
 
     error_template = 'Found redundant subscript slice'
@@ -2439,12 +2452,18 @@ class SimplifiableMatchViolation(ASTViolation):
 
     Solution:
         Replace violating ``match ... case _`` statements with ``if ... else``.
+        Replace single-case ``match`` statements with a plain ``if``
 
     When is this violation is raised?
         - When there are exactly two ``case`` statements
         - When the first case uses a literal pattern
         - When the second case is a wildcard: ``case _:``
-
+        - When there is exactly one  ``case`` statement
+        - When the first case uses a simple sequence (``[1, 2, 3]``)
+          or mapping (``{"x": 1}``) pattern
+          with only literals, constants, or names
+        - Keys and values in mappings are constants (not variables)
+        - No starred patterns (``*args, **kwargs``) or has guards
 
     Example::
 
@@ -2454,6 +2473,11 @@ class SimplifiableMatchViolation(ASTViolation):
         else:
             user = 'active'
 
+        if data == [1, 2]:
+            handle_pair()
+        else:
+            ignore()
+
         # Wrong:
         match state:
             case EventType.REJECT:
@@ -2461,7 +2485,14 @@ class SimplifiableMatchViolation(ASTViolation):
             case _:
                 user = 'active'
 
+        match data:
+            case [1, 2]:
+                handle_pair()
+            case _:
+                ignore()
+
     .. versionadded:: 1.5.0
+    .. versionchanged:: 1.7.0
 
     """
 

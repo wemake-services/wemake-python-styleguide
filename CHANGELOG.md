@@ -16,6 +16,15 @@ Semantic versioning in our case means:
   But, in the future we might change the configuration names/logic,
   change the client facing API, change code conventions significantly, etc.
 
+## 1.7.0
+
+### Features
+
+- Extends `WPS365`: match with a single case statement is now also considered simplifiable. Match with simple sequence and mapping patterns are now also considered simplifiable
+- Extends `WPS349`: Slices with a trailing colon (empty step) like ``array[start:stop:]`` and ``array[start::]`` are now considered as redundant, #1071
+- Extends `WPS347`: imports aliased with names from ``--allowed-domain-names`` are now allowed, #3741
+
+
 ## 1.6.2
 
 ### Bugfixes

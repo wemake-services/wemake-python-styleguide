@@ -3,6 +3,9 @@ from collections.abc import Iterator
 from typing import ClassVar, final
 
 from wemake_python_styleguide.logic import source
+from wemake_python_styleguide.logic.tokens.subscripts import (
+    has_redundant_step,
+)
 from wemake_python_styleguide.logic.tree import functions, operators, slices
 from wemake_python_styleguide.violations import (
     best_practices,
@@ -13,7 +16,7 @@ from wemake_python_styleguide.visitors import base
 
 
 @final
-class SubscriptVisitor(base.BaseNodeVisitor):
+class SubscriptVisitor(base.BaseNodeTokenVisitor):
     """Checks subscripts used in the code."""
 
     _marked_slices: ClassVar[set[ast.Subscript]] = set()
@@ -58,7 +61,9 @@ class SubscriptVisitor(base.BaseNodeVisitor):
         if not isinstance(node.slice, ast.Slice):
             return
 
-        indexes: list[ast.expr | None] = []
+        if has_redundant_step(node, self.file_tokens):
+            self.add_violation(consistency.RedundantSubscriptViolation(node))
+
         lower_ok = node.slice.lower is None or (
             not self._is_zero(node.slice.lower)
             and not self._is_none(node.slice.lower)
@@ -71,17 +76,15 @@ class SubscriptVisitor(base.BaseNodeVisitor):
             and not self._is_none(node.slice.step)
         )
 
-        if not lower_ok:
-            indexes.append(node.slice.lower)
-
-        if not upper_ok:
-            indexes.append(node.slice.upper)
-
-        if not step_ok:
-            indexes.append(node.slice.step)
-
-        for index in indexes:
-            self.add_violation(consistency.RedundantSubscriptViolation(index))
+        for check, index in (
+            (lower_ok, node.slice.lower),
+            (upper_ok, node.slice.upper),
+            (step_ok, node.slice.step),
+        ):
+            if not check:
+                self.add_violation(
+                    consistency.RedundantSubscriptViolation(index),
+                )
 
     def _check_slice_assignment(self, node: ast.Subscript) -> None:
         if not isinstance(node.ctx, ast.Store):

@@ -11,6 +11,7 @@ from wemake_python_styleguide.logic.tree import (
     ifs,
     operators,
     pattern_matching,
+    sequence_pattern_matching,
 )
 from wemake_python_styleguide.logic.walk import (
     are_variables_deleted,
@@ -94,14 +95,12 @@ class IfStatementVisitor(BaseNodeVisitor):
         if not isinstance(comp, ast.Compare) or len(comp.ops) > 1:
             return  # We only check for compares with exactly one op
 
-        if not attributes.only_consists_of_parts(
-            node.body,
-            self._nodes_to_check,
-        ) or not attributes.only_consists_of_parts(
-            node.orelse,
-            self._nodes_to_check,
-        ):
-            return  # Only simple nodes are allowed on left and right parts
+        for branch in (node.body, node.orelse):
+            if not attributes.only_consists_of_parts(
+                branch,
+                self._nodes_to_check,
+            ):
+                return  # Only simple nodes are allowed on left and right parts
 
         if compares.is_useless_ternary(
             node,
@@ -211,13 +210,24 @@ class SimplifiableMatchVisitor(BaseNodeVisitor):
         if len(cases) == 2:
             first, second = cases
 
-            if not pattern_matching.is_wildcard_pattern(second):
+            if not pattern_matching.is_wildcard_pattern(second) or first.guard:
                 return
 
-            if pattern_matching.is_irrefutable_binding(
-                first.pattern
-            ) or pattern_matching.is_simple_pattern(first.pattern):
-                self.add_violation(consistency.SimplifiableMatchViolation(node))
+            simplifiable_checks = [
+                sequence_pattern_matching.is_simple_sequence_or_mapping,
+                pattern_matching.is_irrefutable_binding,
+                pattern_matching.is_simple_pattern,
+            ]
+
+            for check in simplifiable_checks:
+                if check(first.pattern):
+                    self.add_violation(
+                        consistency.SimplifiableMatchViolation(node),
+                    )
+                    return
+
+        elif len(cases) == 1:
+            self.add_violation(consistency.SimplifiableMatchViolation(node))
 
 
 @final

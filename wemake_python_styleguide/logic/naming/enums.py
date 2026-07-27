@@ -86,9 +86,12 @@ def has_enum_like_base_with_config(
 
     enum_bases = config.known_enum_bases
     if enum_bases:
-        normalized: tuple[str, ...] = tuple({
-            name for base in enum_bases for name in (base, base.split('.')[-1])
-        })
+        names = set()
+        for base in enum_bases:
+            names.add(base)
+            short_name = base.split('.')[-1]
+            names.add(short_name)
+        normalized = tuple(names)
         return _has_one_of_base_classes(defn, normalized)
 
     return False

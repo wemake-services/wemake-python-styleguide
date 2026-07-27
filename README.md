@@ -11,6 +11,8 @@
 
 Welcome to the strictest and most opinionated Python linter ever.
 
+*The best tool to teach your LLM how to write idiomatic and simple Python code!*
+
 <p align="center">
   <a href="https://wemake-python-styleguide.rtfd.io">
     <img src="https://raw.githubusercontent.com/wemake-services/wemake-python-styleguide/master/docs/_static/logo.png"

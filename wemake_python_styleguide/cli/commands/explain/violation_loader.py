@@ -6,6 +6,7 @@ from types import ModuleType
 from typing import final
 
 from attrs import frozen
+from typing_extensions import TypeIs
 
 from wemake_python_styleguide.cli.commands.explain.module_loader import (
     get_violation_submodules,
@@ -24,7 +25,9 @@ class ViolationInfo:
     section: str
 
 
-def _is_a_violation(class_object) -> bool:
+def _is_a_violation(
+    class_object: type[object],
+) -> TypeIs[type[BaseViolation]]:
     """Check if class is a violation class."""
     try:
         return (

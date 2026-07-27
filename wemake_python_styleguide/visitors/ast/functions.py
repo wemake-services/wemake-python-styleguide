@@ -66,13 +66,13 @@ class WrongFunctionCallVisitor(base.BaseNodeVisitor):
         self.generic_visit(node)
 
     def _check_wrong_function_called(self, node: ast.Call) -> None:
-        function_name = functions.given_function_called(
+        wrong_function_called = functions.given_function_called(
             node,
             FUNCTIONS_BLACKLIST,
         )
-        if function_name:
+        if wrong_function_called:
             self.add_violation(
-                WrongFunctionCallViolation(node, text=function_name),
+                WrongFunctionCallViolation(node, text=wrong_function_called),
             )
 
     def _check_super_context(self, node: ast.Call) -> None:
