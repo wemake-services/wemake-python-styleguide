@@ -103,9 +103,10 @@ class StringOveruseVisitor(base.BaseNodeVisitor):
     def _post_visit(self) -> None:
         for string, usage_count in self._string_constants.items():
             if usage_count > self.options.max_string_usages:
+                string_value = source.render_string(string)
                 self.add_violation(
                     complexity.OverusedStringViolation(
-                        text=source.render_string(string) or "''",
+                        text=f'{string_value!r} {usage_count}',
                         baseline=self.options.max_string_usages,
                         node=self._string_constants_first_node[string],
                     ),

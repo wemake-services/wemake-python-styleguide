@@ -16,6 +16,13 @@ Semantic versioning in our case means:
   But, in the future we might change the configuration names/logic,
   change the client facing API, change code conventions significantly, etc.
 
+## 1.7.1
+
+### Bugfixes
+
+- Fixes `WPS226`. Now the error message includes the quoted string value and usage count, #3745
+
+
 ## 1.7.0
 
 ### Features
