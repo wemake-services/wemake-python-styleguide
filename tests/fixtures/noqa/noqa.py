@@ -148,7 +148,7 @@ def some_function():
     _should_not_be_used = 1  # noqa: WPS122
     my_print(_should_not_be_used)  # noqa: WPS121
 
-used, __ = 1, 2  # noqa: WPS123
+used, __ = 1, 2  # noqa: WPS123, WPS482
 
 class Mem0Output:  # noqa: WPS124
     # See:
