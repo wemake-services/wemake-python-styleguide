@@ -9,6 +9,11 @@ to make our review and merging processes easier.
 Cheers!
 -->
 
+## AI Policy
+
+- [ ] I have read and agree to the [AI Policy](https://github.com/wemake-services/wemake-python-styleguide/blob/master/.github/AI_POLICY.md), removed any "Co-Authored-By" lines attributing coding agents, and manually reviewed the final result
+
+
 ## Checklist
 
 <!-- Please check everything that applies: -->
