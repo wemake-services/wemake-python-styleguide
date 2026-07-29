@@ -56,6 +56,7 @@ PRESET: Final = (
     builtins.WrongStringVisitor,
     builtins.WrongFormatStringVisitor,
     builtins.WrongAssignmentVisitor,
+    builtins.MultipleVariablesInitializationVisitor,
     builtins.WrongCollectionVisitor,
     operators.UselessOperatorsVisitor,
     operators.WrongMathOperatorVisitor,
