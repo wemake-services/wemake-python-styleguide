@@ -56,6 +56,6 @@ For example:
 
      repos:
       - repo: https://github.com/wemake-services/wemake-python-styleguide
-        rev: ...
+        rev: ...  # select the last active version
         hooks:
          - id: wemake-python-styleguide
