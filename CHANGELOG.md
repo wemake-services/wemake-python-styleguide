@@ -16,11 +16,14 @@ Semantic versioning in our case means:
   But, in the future we might change the configuration names/logic,
   change the client facing API, change code conventions significantly, etc.
 
+
 ## 1.7.1
 
 ### Bugfixes
 
-- Fixes `WPS226`. Now the error message includes the quoted string value and usage count, #3745
+- Fixes `WPS226`. Now the error message includes
+  the quoted string value and usage count, #3745
+- Fixes crash on overused `'{0}'` string literal, #3748
 
 
 ## 1.7.0
@@ -230,7 +233,7 @@ We also significantly improved all the integrations!
 ```yaml
 repos:
 - repo: https://github.com/wemake-services/wemake-python-styleguide
-  rev: 1.0.0
+  rev: ...  # select the last active version
   hooks:
     - id: wemake-python-styleguide
 ```

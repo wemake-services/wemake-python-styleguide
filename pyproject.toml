@@ -4,10 +4,10 @@ requires = [ "poetry-core>=2.2" ]
 
 [tool.poetry]
 name = "wemake-python-styleguide"
-version = "1.7.0"
+version = "1.7.1"
 description = "The strictest and most opinionated python linter ever"
 license = "MIT"
-requires-poetry = ">=2.3"
+requires-poetry = ">=2.4"
 
 authors = [
   "Nikita Sobolev <mail@sobolevn.me>",
@@ -56,13 +56,13 @@ attrs = "*"
 pygments = "^2.19"
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^9.0"
+pytest = "^9.1"
 pytest-cov = "^7.0"
-pytest-randomly = "^4.0"
+pytest-randomly = "^4.1"
 pytest-xdist = "^3.8"
 covdefaults = "^2.3"
 syrupy = "^5.0"
-hypothesis = "^6.135"
+hypothesis = "^6.164"
 hypothesmith = "^0.3"
 
 mypy = "^2.3"
@@ -93,6 +93,7 @@ myst-parser = "^4.0"
 # Ruff config: https://docs.astral.sh/ruff/settings
 preview = true
 fix = true
+output-prefer-rule-codes = true
 target-version = "py310"
 line-length = 80
 extend-exclude = [
