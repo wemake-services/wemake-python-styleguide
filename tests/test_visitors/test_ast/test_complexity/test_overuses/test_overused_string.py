@@ -160,6 +160,7 @@ def test_string_overuse_settings(
     [
         '"same-string"',
         '"GenericType[int, str]"',
+        '"{0}"',
     ],
 )
 @pytest.mark.parametrize(
