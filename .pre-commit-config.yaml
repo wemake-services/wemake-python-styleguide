@@ -13,7 +13,7 @@ repos:
         additional_dependencies:
           - "github.com/wasilibs/go-shellcheck/cmd/shellcheck@latest"
   - repo: https://github.com/woodruffw/zizmor-pre-commit
-    rev: 067260dc5fe6ea86b7551bfd6f8b3ba4e6c93129  # frozen: v1.28.0
+    rev: 451b56af716f9f0d0c2b816503a3fd0cf8b036fa  # frozen: v1.29.0
     hooks:
       - id: zizmor
         args:
@@ -39,7 +39,7 @@ repos:
       - id: mbake-validate
 
   - repo: https://github.com/crate-ci/typos
-    rev: 96d9af6217dc2855210655af7e1ff19d23d4e593  # frozen: v1
+    rev: 12ffd4a04b4893ab75db66a59aaad2d996c3e982  # frozen: v1
     hooks:
       - id: typos
 
