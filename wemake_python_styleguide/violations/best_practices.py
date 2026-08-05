@@ -269,16 +269,23 @@ class MutableModuleConstantViolation(ASTViolation):
     Solution:
         Use immutable types for constants.
 
+        On Python versions prior to 3.15, ``types.MappingProxyType`` is
+        recommended for immutable mappings. On Python 3.15+, prefer
+        ``frozendict``.
+
     We only treat ``ast.Set``, ``ast.Dict``, ``ast.List`` and comprehensions
     as mutable things. All other nodes are still fine.
 
     Example::
 
-        # Correct:
+        # Correct (Python < 3.15):
         import types
         CONST1 = frozenset((1, 2, 3))
         CONST2 = (1, 2, 3)
         CONST3 = types.MappingProxyType({'key': 'value'})
+
+        # Correct (Python >= 3.15):
+        # Replace MappingProxyType with frozendict.
 
         # Wrong:
         CONST1 = {1, 2, 3}
