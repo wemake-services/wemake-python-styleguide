@@ -52,7 +52,7 @@ Example:
   [flake8]
   per-file-ignores =
     # Enable `assert` keyword, magic numbers, and pytest fixture arguments for test files:
-    tests/*.py: D103, S101, S105, WPS118, WPS202, WPS210, WPS211, WPS336, WPS432, WPS442
+    tests/*.py: D103, S101, S105, WPS118, WPS202, WPS210, WPS211, WPS336, WPS432
 
 .. rubric:: Ignoring violations in test files
 
@@ -60,14 +60,22 @@ Test files often require different linting rules than production code due to tes
 
 Common violations ignored in test files:
 
-* ``S101``: Allows using ``assert`` statements (required for testing).
-* ``S105``: Allows hardcoded password strings in test data.
-* ``WPS118``: Allows long, descriptive test function names (e.g., ``test_user_cannot_login_with_invalid_password``).
-* ``WPS202``: Allows modules with many members (test files often contain many test functions).
-* ``WPS210`` & ``WPS211``: Allows many variables and parameters (pytest passes fixtures as arguments).
-* ``WPS432``: Allows magic numbers (common in test cases and sample data).
-* ``WPS442``: Allows outer scope name shadowing (pytest fixtures share names with test parameters).
-* ``D103``: Missing docstrings in public functions/tests (test names are often self-documenting).
+* ``flake8-bandit``:
+
+  * ``S101``: Allows using ``assert`` statements (required for testing).
+  * ``S105``: Allows hardcoded password strings in test data.
+
+* ``wemake-python-styleguide``:
+
+  * ``WPS118``: Allows long, descriptive test function names (e.g., ``test_user_cannot_login_with_invalid_password``).
+  * ``WPS202``: Allows modules with many members (test files often contain many test functions).
+  * ``WPS210`` & ``WPS211``: Allows many variables and parameters (pytest passes fixtures as arguments).
+  * ``WPS336``: Allows explicit string formatting in test code.
+  * ``WPS432``: Allows magic numbers (common in test cases and sample data).
+
+* ``flake8-docstrings``:
+
+  * ``D103``: Missing docstrings in public functions/tests (test names are often self-documenting).
 
 .. rubric:: Further reading
 
