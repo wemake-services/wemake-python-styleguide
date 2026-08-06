@@ -12,6 +12,7 @@ from collections import defaultdict
 from statistics import median
 from typing import final
 
+from wemake_python_styleguide.compat import nodes
 from wemake_python_styleguide.compat.aliases import FunctionNodes
 from wemake_python_styleguide.compat.nodes import TypeAlias as ast_TypeAlias
 from wemake_python_styleguide.violations.complexity import (
@@ -32,8 +33,9 @@ class JonesComplexityVisitor(BaseNodeVisitor):
 
     Some nodes are ignored because there's no sense in analyzing them.
     Some nodes like type annotations are not affecting line complexity,
-    so we do not count them. FormattedValue and JoinedStr nodes are not
-    counted, because they have no visible impact on source code.
+    so we do not count them. FormattedValue, JoinedStr, Interpolation, and
+    TemplateStr nodes are not counted, because they have no visible impact
+    on source code.
     """
 
     _ignored_nodes = (
@@ -42,6 +44,8 @@ class JonesComplexityVisitor(BaseNodeVisitor):
         ast.expr_context,
         ast.FormattedValue,
         ast.JoinedStr,
+        nodes.Interpolation,
+        nodes.TemplateStr,
     )
 
     def __init__(self, *args, **kwargs) -> None:
