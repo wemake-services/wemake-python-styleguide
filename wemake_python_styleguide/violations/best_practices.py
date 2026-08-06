@@ -278,14 +278,16 @@ class MutableModuleConstantViolation(ASTViolation):
 
     Example::
 
-        # Correct (Python < 3.15):
+        # Correct:
         import types
         CONST1 = frozenset((1, 2, 3))
         CONST2 = (1, 2, 3)
+        
+        # Correct (Python < 3.15):
         CONST3 = types.MappingProxyType({'key': 'value'})
 
         # Correct (Python >= 3.15):
-        # Replace MappingProxyType with frozendict.
+        CONST4 = frozendict({'key': 'value'})
 
         # Wrong:
         CONST1 = {1, 2, 3}
