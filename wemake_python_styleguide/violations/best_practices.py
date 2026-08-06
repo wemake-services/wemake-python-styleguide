@@ -282,7 +282,7 @@ class MutableModuleConstantViolation(ASTViolation):
         import types
         CONST1 = frozenset((1, 2, 3))
         CONST2 = (1, 2, 3)
-        
+
         # Correct (Python < 3.15):
         CONST3 = types.MappingProxyType({'key': 'value'})
 
