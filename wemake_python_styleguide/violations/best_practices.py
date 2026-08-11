@@ -3040,3 +3040,40 @@ class LeakingForLoopViolation(ASTViolation):
 
     error_template = 'Found a leaking ``for`` loop in a class or module body'
     code = 481
+
+
+@final
+class ForbidLazyImportViolation(ASTViolation):
+    """
+    Forbid ``lazy imports``.
+
+    Is only emitted on ``python3.15+``.
+
+    Reasoning:
+        ...
+
+    Solution:
+        If you want imports to be lazy - put them in your functions.
+
+    Example::
+
+        # Correct:
+
+        def some():
+            import json
+            ...
+
+        # Wrong:
+
+        lazy import json
+
+        def some():
+            ...
+
+    .. versionadded:: 1.9.0
+    """
+
+    error_template = (
+        'Found a lazy import, use a regular import inside a function instead'
+    )
+    code = 482

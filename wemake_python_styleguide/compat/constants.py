@@ -9,3 +9,6 @@ PY312: Final = sys.version_info >= (3, 12)
 
 # This indicates that we are running on python3.13+
 PY313: Final = sys.version_info >= (3, 13)
+
+# This indicates that we are running on python3.15+
+PY315: Final = sys.version_info >= (3, 15)
