@@ -5,11 +5,11 @@ from typing import Final, TypeAlias, final
 
 from attrs import frozen
 
-from wemake_python_styleguide.compat.constants import PY315
 from wemake_python_styleguide.constants import FUTURE_IMPORTS_WHITELIST
 from wemake_python_styleguide.logic import nodes
 from wemake_python_styleguide.logic.tree import imports
 from wemake_python_styleguide.options.validation import ValidatedOptions
+from wemake_python_styleguide.types import AnyImport
 from wemake_python_styleguide.violations.base import ErrorCallback
 from wemake_python_styleguide.violations.best_practices import (
     ForbidLazyImportViolation,
@@ -57,11 +57,11 @@ class _ImportValidator(_BaseImportValidator):
 class _ImportLazy(_BaseImportValidator):
     """Validator of ``ast.Import`` and ``ast.ImportFrom`` nodes."""
 
-    def validate(self, node: ast.Import | ast.ImportFrom) -> None:
+    def validate(self, node: AnyImport) -> None:
         self._check_lazy_import(node)
 
-    def _check_lazy_import(self, node: ast.Import | ast.ImportFrom) -> None:
-        if PY315 and imports.is_lazy_import(node):
+    def _check_lazy_import(self, node: AnyImport) -> None:
+        if imports.is_lazy_import(node):
             self._error_callback(ForbidLazyImportViolation(node))
 
 

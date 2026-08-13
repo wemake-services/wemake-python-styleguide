@@ -3050,7 +3050,10 @@ class ForbidLazyImportViolation(ASTViolation):
     Is only emitted on ``python3.15+``.
 
     Reasoning:
-        ...
+        It is an overly complicated feature that is needed
+        for just a couple use-cases.
+        Retuning an object from a function does exactly the same thing:
+        it imports something and returns it, when needed.
 
     Solution:
         If you want imports to be lazy - put them in your functions.
@@ -3061,16 +3064,13 @@ class ForbidLazyImportViolation(ASTViolation):
 
         def some():
             import json
-            ...
 
         # Wrong:
 
         lazy import json
 
-        def some():
-            ...
-
     .. versionadded:: 1.9.0
+
     """
 
     error_template = (
