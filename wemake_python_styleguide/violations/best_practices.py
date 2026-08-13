@@ -3061,12 +3061,10 @@ class ForbidLazyImportViolation(ASTViolation):
     Example::
 
         # Correct:
-
         def some():
             import json
 
         # Wrong:
-
         lazy import json
 
     .. versionadded:: 1.9.0
