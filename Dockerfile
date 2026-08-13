@@ -15,7 +15,7 @@
 # This image is also available on Dockerhub:
 # https://hub.docker.com/r/wemakeservices/wemake-python-styleguide
 
-FROM python:3.14.6-alpine
+FROM python:3.15.0rc1-alpine
 
 LABEL maintainer="mail@sobolevn.me"
 LABEL vendor="wemake.services"
