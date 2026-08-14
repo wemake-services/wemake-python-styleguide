@@ -20,7 +20,7 @@ from typing import Final
 
 import pytest
 
-from wemake_python_styleguide.compat.constants import PY313
+from wemake_python_styleguide.compat.constants import PY313, PY315
 
 #: Used to find violations' codes in output.
 ERROR_PATTERN = re.compile(r'(WPS\d{3})')
@@ -38,6 +38,9 @@ IGNORED_VIOLATIONS = (
 
 #: List of ignored violations on python 3.13+.
 IGNORED_VIOLATIONS3_13 = ()
+
+#: List of ignored violations on python 3.15+.
+IGNORED_VIOLATIONS3_15 = ()
 
 #: Number and count of violations that would be raised.
 SHOULD_BE_RAISED = types.MappingProxyType(
@@ -250,6 +253,7 @@ SHOULD_BE_RAISED = types.MappingProxyType(
         'WPS479': 0,
         'WPS480': 0,  # only triggers on 3.12+
         'WPS481': 10,
+        'WPS482': 0,  # enabled only in python 3.15+
         'WPS500': 1,
         'WPS501': 1,
         'WPS502': 0,  # disabled since 1.0.0
@@ -310,6 +314,7 @@ SHOULD_BE_RAISED = types.MappingProxyType(
 
 #: Number and count of violations that would be raised.
 SHOULD_BE_RAISED3_13 = types.MappingProxyType({'WPS477': 1})
+SHOULD_BE_RAISED3_15 = types.MappingProxyType({'WPS482': 1})
 
 
 def _assert_errors_count_in_output(
@@ -350,6 +355,7 @@ ALWAYS: Final = True  # just for beautiful condition def
     [
         ('noqa.py', SHOULD_BE_RAISED, ALWAYS),
         ('noqa313.py', SHOULD_BE_RAISED3_13, PY313),
+        ('noqa315.py', SHOULD_BE_RAISED3_15, PY315),
     ],
 )
 def test_noqa_fixture_disabled(
@@ -392,10 +398,7 @@ def test_noqa_fixture_disabled(
 
 @pytest.mark.parametrize(
     ('filename', 'run_condition'),
-    [
-        ('noqa.py', ALWAYS),
-        ('noqa313.py', PY313),
-    ],
+    [('noqa.py', ALWAYS), ('noqa313.py', PY313), ('noqa315.py', PY315)],
 )
 def test_noqa_fixture(absolute_path, filename, run_condition):
     """End-to-End test to check that `noqa` works."""
@@ -427,6 +430,7 @@ def test_noqa_fixture(absolute_path, filename, run_condition):
     [
         ('noqa.py', IGNORED_VIOLATIONS, ALWAYS),
         ('noqa313.py', IGNORED_VIOLATIONS3_13, PY313),
+        ('noqa315.py', IGNORED_VIOLATIONS3_15, PY315),
     ],
 )
 def test_noqa_fixture_without_ignore(

@@ -3040,3 +3040,36 @@ class LeakingForLoopViolation(ASTViolation):
 
     error_template = 'Found a leaking ``for`` loop in a class or module body'
     code = 481
+
+
+@final
+class ForbidLazyImportViolation(ASTViolation):
+    """
+    Forbid ``lazy imports``.
+
+    Is only emitted on ``python3.15+``.
+
+    Reasoning:
+        It is an overly complicated feature that is needed
+        for just a couple use-cases.
+        Retuning an object from a function does exactly the same thing:
+        it imports something and returns it, when needed.
+
+    Solution:
+        If you want imports to be lazy - put them in your functions.
+
+    Example::
+
+        # Correct:
+        def some():
+            import json
+
+        # Wrong:
+        lazy import json
+
+    .. versionadded:: 1.8.0
+
+    """
+
+    error_template = 'Found a lazy import'
+    code = 482
