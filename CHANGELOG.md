@@ -23,6 +23,7 @@ Semantic versioning in our case means:
 
 - Adds `WPS482`: forbid lazy imports, #3639
 
+
 ## 1.7.1
 
 ### Bugfixes

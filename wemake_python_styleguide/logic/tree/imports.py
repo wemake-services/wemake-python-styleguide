@@ -2,7 +2,6 @@ import ast
 from typing import NamedTuple, final
 
 from wemake_python_styleguide import constants
-from wemake_python_styleguide.compat.constants import PY315
 from wemake_python_styleguide.logic.naming import logical
 from wemake_python_styleguide.types import AnyImport
 
@@ -53,16 +52,5 @@ def is_vague_import(name: str) -> bool:
 
 
 def is_lazy_import(node: AnyImport) -> bool:
-    """
-    Returns ``True`` if import is lazy.
-
-    >>> is_lazy_import(ast.Import(names=[ast.alias(name='a')]))
-    False
-
-    >>> is_lazy_import(ast.Import(names=[ast.alias(name='a')], is_lazy=1))
-    True
-
-    """
-    if not PY315:
-        return False
+    """Returns ``True`` if import is lazy."""
     return bool(getattr(node, 'is_lazy', False))

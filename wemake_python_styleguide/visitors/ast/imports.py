@@ -54,13 +54,10 @@ class _ImportValidator(_BaseImportValidator):
 
 
 @final
-class _ImportLazy(_BaseImportValidator):
+class _ImportLazyValidator(_BaseImportValidator):  # pragma: >=3.15 cover
     """Validator of ``ast.Import`` and ``ast.ImportFrom`` nodes."""
 
     def validate(self, node: AnyImport) -> None:
-        self._check_lazy_import(node)
-
-    def _check_lazy_import(self, node: AnyImport) -> None:
         if imports.is_lazy_import(node):
             self._error_callback(ForbidLazyImportViolation(node))
 
@@ -202,7 +199,7 @@ class WrongImportVisitor(BaseNodeVisitor):
         self._import_collision_validator = _ImportCollisionValidator(
             self.add_violation,
         )
-        self._lazy_import = _ImportLazy(
+        self._lazy_import = _ImportLazyValidator(
             self.add_violation,
             self.options,
         )

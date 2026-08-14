@@ -6,21 +6,21 @@ from wemake_python_styleguide.violations.best_practices import (
 )
 from wemake_python_styleguide.visitors.ast.imports import WrongImportVisitor
 
-if not PY315:  # pragma: >=3.15 no cover
-    pytest.skip(  # pragma: no cover
-        reason='lazy imports were added in python 3.15+',
-        allow_module_level=True,
-    )
+pytestmark = pytest.mark.skipif(
+    not PY315,
+    reason='lazy imports were added in python 3.15+',
+)
 
 
+@pytestmark
 @pytest.mark.parametrize(
     'code',
     [
-        'lazy from json import dumps',
+        'lazy from json import dumps as json_dumps',
         'lazy import json',
     ],
 )
-def test_imports_collision(
+def test_lazy_import(
     assert_errors,
     parse_ast_tree,
     code,
@@ -28,7 +28,6 @@ def test_imports_collision(
 ):
     """Testing that lazy imports are restricted."""
     tree = parse_ast_tree(code)
-
     visitor = WrongImportVisitor(default_options, tree=tree)
     visitor.run()
 

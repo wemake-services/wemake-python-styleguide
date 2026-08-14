@@ -3071,7 +3071,5 @@ class ForbidLazyImportViolation(ASTViolation):
 
     """
 
-    error_template = (
-        'Found a lazy import, use a regular import inside a function instead'
-    )
+    error_template = 'Found a lazy import'
     code = 482
