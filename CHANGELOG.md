@@ -17,7 +17,7 @@ Semantic versioning in our case means:
   change the client facing API, change code conventions significantly, etc.
 
 
-## 1.9.0
+## 1.8.0 WIP
 
 ### Features
 

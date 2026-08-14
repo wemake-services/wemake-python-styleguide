@@ -35,6 +35,10 @@ jobs:
 
           # Adding `poetry` to `$PATH`:
           echo "$HOME/.poetry/bin" >> "$GITHUB_PATH"
+      - name: Install system dependencies for lxml
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libxml2-dev libxslt1-dev
       - name: Install dependencies
         run: |
           poetry config virtualenvs.in-project true

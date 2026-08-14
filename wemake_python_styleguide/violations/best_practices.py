@@ -3067,7 +3067,7 @@ class ForbidLazyImportViolation(ASTViolation):
         # Wrong:
         lazy import json
 
-    .. versionadded:: 1.9.0
+    .. versionadded:: 1.8.0
 
     """
 

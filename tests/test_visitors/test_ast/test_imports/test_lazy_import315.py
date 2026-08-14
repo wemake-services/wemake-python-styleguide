@@ -18,6 +18,8 @@ pytestmark = pytest.mark.skipif(
     [
         'lazy from json import dumps as json_dumps',
         'lazy import json',
+        'lazy import json as _json',
+        'lazy from math import pi',
     ],
 )
 def test_lazy_import(
