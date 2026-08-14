@@ -1,9 +1,10 @@
 import ast
-import types
 from typing import Final
 
+from wemake_python_styleguide.compat.constants import make_immutable
+
 #: That's how python types and ast types map to each other, copied from ast.
-_CONST_NODE_TYPE_NAMES: Final = types.MappingProxyType(
+_CONST_NODE_TYPE_NAMES: Final = make_immutable(
     {
         bool: 'NameConstant',  # should be before int
         type(None): 'NameConstant',

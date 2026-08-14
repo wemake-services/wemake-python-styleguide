@@ -22,6 +22,7 @@ Semantic versioning in our case means:
 ### Features
 
 - Adds `WPS482`: forbid lazy imports, #3639
+- Adds `WPS483`: forbid `MappingProxyType`, #3762
 
 
 ## 1.7.1
