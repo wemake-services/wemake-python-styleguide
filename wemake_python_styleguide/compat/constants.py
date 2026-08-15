@@ -23,6 +23,6 @@ def make_immutable(
     mutable_dict: Mapping[_KT, _VT],
 ) -> Mapping[_KT, _VT]:
     """Make a dictionary immutable."""
-    if PY315:  # pragma: >=3.15 cover
+    if sys.version_info >= (3, 15):  # pragma: >=3.15 cover
         return frozendict(mutable_dict)  # noqa: F821
     return types.MappingProxyType(mutable_dict)  # noqa: WPS483 # pragma: <3.15 cover
