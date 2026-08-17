@@ -19,7 +19,6 @@ lint: ## Run linting checks (ruff, flake8, mypy)
 	$(POETRY) run ruff check --exit-non-zero-on-fix
 	$(POETRY) run ruff format --check --diff
 	$(POETRY) run flake8 .
-	$(POETRY) run mypy wemake_python_styleguide scripts
 	$(POETRY) run lint-imports
 	$(POETRY) run python3 scripts/check_generic_visit.py wemake_python_styleguide/visitors/ast
 
@@ -36,4 +35,4 @@ package: ## Check package dependencies with pip
 	$(POETRY) run pip check
 
 .PHONY: test
-test: lint unit package ## Run all checks (lint, unit, package)
+test: lint type-check unit package ## Run all checks (lint, unit, package)
