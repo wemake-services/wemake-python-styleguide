@@ -23,6 +23,10 @@ lint: ## Run linting checks (ruff, flake8, mypy)
 	$(POETRY) run lint-imports
 	$(POETRY) run python3 scripts/check_generic_visit.py wemake_python_styleguide/visitors/ast
 
+.PHONY: type-check
+type-check: ## Run type checking (mypy)
+	$(POETRY) run mypy wemake_python_styleguide scripts
+
 .PHONY: unit
 unit: ## Run unit tests with pytest
 	$(POETRY) run pytest
