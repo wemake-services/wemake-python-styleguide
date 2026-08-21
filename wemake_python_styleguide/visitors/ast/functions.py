@@ -7,6 +7,7 @@ from wemake_python_styleguide.compat.aliases import (
     ForNodes,
     FunctionNodes,
 )
+from wemake_python_styleguide.compat.constants import PY315
 from wemake_python_styleguide.constants import (
     FUNCTIONS_BLACKLIST,
 )
@@ -29,6 +30,7 @@ from wemake_python_styleguide.types import (
 from wemake_python_styleguide.violations import naming, oop
 from wemake_python_styleguide.violations.best_practices import (
     ComplexDefaultValueViolation,
+    ForbidMappingProxyTypeViolation,
     GetterWithoutReturnViolation,
     ProblematicFunctionParamsViolation,
     StopIterationInsideGeneratorViolation,
@@ -58,12 +60,28 @@ class WrongFunctionCallVisitor(base.BaseNodeVisitor):
     def visit_Call(self, node: ast.Call) -> None:
         """Used to find ``FUNCTIONS_BLACKLIST`` calls."""
         self._check_wrong_function_called(node)
+        if PY315:  # pragma: >=3.15 cover
+            self._check_mapping_proxy_type(node)
 
         if functions.given_function_called(node, {'super'}):
             self._check_super_context(node)
             self._check_super_arguments(node)
 
         self.generic_visit(node)
+
+    def _check_mapping_proxy_type(  # pragma: >=3.15 cover
+        self,
+        node: ast.Call,
+    ) -> None:
+        function_name = functions.given_function_called(
+            node,
+            {'MappingProxyType'},
+            split_modules=True,
+        )
+        if not function_name:
+            return
+
+        self.add_violation(ForbidMappingProxyTypeViolation(node))
 
     def _check_wrong_function_called(self, node: ast.Call) -> None:
         wrong_function_called = functions.given_function_called(
