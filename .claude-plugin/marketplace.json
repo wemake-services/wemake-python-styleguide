@@ -1,0 +1,37 @@
+{
+  "name": "django-modern-rest",
+  "version": "1.0.0",
+  "owner": {
+    "name": "wemake-services"
+  },
+  "description": "Modern REST framework for Django with types and async support",
+  "author": {
+    "name": "wemake-services",
+    "url": "https://github.com/wemake-services"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/wemake-services/django-modern-rest",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wemake-services/django-modern-rest.git"
+  },
+  "keywords": [
+    "django",
+    "django plugin",
+    "djangorestframework",
+    "django-api",
+    "API",
+    "REST",
+    "wemake-python-package"
+  ],
+  "metadata": {
+    "pluginRoot": "./.agents/skills"
+  },
+  "plugins": [
+    {
+      "name": "wps",
+      "source": "./wps",
+      "description": "Write code that passes wemake-python-styleguide"
+    }
+  ]
+}

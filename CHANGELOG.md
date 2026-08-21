@@ -23,6 +23,10 @@ Semantic versioning in our case means:
 
 - Adds `WPS482`: forbid lazy imports, #3639
 
+### Misc
+
+- Adds `/wps` skill for agents, #3773
+
 
 ## 1.7.1
 
