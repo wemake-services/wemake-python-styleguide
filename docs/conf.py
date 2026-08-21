@@ -130,5 +130,5 @@ todo_include_todos = True
 llms_txt_uri_template = '{base_url}{docname}.html'
 
 llms_txt_code_files = [
-    '+:../wemake_python_styleguide/violations/naming.py',
+    '+:../wemake_python_styleguide/violations/*.py',
 ]

@@ -26,6 +26,10 @@ Semantic versioning in our case means:
 - Adds an optional MCP server for violation explanations, #3770
 - Adds `WPS483`: forbid `MappingProxyType` on `python3.15+`, #3762
 
+### Bugfixes
+
+- Fixes missing violations in `llms-full.txt`
+
 ### Misc
 
 - Adds `/wps` skill for agents, #3773
