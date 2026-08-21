@@ -22,6 +22,7 @@ Semantic versioning in our case means:
 ### Features
 
 - Adds `WPS482`: forbid lazy imports, #3639
+- Adds an optional MCP server for violation explanations, #3770
 
 
 ## 1.7.1

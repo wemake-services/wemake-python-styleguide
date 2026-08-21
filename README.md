@@ -43,6 +43,18 @@ Additional contexts for LLMs:
 - https://wemake-python-styleguide.readthedocs.io/llms.txt
 - https://wemake-python-styleguide.readthedocs.io/llms-full.txt
 
+### MCP server
+
+Install the optional MCP dependency and start the stdio server:
+
+```bash
+pip install 'wemake-python-styleguide[mcp]'
+wps-mcp
+```
+
+The server exposes an `explain_violation` tool that returns the same
+description as `wps explain WPSXXX`.
+
 
 ## Running
 

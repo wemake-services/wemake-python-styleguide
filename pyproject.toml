@@ -54,8 +54,17 @@ python = "^3.10"
 flake8 = "^7.3"
 attrs = "*"
 pygments = "^2.19"
+mcp = { version = "^1.26", optional = true }
+# FastMCP v1 leaves its lifespan annotation unresolved:
+# https://github.com/modelcontextprotocol/python-sdk/issues/3294
+pydantic-settings = { version = "<2.15", optional = true }
+
+[tool.poetry.extras]
+mcp = ["mcp", "pydantic-settings"]
 
 [tool.poetry.group.dev.dependencies]
+mcp = "^1.26"
+pydantic-settings = "<2.15"
 pytest = "^9.1"
 pytest-cov = "^7.0"
 pytest-randomly = "^4.1"
@@ -305,3 +314,4 @@ extend-exclude = [
 
 [tool.poetry.scripts]
 wps = "wemake_python_styleguide.cli.cli_app:main"
+wps-mcp = "wemake_python_styleguide.mcp_server:main"
