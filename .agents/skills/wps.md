@@ -99,6 +99,10 @@ flake8 --select=WPS,E999 --format=default path/to/file.py
 
 Exit code must be `0`. If not, return to Phase 3.
 
+Make sure that the project might have other linters and formatters.
+Run them as well after all fixes are done.
+When there are conflicts, prioritize WPS over other linters, but not type-checkers.
+
 ## Config options
 
 All options go under `[flake8]` in `setup.cfg` / `.flake8`, or `[tool.flake8]` in `pyproject.toml`.
@@ -119,7 +123,7 @@ List of all options:
 When `flake8` reports `WPSXXX`, call the MCP tool:
 
 ```python
-explain_violation("WPSXXX")  # returns the same text as `wps explain WPSXXX`
+explain_violation('WPSXXX')  # returns the same text as `wps explain WPSXXX`
 ```
 
 Use the returned description to understand what is wrong and how to fix it. The MCP server is started with `wps mcp` (requires the `mcp` extra for `wemake-python-styleguide`).
