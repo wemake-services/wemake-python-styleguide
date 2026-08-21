@@ -7,12 +7,14 @@ description: >
 
 # wemake-python-styleguide
 
-Edit Python until `flake8 --select=WPS,E999` reports nothing. Fix the code, not the config.
+**Always** write Python code that will pass all rules from [violations index](https://wemake-python-styleguide.readthedocs.io/en/latest/pages/usage/violations/index.html).
+Edit existing Python code until `flake8 --select=WPS,E999` reports nothing.
+Fix the code, not the config.
 
 ## Loop
 
 1. Run `flake8 --select=WPS,E999 --format=default <paths>` with the project's flake8 config (`setup.cfg`, `.flake8`, or `[tool.flake8]` in `pyproject.toml`); pass `--isolated` only when the repo has none.
-2. For each violation, edit the code so its cause is gone — the message names the rule and line; make the smallest change that satisfies it. When a rule's intent is unclear, read its page under the [violations index](https://wemake-python-styleguide.readthedocs.io/en/latest/pages/usage/violations/index.html), or call `explain_violation('WPS###')` if the WPS MCP server is running.
+2. For each violation, edit the code so its cause is gone — the message names the rule and line; make the smallest change that satisfies it. When a rule's intent is unclear, read its page under the violation index, or call `explain_violation('WPS###')` if the WPS MCP server is running.
 3. Re-run step 1. Done when it exits 0.
 
 ## Guardrails
