@@ -3,7 +3,8 @@ name: wps
 description: >
   Use when asked to "lint my code", "fix WPS violations", "make this pass wemake-python-styleguide",
   "run wps", or "check style", or when writing, reviewing, or fixing Python code that must
-  conform to wemake-python-styleguide rules.
+  conform to wemake-python-styleguide rules. Always use this skill if `wemake-python-styleguide`
+  is installed and is used in the CI.
 ---
 
 # wemake-python-styleguide
@@ -12,6 +13,8 @@ Write and fix Python code that passes `wemake-python-styleguide` (WPS) linting.
 
 **Requirements:** Python 3.10+, flake8 7.3+, and `wemake-python-styleguide` installed.
 For MCP-assisted fixes: `pip install 'wemake-python-styleguide[mcp]'` and register `wps mcp` as a stdio MCP server.
+
+If `wemake-python-styleguide` is not installed in this project, ignore do not use this skill.
 
 ## Resources
 
