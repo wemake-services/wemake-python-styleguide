@@ -7,7 +7,8 @@ WPS has a command-line utility named ``wps``
 
 Here are listed all the subcommands it has.
 
-.. rubric:: ``wps explain``
+wps explain
+-----------
 
 This command can be used to get description of violation.
 It will be the same description that is located on the website.
