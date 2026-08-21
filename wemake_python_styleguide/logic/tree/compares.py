@@ -1,8 +1,8 @@
 import ast
-import types
 from collections.abc import Mapping
 from typing import Final, TypeAlias
 
+from wemake_python_styleguide.compat.constants import make_immutable
 from wemake_python_styleguide.logic import source
 
 #: Type to represent multiple simple operators.
@@ -15,7 +15,8 @@ _ComparesMapping: TypeAlias = Mapping[
 ]
 
 #: Constant to define similar operators.
-_SIMILAR_OPERATORS: Final[_ComparesMapping] = types.MappingProxyType(
+
+_SIMILAR_OPERATORS: Final[_ComparesMapping] = make_immutable(
     {
         ast.Gt: (ast.Gt, ast.GtE),
         ast.GtE: (ast.Gt, ast.GtE),

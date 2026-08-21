@@ -21,8 +21,14 @@ Semantic versioning in our case means:
 
 ### Features
 
+- Adds `python3.15` official support
 - Adds `WPS482`: forbid lazy imports, #3639
 - Adds an optional MCP server for violation explanations, #3770
+- Adds `WPS483`: forbid `MappingProxyType` on `python3.15+`, #3762
+
+### Misc
+
+- Adds `/wps` skill for agents, #3773
 
 
 ## 1.7.1
