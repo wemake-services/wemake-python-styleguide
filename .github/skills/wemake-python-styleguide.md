@@ -87,12 +87,11 @@ Register the MCP server (`wps mcp`) in your agent config to use `explain_violati
 
 ### Complexity continued (WPS3xx — consistency)
 
-- `WPS300` — no local folder imports (`from . import`)... actually this is best practices
-  _(see WPS3xx block below)_
+_(see the Consistency section below)_
 
 ### Best practices (WPS4xx)
 
-- `WPS400` — no magic numbers (use named constants)
+- `WPS400` — no wrong magic comments (e.g. `# type: ignore`, `# noqa` without a code)
 - `WPS401` — no `__future__` imports
 - `WPS402` — no `noqa` comments without a reason
 - `WPS403` — no `# type: ignore` without a reason
@@ -104,8 +103,8 @@ Register the MCP server (`wps mcp`) in your agent config to use `explain_violati
 - `WPS409` — no `except Exception` (too broad)
 - `WPS410` — no `__all__` in non-`__init__` modules
 - `WPS411` — no empty comments
-- `WPS412` — no `__init__` module logic (besides imports and `__all__`)
-- `WPS413` — no `__init__` module logic (besides imports and `__all__`)
+- `WPS412` — no logic inside `__init__` modules (only imports and `__all__` allowed)
+- `WPS413` — no `__getattr__` or `__dir__` module-level magic methods
 - `WPS414` — no incorrect `unpacking` target
 - `WPS415` — no incorrect `for` loop target
 - `WPS416` — no `yield` inside comprehension
