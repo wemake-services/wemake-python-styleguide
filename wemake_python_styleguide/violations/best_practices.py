@@ -3090,7 +3090,7 @@ class ForbidMappingProxyTypeViolation(ASTViolation):
         mapping with no shared mutable state underneath.
 
     Solution:
-        Use ``frozendict`` instead of ``MappingProxyType``.
+        Use ``frozendict`` instead of ``MappingProxyType`` on Python 3.15+
 
     Example::
 
@@ -3105,5 +3105,7 @@ class ForbidMappingProxyTypeViolation(ASTViolation):
 
     """
 
-    error_template = 'Found a MappingProxyType'
+    error_template = (
+        'Found a `types.MappingProxyType` usage, prefer `frozendict` on 3.15+'
+    )
     code = 483

@@ -60,7 +60,8 @@ class WrongFunctionCallVisitor(base.BaseNodeVisitor):
     def visit_Call(self, node: ast.Call) -> None:
         """Used to find ``FUNCTIONS_BLACKLIST`` calls."""
         self._check_wrong_function_called(node)
-        self._check_mapping_proxy_type(node)
+        if PY315:  # pragma: >=3.15 cover
+            self._check_mapping_proxy_type(node)
 
         if functions.given_function_called(node, {'super'}):
             self._check_super_context(node)
@@ -68,17 +69,16 @@ class WrongFunctionCallVisitor(base.BaseNodeVisitor):
 
         self.generic_visit(node)
 
-    def _check_mapping_proxy_type(
+    def _check_mapping_proxy_type(  # pragma: >=3.15 cover
         self,
         node: ast.Call,
-    ) -> None:  # pragma: >=3.15 cover
+    ) -> None:  
         function_name = functions.given_function_called(
             node,
             {'MappingProxyType'},
             split_modules=True,
         )
-
-        if not function_name or not PY315:
+        if not function_name:
             return
 
         self.add_violation(ForbidMappingProxyTypeViolation(node))

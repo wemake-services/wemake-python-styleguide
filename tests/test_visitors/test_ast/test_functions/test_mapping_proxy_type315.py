@@ -21,6 +21,7 @@ pytestmark = pytest.mark.skipif(
         'MappingProxyType({"a": 1})',
         'MappingProxyType({"a": 1, "b": 2})',
         'import types\ntypes.MappingProxyType({"a": 1})',
+        'types.MappingProxyType({"a": 1})',
     ],
 )
 def test_mapping_proxy_type(
