@@ -44,7 +44,7 @@ jobs:
         run: |
           poetry config virtualenvs.in-project true
           poetry run pip install -U pip
-          poetry install --with mcp
+          poetry install --all-extras
       - name: Run tests
         run: make test
       - name: Upload coverage to Codecov
