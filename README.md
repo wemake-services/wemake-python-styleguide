@@ -49,7 +49,7 @@ Install the optional MCP dependency and start the stdio server:
 
 ```bash
 pip install 'wemake-python-styleguide[mcp]'
-wps-mcp
+wps mcp
 ```
 
 The server exposes an `explain_violation` tool that returns the same

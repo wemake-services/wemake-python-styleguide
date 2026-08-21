@@ -1,6 +1,7 @@
 import argparse
 
 from wemake_python_styleguide.cli.commands.explain.command import ExplainCommand
+from wemake_python_styleguide.cli.commands.mcp.command import McpCommand
 
 
 def _configure_arg_parser() -> argparse.ArgumentParser:
@@ -23,6 +24,12 @@ def _configure_arg_parser() -> argparse.ArgumentParser:
         help='Desired violation code',
     )
     parser_explain.set_defaults(func=ExplainCommand())
+
+    parser_mcp = sub_parsers.add_parser(
+        'mcp',
+        help='Run the MCP server',
+    )
+    parser_mcp.set_defaults(func=McpCommand())
 
     return parser
 

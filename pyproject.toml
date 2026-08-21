@@ -63,8 +63,6 @@ pydantic-settings = { version = "<2.15", optional = true }
 mcp = ["mcp", "pydantic-settings"]
 
 [tool.poetry.group.dev.dependencies]
-mcp = "^1.26"
-pydantic-settings = "<2.15"
 pytest = "^9.1"
 pytest-cov = "^7.0"
 pytest-randomly = "^4.1"
@@ -83,6 +81,13 @@ astpath = "^0.9"
 lxml = "^6.0"
 nbqa = "^1.2"
 ruff = "^0.16"
+
+[tool.poetry.group.mcp]
+optional = true
+
+[tool.poetry.group.mcp.dependencies]
+mcp = "^1.26"
+pydantic-settings = "<2.15"
 
 [tool.poetry.group.docs]
 optional = true
@@ -314,4 +319,3 @@ extend-exclude = [
 
 [tool.poetry.scripts]
 wps = "wemake_python_styleguide.cli.cli_app:main"
-wps-mcp = "wemake_python_styleguide.mcp_server:main"

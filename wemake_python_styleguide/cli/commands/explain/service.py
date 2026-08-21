@@ -1,4 +1,4 @@
-"""Provides the shared violation explanation service."""
+from typing import final
 
 from wemake_python_styleguide.cli.commands.explain import (
     message_formatter,
@@ -6,12 +6,18 @@ from wemake_python_styleguide.cli.commands.explain import (
 )
 
 
-class ViolationNotFoundError(ValueError):
+@final
+class ViolationNotFoundError(Exception):
     """Raised when a violation code cannot be resolved."""
 
 
 def explain_violation(violation_code: str) -> str:
-    """Return the formatted explanation for a violation code."""
+    """
+    Return the formatted explanation for a violation code.
+
+    Raises:
+        ViolationNotFoundError: when we can't parse the violation docs.
+    """
     normalized_code = violation_code.removeprefix('WPS')
     try:
         code = int(normalized_code)

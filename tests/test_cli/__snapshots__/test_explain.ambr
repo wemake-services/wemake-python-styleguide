@@ -47,8 +47,8 @@
 # ---
 # name: test_no_command_specified
   '''
-  usage: wps [-h] {explain} ...
-  wps: error: the following arguments are required: {explain}
+  usage: wps [-h] {explain,mcp} ...
+  wps: error: the following arguments are required: {explain,mcp}
   
   '''
 # ---

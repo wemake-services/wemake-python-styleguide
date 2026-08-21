@@ -1,5 +1,5 @@
-Command line tool
-=================
+Command line tool and MCP
+=========================
 
 .. versionadded:: 1.1.0
 
@@ -33,3 +33,16 @@ Examples:
    Reasoning:
        This is done to gain extra readability.
    ...
+
+.. rubric:: ``wps mcp``
+
+This command starts a Model Context Protocol server over standard input and
+output. The server exposes an ``explain_violation`` tool that returns the same
+description as ``wps explain``.
+
+Install the optional dependency before starting the server:
+
+.. code:: console
+
+   $ pip install 'wemake-python-styleguide[mcp]'
+   $ wps mcp

@@ -1,15 +1,17 @@
-"""Exposes violation explanations over the Model Context Protocol."""
+from wemake_python_styleguide.cli.output import print_stderr
 
-from mcp.server.fastmcp import FastMCP
+try:
+    from mcp.server.fastmcp import FastMCP
+except ImportError:  # pragma: no cover
+    print_stderr(
+        "Please use `pip install 'wemake-python-styleguide[mcp]'` "
+        'to use MCP feature',
+    )
+    raise
 
 from wemake_python_styleguide.cli.commands.explain.service import (
-    explain_violation as _explain_violation,
+    explain_violation,
 )
-
-
-def explain_violation(violation_code: str) -> str:
-    """Explain a wemake-python-styleguide violation such as ``WPS123``."""
-    return _explain_violation(violation_code)
 
 
 def create_server() -> FastMCP:
