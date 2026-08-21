@@ -54,6 +54,10 @@ python = "^3.10"
 flake8 = "^7.3"
 attrs = "*"
 pygments = "^2.19"
+mcp = { version = "^2.0", extras = ["cli"], optional = true }
+
+[tool.poetry.extras]
+mcp = ["mcp"]
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^9.1"
