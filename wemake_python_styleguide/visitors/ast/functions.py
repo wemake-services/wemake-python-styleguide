@@ -72,7 +72,7 @@ class WrongFunctionCallVisitor(base.BaseNodeVisitor):
     def _check_mapping_proxy_type(  # pragma: >=3.15 cover
         self,
         node: ast.Call,
-    ) -> None:  
+    ) -> None:
         function_name = functions.given_function_called(
             node,
             {'MappingProxyType'},
