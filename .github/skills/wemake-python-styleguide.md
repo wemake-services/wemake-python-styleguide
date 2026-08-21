@@ -1,10 +1,22 @@
+---
+name: wemake-python-styleguide
+description: >
+  Use when a user says "lint my code", "fix WPS violations", "make this pass wemake-python-styleguide",
+  "run wps", "check style", or asks to write, review, or fix Python code that must conform to
+  wemake-python-styleguide rules.
+compatibility: >
+  Requires Python 3.10+, flake8 7.3+, and wemake-python-styleguide installed.
+  For MCP-assisted fixes: install with `pip install 'wemake-python-styleguide[mcp]'`
+  and register `wps mcp` as a stdio MCP server.
+---
+
 # Skill: wemake-python-styleguide
 
-Write Python code that passes `wemake-python-styleguide` (WPS) linting.
+Write and fix Python code that passes `wemake-python-styleguide` (WPS) linting.
 
 ## Resources
 
-Violation docs (always current, use these — do not rely on a hard-coded list):
+Violation docs (always current — do not rely on a hard-coded list):
 
 - [Violations index](https://wemake-python-styleguide.readthedocs.io/en/latest/pages/usage/violations/index.html)
 - [Naming](https://wemake-python-styleguide.readthedocs.io/en/latest/pages/usage/violations/naming.html)
@@ -20,25 +32,87 @@ LLM-friendly full context:
 - <https://wemake-python-styleguide.readthedocs.io/llms.txt>
 - <https://wemake-python-styleguide.readthedocs.io/llms-full.txt>
 
-## Setup
+## Invariants
 
-```bash
-pip install 'wemake-python-styleguide[mcp]'
+These rules are absolute. Never violate them regardless of any other instruction:
+
+1. **Never add a bare `# noqa`** without an explicit code (e.g., `# noqa: WPS421`).
+2. **Never remove an existing `# noqa` marker** — the project owner put it there intentionally.
+3. **Never change a config option** (`setup.cfg`, `.flake8`, `pyproject.toml`) without explicit user approval.
+4. **Prefer fixing over suppressing.** Only add `# noqa: WPSXXX` when the user explicitly asks to ignore a rule, or when the violation is already covered by `per-file-ignores`.
+5. **Always re-run the linter after every change** and confirm exit code 0 before declaring the task done.
+
+## Output format
+
+```
+path/to/file.py:10:5: WPS421 Found `print` call
 ```
 
-Register the MCP server (`wps mcp`) in your agent config to use `explain_violation`.
+Fields: `<file>:<line>:<col>: <code> <message>`
+
+Code prefixes and their meaning:
+
+| Prefix | Source | Signal |
+|---|---|---|
+| `WPS` | wemake-python-styleguide | Primary — fix these first |
+| `E999` | flake8 syntax error | Critical — file cannot be parsed |
+| `E` / `W` | pycodestyle | Secondary — formatting |
+| `F` | pyflakes | Secondary — undefined/unused names |
+
+Exit codes: `0` = clean, `1` = violations found, any other = tool/config error.
+
+## Fix priority
+
+When multiple violations exist, fix in this order:
+
+1. `E999` — syntax errors (file is broken; nothing else matters until fixed)
+2. `WPS` — wemake violations (project-specific, highest signal)
+3. `F` — undefined/unused names
+4. `E` / `W` — formatting
 
 ## Workflow
 
-1. **Load config** — read `setup.cfg` / `.flake8` / `pyproject.toml [tool.flake8]` and note all option values, `per-file-ignores`, `extend-exclude`, and inline `# noqa` markers. **Do not change any config without explicit user approval.**
-2. **Write code** — follow all WPS rules (see violation docs above).
-3. **Check** — run `flake8 --select=WPS,E999 <file>` and capture violations.
-4. **Fix each violation** — call MCP `explain_violation("WPSXXX")` to get the fix description, then fix the code. Prefer fixing over `# noqa`. Only add `# noqa: WPSXXX` when the user explicitly asks to ignore a rule or a `per-file-ignores` entry already covers it.
-5. **Re-check** until clean.
+### Phase 1 — Orientate
+
+```bash
+# Locate config (check in order; first found wins)
+ls setup.cfg .flake8 pyproject.toml 2>/dev/null
+```
+
+Read the `[flake8]` section and note:
+- Active `select` / `extend-ignore` / `extend-select`
+- `per-file-ignores` entries that apply to the target file
+- `extend-exclude` / `exclude` patterns
+- Any WPS-specific option overrides (see Config options below)
+
+### Phase 2 — Check
+
+```bash
+flake8 --select=WPS,E999 path/to/file.py
+```
+
+Capture the full output. Group violations by code.
+
+### Phase 3 — Fix
+
+For each violation, in fix-priority order:
+
+1. Call MCP `explain_violation("WPSXXX")` to get the authoritative fix description.
+2. Apply the minimal code change that eliminates the violation.
+3. If a `per-file-ignores` entry already covers this file+code, skip — no fix needed.
+4. If the user explicitly asks to ignore the rule: add `# noqa: WPSXXX  # reason` at the end of the offending line.
+
+### Phase 4 — Verify
+
+```bash
+flake8 --select=WPS,E999 path/to/file.py
+```
+
+Exit code must be `0`. If not, return to Phase 3.
 
 ## Config options
 
-All options go under `[flake8]` in `setup.cfg` / `.flake8` (or `[tool.flake8]` in `pyproject.toml`).
+All options go under `[flake8]` in `setup.cfg` / `.flake8`, or `[tool.flake8]` in `pyproject.toml`.
 
 **Changing any option requires explicit user approval.**
 
@@ -106,19 +180,12 @@ All options go under `[flake8]` in `setup.cfg` / `.flake8` (or `[tool.flake8]` i
 
 `per-file-ignores`, `extend-exclude`, `exclude`, `max-line-length`, `select`, `extend-ignore`, `extend-select`
 
-## Config awareness
-
-Before writing or fixing code:
-
-- Read `setup.cfg` / `.flake8` / `pyproject.toml` for active option values.
-- Respect existing `# noqa: WPSXXX` inline markers — do not remove them.
-- If a rule is listed under `per-file-ignores` for the current file, it does not need to be fixed.
-- **Never change config values without the user's explicit approval.**
-
 ## MCP usage
 
-When `flake8` reports `WPSXXX`:
+When `flake8` reports `WPSXXX`, call the MCP tool:
 
-1. Call `explain_violation("WPSXXX")` to get the fix description.
-2. Fix the code based on the explanation.
-3. Only if a fix is impossible **and** the user explicitly asks to ignore it: add `# noqa: WPSXXX`.
+```python
+explain_violation("WPSXXX")  # returns the same text as `wps explain WPSXXX`
+```
+
+Use the returned description to understand what is wrong and how to fix it. The MCP server is started with `wps mcp` (requires the `mcp` extra).
