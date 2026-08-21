@@ -12,7 +12,8 @@ description: >
 Write and fix Python code that passes `wemake-python-styleguide` (WPS) linting.
 
 **Requirements:** Python 3.10+, flake8 7.3+, and `wemake-python-styleguide` installed.
-For MCP-assisted fixes: `pip install 'wemake-python-styleguide[mcp]'` and register `wps mcp` as a stdio MCP server.
+For MCP-assisted fixes: `pip install 'wemake-python-styleguide[mcp]'`
+and register `mcp run wemake_python_styleguide/mcp_server.py:mcp` as a stdio MCP server.
 
 If `wemake-python-styleguide` is not installed in this project, ignore do not use this skill.
 
@@ -122,4 +123,4 @@ When `flake8` reports `WPSXXX`, call the MCP tool:
 explain_violation('WPSXXX')  # returns the same text as `wps explain WPSXXX`
 ```
 
-Use the returned description to understand the violation and how to fix it. Start the MCP server with `wps mcp` (requires the `mcp` extra for `wemake-python-styleguide`).
+Use the returned description to understand the violation and how to fix it. Start the MCP server with `mcp run wemake_python_styleguide/mcp_server.py:mcp` (requires the `mcp` extra for `wemake-python-styleguide`).
