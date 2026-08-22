@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 1a4bb160cab6417b3045e1b37b6b72449243e658  # frozen: 0.37.4
+    rev: c4654a7e007c9619a5eb63c39a456572a0fa1851  # frozen: 0.38.0
     hooks:
       - id: check-dependabot
       - id: check-github-workflows
@@ -13,7 +13,7 @@ repos:
         additional_dependencies:
           - "github.com/wasilibs/go-shellcheck/cmd/shellcheck@latest"
   - repo: https://github.com/woodruffw/zizmor-pre-commit
-    rev: 067260dc5fe6ea86b7551bfd6f8b3ba4e6c93129  # frozen: v1.28.0
+    rev: 451b56af716f9f0d0c2b816503a3fd0cf8b036fa  # frozen: v1.29.0
     hooks:
       - id: zizmor
         args:
@@ -25,7 +25,7 @@ repos:
       - id: shellcheck
         args: ["--severity=style"]
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: cb8c523fd4835aba42af70f4cad5568db4df0b6c  # frozen: v0.16.0
+    rev: 65dbdb59d2f2d9c3bdc343c566821ad3319ddaa3  # frozen: v0.16.3
     hooks:
       - id: ruff-check
         args: ["--exit-non-zero-on-fix"]
@@ -39,7 +39,7 @@ repos:
       - id: mbake-validate
 
   - repo: https://github.com/crate-ci/typos
-    rev: 96d9af6217dc2855210655af7e1ff19d23d4e593  # frozen: v1
+    rev: 12ffd4a04b4893ab75db66a59aaad2d996c3e982  # frozen: v1
     hooks:
       - id: typos
 
@@ -47,6 +47,7 @@ repos:
     rev: 57b21406f092110c18776e39b0bda50d37c945c8  # frozen: v2.4.3
     hooks:
     - id: codespell
+      args: ["--write-changes"]
       additional_dependencies:
         - tomli
 

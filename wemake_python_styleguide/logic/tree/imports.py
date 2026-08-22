@@ -49,3 +49,8 @@ def is_vague_import(name: str) -> bool:
     with_from_or_to = name.startswith(('from_', 'to_'))
     too_short = logical.is_too_short_name(name, 2, trim=True)
     return blacklisted or with_from_or_to or too_short
+
+
+def is_lazy_import(node: AnyImport) -> bool:
+    """Returns ``True`` if import is lazy."""
+    return bool(getattr(node, 'is_lazy', False))

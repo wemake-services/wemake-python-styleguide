@@ -15,12 +15,12 @@
 # This image is also available on Dockerhub:
 # https://hub.docker.com/r/wemakeservices/wemake-python-styleguide
 
-FROM python:3.14.6-alpine
+FROM python:3.14.7-alpine
 
 LABEL maintainer="mail@sobolevn.me"
 LABEL vendor="wemake.services"
 
-ENV WPS_VERSION='1.7.0'
+ENV WPS_VERSION='1.7.1'
 ENV REVIEWDOG_VERSION='v0.21.0'
 
 RUN apk add --no-cache bash git wget

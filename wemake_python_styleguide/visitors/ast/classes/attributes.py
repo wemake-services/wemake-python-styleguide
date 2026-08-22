@@ -17,7 +17,7 @@ from wemake_python_styleguide.visitors import base, decorators
 
 @final
 class ClassAttributeVisitor(base.BaseNodeVisitor):
-    """Finds incorrectattributes."""
+    """Finds incorrect attributes."""
 
     def visit_ClassDef(self, node: ast.ClassDef) -> None:
         """Checks that assigned attributes are correct."""

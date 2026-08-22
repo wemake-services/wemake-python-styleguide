@@ -9,8 +9,10 @@ from wemake_python_styleguide.constants import FUTURE_IMPORTS_WHITELIST
 from wemake_python_styleguide.logic import nodes
 from wemake_python_styleguide.logic.tree import imports
 from wemake_python_styleguide.options.validation import ValidatedOptions
+from wemake_python_styleguide.types import AnyImport
 from wemake_python_styleguide.violations.base import ErrorCallback
 from wemake_python_styleguide.violations.best_practices import (
+    ForbidLazyImportViolation,
     FutureImportViolation,
     ImportCollisionViolation,
     ImportObjectCollisionViolation,
@@ -49,6 +51,15 @@ class _ImportValidator(_BaseImportValidator):
                 self._error_callback(
                     DottedRawImportViolation(node, text=alias.name),
                 )
+
+
+@final
+class _ImportLazyValidator(_BaseImportValidator):  # pragma: >=3.15 cover
+    """Validator of ``ast.Import`` and ``ast.ImportFrom`` nodes."""
+
+    def validate(self, node: AnyImport) -> None:
+        if imports.is_lazy_import(node):
+            self._error_callback(ForbidLazyImportViolation(node))
 
 
 @final
@@ -188,17 +199,23 @@ class WrongImportVisitor(BaseNodeVisitor):
         self._import_collision_validator = _ImportCollisionValidator(
             self.add_violation,
         )
+        self._lazy_import = _ImportLazyValidator(
+            self.add_violation,
+            self.options,
+        )
 
     def visit_Import(self, node: ast.Import) -> None:
         """Used to find wrong ``import`` statements."""
         self._import_validator.validate(node)
         self._import_collision_validator.add_import(node)
+        self._lazy_import.validate(node)
         self.generic_visit(node)
 
     def visit_ImportFrom(self, node: ast.ImportFrom) -> None:
         """Used to find wrong ``from ... import ...`` statements."""
         self._import_from_validator.validate(node)
         self._import_collision_validator.add_import_from(node)
+        self._lazy_import.validate(node)
         self.generic_visit(node)
 
     def _post_visit(self) -> None:

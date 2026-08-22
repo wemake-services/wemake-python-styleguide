@@ -39,9 +39,22 @@ We highly recommend to also use:
 
 - [ondivi](https://wemake-python-styleguide.rtfd.io/en/latest/pages/usage/integrations/ondivi.html) for easy integration into a **legacy** codebase
 
+
+## AI Features
+
+`wemake-python-styleguide` works natively with AI tools,
+it is great for improving agents' code quality.
+
+Skills:
+- [`/wps`](https://github.com/wemake-services/wemake-python-styleguide/blob/master/.agents/skills/wps.md) to run better Python code that passes `wemake-python-styleguide`
+
+MCPs:
+- [wps](https://wemake-python-styleguide.readthedocs.io/en/latest/pages/usage/cli.html#mcp-server) MCP helps with explaining violations and provide context on how to fix them
+
 Additional contexts for LLMs:
-- https://wemake-python-styleguide.readthedocs.io/llms.txt
-- https://wemake-python-styleguide.readthedocs.io/llms-full.txt
+- [Context7](https://context7.com/wemake-services/wemake-python-styleguide)
+- [`llms.txt`](https://wemake-python-styleguide.readthedocs.io/llms.txt)
+- [`llms-full.txt`](https://wemake-python-styleguide.readthedocs.io/llms-full.txt)
 
 
 ## Running

@@ -269,6 +269,10 @@ class MutableModuleConstantViolation(ASTViolation):
     Solution:
         Use immutable types for constants.
 
+        On Python versions prior to 3.15, ``types.MappingProxyType`` is
+        recommended for immutable mappings. On Python 3.15+, prefer
+        ``frozendict``.
+
     We only treat ``ast.Set``, ``ast.Dict``, ``ast.List`` and comprehensions
     as mutable things. All other nodes are still fine.
 
@@ -278,7 +282,12 @@ class MutableModuleConstantViolation(ASTViolation):
         import types
         CONST1 = frozenset((1, 2, 3))
         CONST2 = (1, 2, 3)
+
+        # Correct (Python < 3.15):
         CONST3 = types.MappingProxyType({'key': 'value'})
+
+        # Correct (Python >= 3.15):
+        CONST4 = frozendict({'key': 'value'})
 
         # Wrong:
         CONST1 = {1, 2, 3}
@@ -3033,3 +3042,72 @@ class LeakingForLoopViolation(ASTViolation):
 
     error_template = 'Found a leaking ``for`` loop in a class or module body'
     code = 481
+
+
+@final
+class ForbidLazyImportViolation(ASTViolation):
+    """
+    Forbid ``lazy imports``.
+
+    Is only emitted on ``python3.15+``.
+
+    Reasoning:
+        It is an overly complicated feature that is needed
+        for just a couple use-cases.
+        Retuning an object from a function does exactly the same thing:
+        it imports something and returns it, when needed.
+
+    Solution:
+        If you want imports to be lazy - put them in your functions.
+
+    Example::
+
+        # Correct:
+        def some():
+            import json
+
+        # Wrong:
+        lazy import json
+
+    .. versionadded:: 1.8.0
+
+    """
+
+    error_template = 'Found a lazy import'
+    code = 482
+
+
+@final
+class ForbidMappingProxyTypeViolation(ASTViolation):
+    """
+    ``frozendict`` is always better than ``MappingProxyType``.
+
+    Is only emitted on ``python3.15+``.
+
+    Reasoning:
+        ``MappingProxyType`` does not copy the underlying dict and
+        its values are not truly immutable: the wrapped ``dict`` can still
+        be mutated through the original reference. On Python 3.15+
+        ``frozendict`` is always a better choice — it is a real immutable
+        mapping with no shared mutable state underneath.
+
+    Solution:
+        Use ``frozendict`` instead of ``MappingProxyType`` on Python 3.15+
+
+    Example::
+
+        # Correct:
+        my_dict = frozendict({'a': 1})
+
+        # Wrong:
+        my_dict = MappingProxyType({'a': 1})
+
+
+    .. versionadded:: 1.8.0
+
+    """
+
+    error_template = (
+        'Found a `types.MappingProxyType` usage, prefer `frozendict` on 3.15+'
+    )
+    code = 483

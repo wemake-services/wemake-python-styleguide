@@ -1,5 +1,3 @@
-"""Provides tools to extract violation info."""
-
 import inspect
 from collections.abc import Collection, Mapping
 from types import ModuleType
