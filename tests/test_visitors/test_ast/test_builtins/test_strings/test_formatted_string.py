@@ -1,7 +1,6 @@
-import sys
-
 import pytest
 
+from wemake_python_styleguide.compat.constants import PY314
 from wemake_python_styleguide.violations.complexity import (
     TooComplexFormattedStringViolation,
 )
@@ -121,7 +120,7 @@ PREFIXES = (
     pytest.param(
         't',
         marks=pytest.mark.skipif(
-            sys.version_info < (3, 14),
+            not PY314,
             reason='t-strings are only in Python 3.14+',
         ),
     ),
