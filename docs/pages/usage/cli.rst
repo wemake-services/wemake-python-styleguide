@@ -17,7 +17,7 @@ Syntax: ``wps explain <code>``
 
 Examples:
 
-.. code:: text
+.. code:: console
 
    $ wps explain WPS115
    WPS115 — Require ``snake_case`` for naming class attributes.
@@ -26,7 +26,7 @@ Examples:
    are ignored, as they should be written in UPPER_SNAKE_CASE
    ...
 
-.. code:: text
+.. code:: console
 
    $ wps explain 116
    WPS116 — Forbid using more than one consecutive underscore in variable names.
@@ -40,6 +40,11 @@ MCP server
 
 .. versionadded:: 1.8.0
 
+The best way to use our MCP is to use our
+`/wps skill <https://github.com/wemake-services/wemake-python-styleguide/blob/master/.agents/skills/wps.md>`_
+for your agent, it contains all the information
+about installing and starting the MCP server.
+
 This command starts a Model Context Protocol server over standard input and
 output. The server exposes an ``explain_violation`` tool that returns the same
 description as ``wps explain``.
@@ -49,6 +54,11 @@ Install the optional dependency before starting the server:
 .. code:: console
 
    $ pip install 'wemake-python-styleguide[mcp]'
+
+Next, run the server:
+
+.. code:: console
+
    $ mcp run wemake_python_styleguide/mcp.py:mcp
 
 The MCP SDK command-line tool can also open the server in the MCP Inspector:
