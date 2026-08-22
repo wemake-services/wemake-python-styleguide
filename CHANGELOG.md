@@ -17,7 +17,7 @@ Semantic versioning in our case means:
   change the client facing API, change code conventions significantly, etc.
 
 
-## 1.8.0 WIP
+## 1.8.0 aka The Slop Slayer
 
 ### AI features
 
@@ -30,6 +30,8 @@ Use it in your workflows to make the final code simpler and more readable.
 ### Features
 
 - Adds `python3.15` official support, #3758
+- Adds support for `t` strings, it now follows
+  the same rules as `f` string everywhere, #3702
 - Adds `WPS482`: forbid lazy imports, #3639
 - Adds `WPS483`: forbid `MappingProxyType` on `python3.15+`, #3762
 
