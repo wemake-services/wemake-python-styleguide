@@ -29,19 +29,19 @@
 # ---
 # name: test_command_on_not_found[wps explain 10000]
   '''
-  Violation "10000" not found
+  Unknown violation code '10000', no such rule exists
   
   '''
 # ---
 # name: test_command_on_not_found[wps explain NOT_A_CODE]
   '''
-  Violation "NOT_A_CODE" not found
+  Unknown violation code 'NOT_A_CODE', no such rule exists
   
   '''
 # ---
 # name: test_command_on_not_found[wps explain WPS10000]
   '''
-  Violation "WPS10000" not found
+  Unknown violation code 'WPS10000', no such rule exists
   
   '''
 # ---
