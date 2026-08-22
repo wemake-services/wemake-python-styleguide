@@ -40,9 +40,10 @@ MCP server
 
 .. versionadded:: 1.8.0
 
-The best to use our MCP is to use our
+The best way to use our MCP is to use our
 `/wps skill <https://github.com/wemake-services/wemake-python-styleguide/blob/master/.agents/skills/wps.md>`_
-for your agent.
+for your agent, it contains all the information
+about installing and starting the MCP server.
 
 This command starts a Model Context Protocol server over standard input and
 output. The server exposes an ``explain_violation`` tool that returns the same
