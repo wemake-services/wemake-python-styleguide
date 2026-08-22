@@ -2455,32 +2455,32 @@ class SimplifiableMatchViolation(ASTViolation):
         Replace single-case ``match`` statements with a plain ``if``
 
     When is this violation is raised?
-        - When there are exactly two ``case`` statements
-        - When the first case uses a literal pattern
-        - When the second case is a wildcard: ``case _:``
         - When there is exactly one  ``case`` statement
-        - When the first case uses a simple sequence (``[1, 2, 3]``)
-          or mapping (``{"x": 1}``) pattern
-          with only literals, constants, or names
-        - Keys and values in mappings are constants (not variables)
-        - No starred patterns (``*args, **kwargs``) or has guards
+        - When there are exactly two ``case`` statements:
+          the first case uses a literal, name, sequence,
+          or mapping (with literals or names) patterns
+          and the second case is a wildcard: ``case _:``.
+          The first case must not have a guard
 
     Example::
 
         # Correct:
-        if state == EventType.REJECT:
+        if state == EventType.rejected:
             user = 'rejected'
         else:
             user = 'active'
 
-        if data == [1, 2]:
-            handle_pair()
-        else:
-            ignore()
+        match state:
+            case EventType.rejected | EventType.timeout:
+                message = 'rejected'
+            case EventType.accepted:
+                message = 'accepted'
+            case _:
+                assert_never(state)
 
         # Wrong:
         match state:
-            case EventType.REJECT:
+            case EventType.reject:
                 user = 'rejected'
             case _:
                 user = 'active'
@@ -2488,8 +2488,6 @@ class SimplifiableMatchViolation(ASTViolation):
         match data:
             case [1, 2]:
                 handle_pair()
-            case _:
-                ignore()
 
     .. versionadded:: 1.5.0
     .. versionchanged:: 1.7.0

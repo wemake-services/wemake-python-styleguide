@@ -39,6 +39,7 @@ Use it in your workflows to make the final code simplier and more readable.
 
 ### Misc
 
+- Improves `WPS365` docs, #3776
 - Improves `wps explain FOO` error message, when `FOO` is not found, #3775
 
 
