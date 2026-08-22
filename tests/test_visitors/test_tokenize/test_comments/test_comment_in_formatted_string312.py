@@ -1,3 +1,5 @@
+import sys
+
 import pytest
 
 from wemake_python_styleguide.compat.constants import PY312
@@ -14,131 +16,143 @@ if not PY312:  # pragma: >=3.12 no cover
         allow_module_level=True,
     )
 
+PREFIXES = (
+    'f',
+    pytest.param(
+        't',
+        marks=pytest.mark.skipif(
+            sys.version_info < (3, 14),
+            reason='t-strings are only in Python 3.14+',
+        ),
+    ),
+)
+
 # Correct
 fstring_without_comments = """
-foo = f"test{a}"
+foo = {0}"test{{a}}"
 """
 
 fstring_with_hash_single_quotes = """
-foo = f'test {a} # testing'
+foo = {0}'test {{a}} # testing'
 """
 
 fstring_with_hash = """
-foo = f"test{a} # testing"
+foo = {0}"test{{a}} # testing"
 """
 
 fstring_with_hash_between_braces = """
-foo = f"test{a} # comment {b} # comment"
+foo = {0}"test{{a}} # comment {{b}} # comment"
 """
 
 
 fstring_with_two_values = """
-f"My name is {name} and I am {age} years old."
+{0}"My name is {{name}} and I am {{age}} years old."
 """
 
 
 fstring_with_math_operation = """
-f"The sum of {x} and {y} is {x + y}."
+{0}"The sum of {{x}} and {{y}} is {{x + y}}."
 """
 
 fstring_with_hash_between_quotes = """
-foo = f"hello" # comment "{bar}" # comment"
+foo = {0}"hello" # comment "{{bar}}" # comment"
 """
 
 
 fstring_in_docstring = '''
-foo = f"""hello"{bar}" # comment world"""
+foo = {0}"""hello"{{bar}}" # comment world"""
 '''
 
 # Wrong
 fstring_with_comment = """
-foo = f"test{a # comment
-}"
+foo = {0}"test{{a # comment
+}}"
 """
 
 rfstring_with_comment = """
-foo = rf"test{a # comment
-}"
+foo = r{0}"test{{a # comment
+}}"
 """
 
 rfstring_with_comment_single_quotes = """
-foo = rf'test{a # comment
-}'
+foo = r{0}'test{{a # comment
+}}'
 """
 
 
 rfstring_with_comment_triple_quotes = '''
-foo = rf"""test{a # comment
-}"""
+foo = r{0}"""test{{a # comment
+}}"""
 '''
 
 rfstring_with_comment_triple_single_quotes = """
-foo = rf'''test{a # comment
-}'''
+foo = rf'''test{{a # comment
+}}'''
 """
 
 
 frstring_with_comment = """
-foo = fr"test{a # comment
-}"
+foo = {0}r"test{{a # comment
+}}"
 """
 
 frstring_with_comment_single_quotes = """
-foo = fr'test{a # comment
-}'
+foo = {0}r'test{{a # comment
+}}'
 """
 
 
 frstring_with_comment_triple_quotes = '''
-foo = fr"""test{a # comment
-}"""
+foo = {0}r"""test{{a # comment
+}}"""
 '''
 
 frstring_with_comment_triple_single_quotes = """
-foo = fr'''test{a # comment
-}'''
+foo = {0}r'''test{{a # comment
+}}'''
 """
 
 fstring_with_comment_single_quotes = """
-foo = f'test{a # comment
-}'
+foo = {0}'test{{a # comment
+}}'
 """
 
 fstring_with_comment_and_hash_on_new_line = """
-foo = f"test{a # comment
-} # comment"
+foo = {0}"test{{a # comment
+}} # comment"
 """
 
 fstring_with_two_values_and_comment = """
-foo = f"test{a} and test{b # Testing values
-}"
+foo = {0}"test{{a}} and test{{b # Testing values
+}}"
 """
 
 
 multiline_fstring_with_comment = """
-foo = (f"test{value}"
-       f"test{another_value}"
-       f"test{wrong # This is not allowed
-       }"
-       f"test{value}")
+foo = ({0}"test{{value}}"
+       {0}"test{{another_value}}"
+       {0}"test{{wrong # This is not allowed
+       }}"
+       {0}"test{{value}}")
 """
 
 fstring_with_comment_and_second_line = """
-foo = f"hello{bar # comment
-}world"
+foo = {0}"hello{{bar # comment
+}}world"
 """
 
 fstring_with_comment_between_quotes = """
-foo = f"hello'{bar # comment
-}'world"
+foo = {0}"hello'{{bar # comment
+}}'world"
 """
 
 fstring_with_comment_in_docstring = '''
-foo = f"""hello"{bar # comment
-}world"""
+foo = {0}"""hello"{{bar # comment
+}}world"""
 '''
 
 
+@pytest.mark.parametrize('prefix', PREFIXES)
 @pytest.mark.parametrize(
     'code',
     [
@@ -157,9 +171,10 @@ def test_correct_formatted_string(
     assert_errors,
     default_options,
     code,
+    prefix,
 ) -> None:
     """Check that there are no violations in the correct string."""
-    file_tokens = parse_tokens(code)
+    file_tokens = parse_tokens(code.format(prefix))
 
     visitor = CommentInFormattedStringVisitor(
         default_options,
@@ -170,6 +185,7 @@ def test_correct_formatted_string(
     assert_errors(visitor, [])
 
 
+@pytest.mark.parametrize('prefix', PREFIXES)
 @pytest.mark.parametrize(
     'code',
     [
@@ -196,9 +212,10 @@ def test_wrong_formatted_string(
     assert_errors,
     default_options,
     code,
+    prefix,
 ) -> None:
     """Checking that the wrong string has violations."""
-    file_tokens = parse_tokens(code)
+    file_tokens = parse_tokens(code.format(prefix))
 
     visitor = CommentInFormattedStringVisitor(
         default_options,

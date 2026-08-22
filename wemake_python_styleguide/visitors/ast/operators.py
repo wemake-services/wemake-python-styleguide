@@ -3,6 +3,7 @@ from collections import defaultdict
 from collections.abc import Mapping, Sequence
 from typing import ClassVar, TypeAlias, final
 
+from wemake_python_styleguide.compat import nodes
 from wemake_python_styleguide.compat.aliases import TextNodes
 from wemake_python_styleguide.logic import walk
 from wemake_python_styleguide.logic.nodes import get_parent
@@ -241,6 +242,7 @@ class WrongMathOperatorVisitor(base.BaseNodeVisitor):
     _string_nodes: ClassVar[AnyNodes] = (
         TextNodes,
         ast.JoinedStr,
+        nodes.TemplateStr,
     )
 
     _list_nodes: ClassVar[AnyNodes] = (

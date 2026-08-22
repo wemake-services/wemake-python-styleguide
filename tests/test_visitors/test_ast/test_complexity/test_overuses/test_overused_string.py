@@ -1,5 +1,6 @@
 import pytest
 
+from wemake_python_styleguide.compat.constants import PY314
 from wemake_python_styleguide.violations.complexity import (
     OverusedStringViolation,
 )
@@ -107,6 +108,28 @@ fstring_same_prefix2 = """
 x = f'{pattern}-postfix'
 y = f'{pattern}-postfix'
 """
+
+tstring_same_prefix1 = pytest.param(
+    """
+    x = f'Hello, {pattern}'
+    y = f'Hello, {pattern}'
+    """,
+    marks=pytest.mark.skipif(
+        not PY314,
+        reason='t-strings are only in Python 3.14+',
+    ),
+)
+
+tstring_same_prefix2 = pytest.param(
+    """
+    x = f'{pattern}-postfix'
+    y = f'{pattern}-postfix'
+    """,
+    marks=pytest.mark.skipif(
+        not PY314,
+        reason='t-strings are only in Python 3.14+',
+    ),
+)
 
 EXPECTED_LOCATION = (2, 8)
 
@@ -280,9 +303,11 @@ def test_common_strings_allowed(
     [
         fstring_same_prefix1,
         fstring_same_prefix2,
+        tstring_same_prefix1,
+        tstring_same_prefix2,
     ],
 )
-def test_fstring_strings_not_counted(
+def test_format_strings_not_counted(
     assert_errors,
     parse_ast_tree,
     options,

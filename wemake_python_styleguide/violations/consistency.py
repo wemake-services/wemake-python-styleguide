@@ -1464,7 +1464,7 @@ class ExplicitStringConcatViolation(ASTViolation):
 
     Reasoning:
         When formatting strings one must use ``.format``
-        and not any other formatting methods like ``%``, ``+``, or ``f``.
+        and not any other formatting methods like ``%``, ``+``, ``f``, or ``t``.
         This is done for consistency reasons.
 
     Solution:

@@ -1156,7 +1156,9 @@ class TooLongTupleUnpackViolation(ASTViolation):
 @final
 class TooComplexFormattedStringViolation(ASTViolation):
     """
-    Forbids ``f`` strings that are too complex.
+    Forbids ``f`` and ``t`` strings that are too complex.
+
+    ``t``-strings are only checked on ``python3.14+``.
 
     Formatting expressions that we consider simple:
 
@@ -1180,9 +1182,9 @@ class TooComplexFormattedStringViolation(ASTViolation):
     using more than one specifier for a single value.
 
     Reasoning:
-        Complex ``f`` strings are often difficult to understand,
+        Complex ``f`` and ``t`` strings are often difficult to understand,
         making the code less readable. Generally we don't allow
-        ``f`` strings but this violation exists in case the user
+        formatted strings but this violation exists in case the user
         decides to ignore the general violation.
 
     Solution:
@@ -1205,10 +1207,12 @@ class TooComplexFormattedStringViolation(ASTViolation):
     .. versionadded:: 0.15.0
     .. versionchanged:: 1.6.0
         Complex format specifiers are forbidden.
+    .. versionchanged:: 1.8.0
+        Added ``t``-strings support.
 
     """
 
-    error_template = 'Found a too complex `f` string'
+    error_template = 'Found a too complex formatted string'
     code = 237
 
 

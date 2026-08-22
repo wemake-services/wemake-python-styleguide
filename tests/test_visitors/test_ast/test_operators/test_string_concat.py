@@ -1,5 +1,6 @@
 import pytest
 
+from wemake_python_styleguide.compat.constants import PY314
 from wemake_python_styleguide.violations.consistency import (
     ExplicitStringConcatViolation,
 )
@@ -48,6 +49,20 @@ long_text = (
 )
 """
 
+multiline_format_concat_t = pytest.param(
+    """
+    long_text = (
+        t'first {0}' +
+        t'second' +
+        t'third'
+    )
+    """,
+    marks=pytest.mark.skipif(
+        not PY314,
+        reason='t-strings are only in Python 3.14+',
+    ),
+)
+
 
 @pytest.mark.parametrize(
     'expression',
@@ -62,6 +77,13 @@ long_text = (
         '+= b"123"',
         '+= f""',
         '+= b""',
+        pytest.param(
+            '+ t"{x}"',
+            marks=pytest.mark.skipif(
+                not PY314,
+                reason='t-strings are only in Python 3.14+',
+            ),
+        ),
     ],
 )
 def test_string_concat(
@@ -110,6 +132,7 @@ def test_correct_operation(
         multiline_bytes_concat,
         multiline_format_concat,
         multiline_mixed_concat,
+        multiline_format_concat_t,
     ],
 )
 def test_correct_multiline_operation(
