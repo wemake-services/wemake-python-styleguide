@@ -16,35 +16,48 @@ if not PY312:  # pragma: >=3.12 no cover
         allow_module_level=True,
     )
 
+PREFIXES = (
+    'f',
+    pytest.param(
+        't',
+        marks=pytest.mark.skipif(
+            sys.version_info < (3, 14),
+            reason='t-strings are only in Python 3.14+',
+        ),
+    ),
+)
+
 # Wrong:
-single_quote_formatted_string_wrong = """x=f'{ 1
-}'
+single_quote_formatted_string_wrong = """x={0}'{{ 1
+}}'
 """
 
-fr_prefix_formatted_string_wrong = """x=fr'{1
-}'"""
+fr_prefix_formatted_string_wrong = """x={0}r'{{1
+}}'"""
 
-double_quote_formatted_string_wrong = """x=f" {2} { 1
-}"
+double_quote_formatted_string_wrong = """x={0}" {{2}} {{ 1
+}}"
 """
 
 # Correct:
-triple_quote_formatted_string_first_correct = """x=f'''{ 1
-}'''
+triple_quote_formatted_string_first_correct = """x={0}'''{{ 1
+}}'''
 """
 
-triple_quote_formatted_string_second_correct = '''x=f"""{ 1
-}"""
+triple_quote_formatted_string_second_correct = '''x={0}"""{{ 1
+}}"""
 '''
+
 single_line_formatted_string = (
-    """formatted_string_complex = f'1+1={1 + 1}'  # noqa: WPS237"""
+    """formatted_string_complex = {0}'1+1={{1 + 1}}'  # noqa: WPS237"""
 )
 
 fr_prefix_formatted_string = (
-    """formatted_string_complex = fr'1+1={1 + 1}'  # noqa: WPS237"""
+    """formatted_string_complex = {0}r'1+1={{1 + 1}}'  # noqa: WPS237"""
 )
 
 
+@pytest.mark.parametrize('prefix', PREFIXES)
 @pytest.mark.parametrize(
     'code',
     [
@@ -59,9 +72,10 @@ def test_correctly_formatted_string(
     assert_errors,
     default_options,
     code,
+    prefix,
 ):
     """Ensures that correct formatting works."""
-    tokens = parse_tokens(code)
+    tokens = parse_tokens(code.format(prefix))
     visitor = MultilineFormattedStringTokenVisitor(
         default_options,
         file_tokens=tokens,
@@ -70,6 +84,7 @@ def test_correctly_formatted_string(
     assert_errors(visitor, [])
 
 
+@pytest.mark.parametrize('prefix', PREFIXES)
 @pytest.mark.parametrize(
     'code',
     [
@@ -83,65 +98,10 @@ def test_incorrectly_formatted_string(
     assert_errors,
     default_options,
     code,
+    prefix,
 ):
     """Ensures that correct formatting works."""
-    tokens = parse_tokens(code)
-    visitor = MultilineFormattedStringTokenVisitor(
-        default_options,
-        file_tokens=tokens,
-    )
-    visitor.run()
-    assert_errors(visitor, [MultilineFormattedStringViolation])
-
-
-@pytest.mark.skipif(
-    sys.version_info < (3, 14),
-    reason='t-strings are only in Python 3.14+',
-)
-@pytest.mark.parametrize(
-    'code',
-    [
-        "x = t'''{1}'''",
-        'x = t"""{1}"""',
-        "x = tr'''{1}'''",
-    ],
-)
-def test_correctly_formatted_t_string(  # pragma: >=3.14 cover
-    parse_tokens,
-    assert_errors,
-    default_options,
-    code,
-):
-    """Ensures that correct multiline t-string formatting works."""
-    tokens = parse_tokens(code)
-    visitor = MultilineFormattedStringTokenVisitor(
-        default_options,
-        file_tokens=tokens,
-    )
-    visitor.run()
-    assert_errors(visitor, [])
-
-
-@pytest.mark.skipif(
-    sys.version_info < (3, 14),
-    reason='t-strings are only in Python 3.14+',
-)
-@pytest.mark.parametrize(
-    'code',
-    [
-        "x = t'{1\n}'",
-        'x = t"{1\n}"',
-        "x = tr'{1\n}'",
-    ],
-)
-def test_incorrectly_formatted_t_string(  # pragma: >=3.14 cover
-    parse_tokens,
-    assert_errors,
-    default_options,
-    code,
-):
-    """Ensures that multiline single-quote t-strings cause violations."""
-    tokens = parse_tokens(code)
+    tokens = parse_tokens(code.format(prefix))
     visitor = MultilineFormattedStringTokenVisitor(
         default_options,
         file_tokens=tokens,

@@ -138,7 +138,7 @@ class WrongFormatStringVisitor(base.BaseNodeVisitor):
                 )
             # check format complexity for nested JoinedStr
             is_format_complex = parent and (
-                strings.has_fstring_conversion(string_component)
+                strings.has_format_string_conversion(string_component)
                 or len(node.values) > 1
                 or not self._is_const_format_valid(string_component, parent)
             )

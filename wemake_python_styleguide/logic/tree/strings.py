@@ -19,7 +19,7 @@ def is_doc_string(node: ast.AST) -> bool:
     )
 
 
-def has_fstring_conversion(component: ast.AST) -> bool:
+def has_format_string_conversion(component: ast.AST) -> bool:
     """Checks whether formatted string component has a conversion specifier."""
     formatted_component = (
         get_closest_parent(component, (ast.FormattedValue, nodes.Interpolation))

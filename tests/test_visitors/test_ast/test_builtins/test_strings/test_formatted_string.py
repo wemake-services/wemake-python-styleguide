@@ -82,7 +82,7 @@ f_double_call_arg = "{0}'{{foo()(arg)}}'"
 f_single_chained_functions = "{0}'{{f1().f2()}}'"
 f_function_with_four_args = "{0}'{{func(arg1, arg2, arg3, arg4)}}'"
 f_method_with_four_args = "{0}'{{obj.meth(arg1, arg2, arg3, arg4)}}-post'"
-f_nested_string = """{0}'{{{0}"{{value}}"}}'"""
+f_nested_string = """{0}'{{{0}"{{value}}"}}'"""  # noqa: WPS322
 # Disallowed format specifiers
 f_format_var_multi = "{0}'pre {{value:{{fmt1}}{{fmt2}}}}'"
 f_format_var_chain = "{0}'{{value:{{fmt.attr.attr}}}}'"
@@ -116,7 +116,7 @@ f_format_assign_var_multi = "{0}'{{value=:{{fmt1}}{{fmt2}}}}'"
 # regression 1921
 f_string_comma_format = '{0}"Count={{count:,}}"'
 
-PREFIXES = [
+PREFIXES = (
     'f',
     pytest.param(
         't',
@@ -125,7 +125,7 @@ PREFIXES = [
             reason='t-strings are only in Python 3.14+',
         ),
     ),
-]
+)
 
 
 @pytest.mark.parametrize(

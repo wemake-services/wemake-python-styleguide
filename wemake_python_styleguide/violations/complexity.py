@@ -1207,10 +1207,12 @@ class TooComplexFormattedStringViolation(ASTViolation):
     .. versionadded:: 0.15.0
     .. versionchanged:: 1.6.0
         Complex format specifiers are forbidden.
+    .. versionchanged:: 1.8.0
+        Added ``t``-strings support.
 
     """
 
-    error_template = 'Found a too complex `f` string'
+    error_template = 'Found a too complex formatted string'
     code = 237
 
 
