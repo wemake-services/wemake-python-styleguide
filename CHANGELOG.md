@@ -22,7 +22,7 @@ Semantic versioning in our case means:
 ### AI features
 
 `wemake-python-styleguide` is crazy good at improving the agents' code quality.
-Use it in your workflows to make the final code simplier and more readable.
+Use it in your workflows to make the final code simpler and more readable.
 
 - Adds an optional MCP server for violation explanations, #3770
 - Adds `/wps` skill for agents, #3773
