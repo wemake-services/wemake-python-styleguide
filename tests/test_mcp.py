@@ -4,7 +4,7 @@ import pytest
 from mcp import Client
 from mcp.server import MCPServer
 
-from wemake_python_styleguide import mcp_server
+from wemake_python_styleguide import mcp
 from wemake_python_styleguide.cli.commands.explain import (
     message_formatter,
     violation_loader,
@@ -18,7 +18,7 @@ _VIOLATION_CODE = 123
 
 
 async def _assert_explanation_tool_response() -> None:
-    async with Client(mcp_server.mcp) as client:
+    async with Client(mcp.mcp) as client:
         response = await client.call_tool(
             'explain_violation',
             {'violation_code': 'WPS123'},
@@ -47,14 +47,14 @@ def test_explain_violation_rejects_unknown_code():
 
 def test_create_server_registers_explanation_tool():
     """The MCP server advertises the explanation tool."""
-    tools = asyncio.run(mcp_server.mcp.list_tools())
+    tools = asyncio.run(mcp.mcp.list_tools())
 
     assert [tool.name for tool in tools] == ['explain_violation']
 
 
 def test_server_uses_v2_sdk():
     """The MCP server uses the supported v2 server class."""
-    assert isinstance(mcp_server.mcp, MCPServer)
+    assert isinstance(mcp.mcp, MCPServer)
 
 
 def test_explanation_tool_over_mcp_protocol():

@@ -1,5 +1,3 @@
-"""Contains command implementation."""
-
 from typing import final
 
 from attrs import frozen
@@ -29,8 +27,8 @@ class ExplainCommand(AbstractCommand[ExplainCommandArgs]):
         """Run command."""
         try:
             message = service.explain_violation(args.violation_code)
-        except service.ViolationNotFoundError:
-            print_stderr(f'Violation "{args.violation_code}" not found')
+        except service.ViolationNotFoundError as exc:
+            print_stderr(str(exc))
             return 1
         print_stdout(message)
         return 0

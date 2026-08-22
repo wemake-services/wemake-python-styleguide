@@ -33,6 +33,7 @@ Semantic versioning in our case means:
 ### Misc
 
 - Adds `/wps` skill for agents, #3773
+- Improves `wps explain FOO` error message, when `FOO` is not found
 
 
 ## 1.7.1

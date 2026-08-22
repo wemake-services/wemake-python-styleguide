@@ -49,13 +49,13 @@ Install the optional dependency before starting the server:
 .. code:: console
 
    $ pip install 'wemake-python-styleguide[mcp]'
-   $ mcp run wemake_python_styleguide/mcp_server.py:mcp
+   $ mcp run wemake_python_styleguide/mcp.py:mcp
 
 The MCP SDK command-line tool can also open the server in the MCP Inspector:
 
 .. code:: console
 
-   $ mcp dev wemake_python_styleguide/mcp_server.py:mcp
+   $ mcp dev wemake_python_styleguide/mcp.py:mcp
 
 These commands use the standard input and output transport, which does not
 listen on a network port.
