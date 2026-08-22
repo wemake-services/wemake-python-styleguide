@@ -1,8 +1,6 @@
-import sys
-
 import pytest
 
-from wemake_python_styleguide.compat.constants import PY312
+from wemake_python_styleguide.compat.constants import PY312, PY314
 from wemake_python_styleguide.violations.best_practices import (
     CommentInFormattedStringViolation,
 )
@@ -21,7 +19,7 @@ PREFIXES = (
     pytest.param(
         't',
         marks=pytest.mark.skipif(
-            sys.version_info < (3, 14),
+            not PY314,
             reason='t-strings are only in Python 3.14+',
         ),
     ),
