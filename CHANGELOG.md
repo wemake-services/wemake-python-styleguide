@@ -19,11 +19,18 @@ Semantic versioning in our case means:
 
 ## 1.8.0 WIP
 
+### AI features
+
+`wemake-python-styleguide` is crazy good at improving the agents' code quality.
+Use it in your workflows to make the final code simplier and more readable.
+
+- Adds an optional MCP server for violation explanations, #3770
+- Adds `/wps` skill for agents, #3773
+
 ### Features
 
-- Adds `python3.15` official support
+- Adds `python3.15` official support, #3758
 - Adds `WPS482`: forbid lazy imports, #3639
-- Adds an optional MCP server for violation explanations, #3770
 - Adds `WPS483`: forbid `MappingProxyType` on `python3.15+`, #3762
 
 ### Bugfixes
@@ -32,8 +39,7 @@ Semantic versioning in our case means:
 
 ### Misc
 
-- Adds `/wps` skill for agents, #3773
-- Improves `wps explain FOO` error message, when `FOO` is not found
+- Improves `wps explain FOO` error message, when `FOO` is not found, #3775
 
 
 ## 1.7.1
@@ -49,9 +55,14 @@ Semantic versioning in our case means:
 
 ### Features
 
-- Extends `WPS365`: match with a single case statement is now also considered simplifiable. Match with simple sequence and mapping patterns are now also considered simplifiable
-- Extends `WPS349`: Slices with a trailing colon (empty step) like ``array[start:stop:]`` and ``array[start::]`` are now considered as redundant, #1071
-- Extends `WPS347`: imports aliased with names from ``--allowed-domain-names`` are now allowed, #3741
+- Extends `WPS365`: match with a single case statement
+  is now also considered simplifiable. Match with simple sequence
+  and mapping patterns are now also considered simplifiable, #3528
+- Extends `WPS349`: Slices with a trailing colon (empty step)
+  like ``array[start:stop:]`` and ``array[start::]``
+  are now considered as redundant, #1071
+- Extends `WPS347`: imports aliased with names
+  from ``--allowed-domain-names`` are now allowed, #3741
 
 
 ## 1.6.2
@@ -371,7 +382,7 @@ Our [GitHub Action](https://github.com/marketplace/actions/wemake-python-stylegu
 - Adds a new rule to forbid extra syntax in `match ...` subjects, #3217
 - Adds new `--allowed-module-metadata` and `--forbidden-module-metadata`
   configuration options for `WPS410`, #3060
-- Now `--allowed-domain-names` also affect `WPS11`
+- Now `--allowed-domain-names` also affect `WPS111`
   to allow custom short variable names, #2554
 - Adds support to run `wemake-python-styleguide` as a `pre-commit` hook, #2588
 - GitHub Action can now use `cwd:` parameter to specify
