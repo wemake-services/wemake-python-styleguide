@@ -17,6 +17,13 @@ Semantic versioning in our case means:
   change the client facing API, change code conventions significantly, etc.
 
 
+## WIP
+
+### Misc
+
+- Fixed claude skill definition and metadata
+
+
 ## 1.8.0 aka The Slop Slayer
 
 ### AI features

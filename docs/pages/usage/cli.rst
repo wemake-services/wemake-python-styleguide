@@ -41,7 +41,7 @@ MCP server
 .. versionadded:: 1.8.0
 
 The best way to use our MCP is to use our
-`/wps skill <https://github.com/wemake-services/wemake-python-styleguide/blob/master/.agents/skills/wps.md>`_
+`/wps skill <https://github.com/wemake-services/wemake-python-styleguide/blob/master/.agents/skills/wps/SKILL.md>`_
 for your agent, it contains all the information
 about installing and starting the MCP server.
 
