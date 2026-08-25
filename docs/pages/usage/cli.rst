@@ -44,7 +44,7 @@ AI features
 .. versionadded:: 1.8.0
 
 ``wemake-python-styleguide`` supports multiple AI features
-to help your agent writting the best possible Python code.
+to help your agent writing the best possible Python code.
 
 We support several different AI features for most of the agents / models.
 
