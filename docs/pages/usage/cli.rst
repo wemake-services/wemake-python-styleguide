@@ -51,7 +51,7 @@ We support several different AI features for most of the agents / models.
 Skill
 ~~~~~
 
-Install for any harness / provier,
+Install for any harness / provider,
 using `npx skills <https://github.com/vercel-labs/skills>`_:
 
 .. code:: console
