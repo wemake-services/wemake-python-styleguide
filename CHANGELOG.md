@@ -19,9 +19,13 @@ Semantic versioning in our case means:
 
 ## WIP
 
+### Bugfixes
+
+- Count overused str and bytes separately for `WPS226`, 3782
+
 ### Misc
 
-- Fixed claude skill definition and metadata
+- Fixed claude skill definition and metadata, #3780
 
 
 ## 1.8.0 aka The Slop Slayer

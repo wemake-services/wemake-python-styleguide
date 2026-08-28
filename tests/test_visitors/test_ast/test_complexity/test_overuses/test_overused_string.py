@@ -223,6 +223,38 @@ def test_string_overuse(
 @pytest.mark.parametrize(
     'strings',
     [
+        string_actions,
+    ],
+)
+@pytest.mark.parametrize(
+    'string_value',
+    [
+        '"same-string"',
+        '"GenericType[int, str]"',
+        '"{0}"',
+    ],
+)
+def test_string_overuse_bytes_and_str(
+    assert_errors,
+    parse_ast_tree,
+    default_options,
+    strings,
+    string_value,
+):
+    """Ensures that string and bytes are treated separately."""
+    bytes_value = f'b{string_value}'
+    tree = parse_ast_tree(
+        strings.format(bytes_value) + strings.format(string_value),
+    )
+    visitor = StringOveruseVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [OverusedStringViolation, OverusedStringViolation])
+
+
+@pytest.mark.parametrize(
+    'strings',
+    [
         string_function_type_annotations1,
         string_function_type_annotations2,
         string_class_type_annotations,

@@ -1,31 +1,24 @@
 import ast
 from collections import defaultdict
 from collections.abc import Callable
-from typing import ClassVar, TypeAlias, final
+from typing import ClassVar, TypeAlias, TypeVar, final
 
 from wemake_python_styleguide.compat import nodes
 from wemake_python_styleguide.compat.aliases import FunctionNodes
 from wemake_python_styleguide.logic import source, walk
 from wemake_python_styleguide.logic.complexity import overuses
 from wemake_python_styleguide.logic.tree import annotations
-from wemake_python_styleguide.types import AnyNodes, AnyTextPrimitive
+from wemake_python_styleguide.types import AnyNodes
 from wemake_python_styleguide.violations import complexity
-from wemake_python_styleguide.visitors import base, decorators
+from wemake_python_styleguide.visitors import base
 
 #: We use these types to store the number of nodes usage in different contexts.
 _Expressions: TypeAlias = defaultdict[str, list[ast.AST]]
 _FunctionExpressions: TypeAlias = defaultdict[ast.AST, _Expressions]
-_StringConstants: TypeAlias = frozenset[str | bytes]
+_StrOrBytes = TypeVar('_StrOrBytes', str, bytes)
 
 
 @final
-@decorators.alias(
-    'visit_any_string',
-    (
-        'visit_Str',
-        'visit_Bytes',
-    ),
-)
 class StringOveruseVisitor(base.BaseNodeVisitor):
     """
     Restricts repeated usage of the same string constant.
@@ -35,7 +28,7 @@ class StringOveruseVisitor(base.BaseNodeVisitor):
     comma, dot).
     """
 
-    _ignored_string_constants: ClassVar[_StringConstants] = frozenset(
+    _ignored_string_constants: ClassVar[frozenset[str]] = frozenset(
         (
             ' ',
             '.',
@@ -49,6 +42,10 @@ class StringOveruseVisitor(base.BaseNodeVisitor):
             "'",
             '/',
             '...',
+        ),
+    )
+    _ignored_bytes_constants: ClassVar[frozenset[bytes]] = frozenset(
+        (
             b'"',
             b"'",
             b'/',
@@ -65,22 +62,48 @@ class StringOveruseVisitor(base.BaseNodeVisitor):
     def __init__(self, *args, **kwargs) -> None:
         """Inits the counter for constants."""
         super().__init__(*args, **kwargs)
-        self._string_constants: defaultdict[
-            AnyTextPrimitive,
-            int,
-        ] = defaultdict(int)
+        self._string_constants: defaultdict[str, int] = defaultdict(int)
+        self._bytes_constants: defaultdict[bytes, int] = defaultdict(int)
 
         self._string_constants_first_node: defaultdict[
-            AnyTextPrimitive,
+            str,
+            ast.Constant,
+        ] = defaultdict(lambda: ast.Constant(value=None))
+        self._bytes_constants_first_node: defaultdict[
+            bytes,
             ast.Constant,
         ] = defaultdict(lambda: ast.Constant(value=None))
 
-    def visit_any_string(self, node: ast.Constant) -> None:
+    def visit_Str(self, node: ast.Constant) -> None:
         """Restricts to over-use string constants."""
-        self._check_string_constant(node)
+        self._check_constant(
+            node,
+            str,
+            self._ignored_string_constants,
+            self._string_constants,
+            self._string_constants_first_node,
+        )
         self.generic_visit(node)
 
-    def _check_string_constant(self, node: ast.Constant) -> None:
+    def visit_Bytes(self, node: ast.Constant) -> None:
+        """Restricts to over-use bytes constants."""
+        self._check_constant(
+            node,
+            bytes,
+            self._ignored_bytes_constants,
+            self._bytes_constants,
+            self._bytes_constants_first_node,
+        )
+        self.generic_visit(node)
+
+    def _check_constant(
+        self,
+        node: ast.Constant,
+        typechk: type[_StrOrBytes],
+        ignored_constants: frozenset[_StrOrBytes],
+        constants: defaultdict[_StrOrBytes, int],
+        first_nodes: defaultdict[_StrOrBytes, ast.Constant],
+    ) -> None:
         if annotations.is_annotation(node):
             return
 
@@ -94,25 +117,39 @@ class StringOveruseVisitor(base.BaseNodeVisitor):
         # Some strings are so common, that it makes no sense to check if
         # they are overused.
         if (
-            not isinstance(node.value, AnyTextPrimitive)
-            or node.value in self._ignored_string_constants
+            not isinstance(node.value, typechk)
+            or node.value in ignored_constants
         ):
             return
 
-        if node.value not in self._string_constants_first_node:
-            self._string_constants_first_node[node.value] = node
+        if node.value not in first_nodes:
+            first_nodes[node.value] = node
 
-        self._string_constants[node.value] += 1
+        constants[node.value] += 1
 
     def _post_visit(self) -> None:
-        for string, usage_count in self._string_constants.items():
+        self._post_visit_violations(
+            self._string_constants,
+            self._string_constants_first_node,
+        )
+        self._post_visit_violations(
+            self._bytes_constants,
+            self._bytes_constants_first_node,
+        )
+
+    def _post_visit_violations(
+        self,
+        constants: defaultdict[_StrOrBytes, int],
+        first_nodes: defaultdict[_StrOrBytes, ast.Constant],
+    ) -> None:
+        for string, usage_count in constants.items():
             if usage_count > self.options.max_string_usages:
                 string_value = source.render_string(string)
                 self.add_violation(
                     complexity.OverusedStringViolation(
                         text=f'{string_value!r} {usage_count}',
                         baseline=self.options.max_string_usages,
-                        node=self._string_constants_first_node[string],
+                        node=first_nodes[string],
                     ),
                 )
 
