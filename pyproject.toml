@@ -65,7 +65,7 @@ pytest-cov = "^7.0"
 pytest-randomly = "^4.1"
 pytest-xdist = "^3.8"
 covdefaults = "^2.3"
-syrupy = "^5.0"
+syrupy = ">=5,<7"
 hypothesis = "^6.164"
 hypothesmith = "^0.3"
 
