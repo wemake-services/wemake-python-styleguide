@@ -22,6 +22,7 @@ Semantic versioning in our case means:
 ### Bugfixes
 
 - Count overused str and bytes separately for `WPS226`, 3782
+- Adds direct links to violations when searching by code, #3790
 
 ### Misc
 

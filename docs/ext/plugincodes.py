@@ -99,6 +99,14 @@ class PlugincodesDirective(SphinxDirective):
             'exclude-members': 'error_template,code',
         }
         for violation_class in violation_classes:
+            self.env.domains.standard_domain.note_object(
+                'violation-code',
+                violation_class.full_code,
+                (
+                    f'{violation_class.__module__}.'
+                    f'{violation_class.__qualname__}'
+                ),
+            )
             local_autodoc = AutodocDirective(
                 name='autoclass',
                 arguments=[violation_class.__name__],
@@ -161,4 +169,9 @@ def setup(app: Sphinx) -> None:
     """Setup for sphinx extension."""
     app.setup_extension('sphinx.ext.autosummary')
     app.setup_extension('sphinx.ext.autodoc')
+    app.add_object_type(
+        'violation-code',
+        'violation',
+        objname='violation code',
+    )
     app.add_directive('plugincodes', PlugincodesDirective)
