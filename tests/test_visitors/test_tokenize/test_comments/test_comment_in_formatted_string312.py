@@ -84,7 +84,7 @@ foo = r{0}"""test{{a # comment
 '''
 
 rfstring_with_comment_triple_single_quotes = """
-foo = rf'''test{{a # comment
+foo = r{0}'''test{{a # comment
 }}'''
 """
 

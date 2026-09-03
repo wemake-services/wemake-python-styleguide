@@ -111,8 +111,8 @@ y = f'{pattern}-postfix'
 
 tstring_same_prefix1 = pytest.param(
     """
-    x = f'Hello, {pattern}'
-    y = f'Hello, {pattern}'
+    x = t'Hello, {pattern}'
+    y = t'Hello, {pattern}'
     """,
     marks=pytest.mark.skipif(
         not PY314,
@@ -122,8 +122,8 @@ tstring_same_prefix1 = pytest.param(
 
 tstring_same_prefix2 = pytest.param(
     """
-    x = f'{pattern}-postfix'
-    y = f'{pattern}-postfix'
+    x = t'{pattern}-postfix'
+    y = t'{pattern}-postfix'
     """,
     marks=pytest.mark.skipif(
         not PY314,
