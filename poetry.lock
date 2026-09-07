@@ -1286,14 +1286,14 @@ files = [
 
 [[package]]
 name = "import-linter"
-version = "2.13"
+version = "2.14"
 description = "Lint your Python architecture"
 optional = false
 python-versions = ">=3.10"
 groups = ["dev"]
 files = [
-    {file = "import_linter-2.13-py3-none-any.whl", hash = "sha256:c0372e7ee5e15657bc06a8e841445e13237afd738a672d26863dc927af9f0bf5"},
-    {file = "import_linter-2.13.tar.gz", hash = "sha256:13af4a1d6b06044c58ea784e8732fd7fe48eec821a75feb4d6a1a2de36dd5c27"},
+    {file = "import_linter-2.14-py3-none-any.whl", hash = "sha256:0039771a991f9a309055ac6fa18340b0024d0bb88722f9dd2834f0d930a2224c"},
+    {file = "import_linter-2.14.tar.gz", hash = "sha256:8e6304d9a9ddfbd39f6ac990710d95aaf9ac71eb1ba81ac8ce53e1ef2f9773d3"},
 ]
 
 [package.dependencies]
