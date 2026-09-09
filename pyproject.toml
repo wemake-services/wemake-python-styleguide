@@ -62,7 +62,7 @@ mcp = ["mcp"]
 [tool.poetry.group.dev.dependencies]
 pytest = "^9.1"
 pytest-cov = "^7.0"
-pytest-randomly = "^4.1"
+pytest-randomly = ">=4.1,<6.0"
 pytest-xdist = "^3.8"
 covdefaults = "^2.3"
 syrupy = ">=5,<7"
