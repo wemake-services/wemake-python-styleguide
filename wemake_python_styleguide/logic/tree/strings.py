@@ -1,6 +1,7 @@
 import ast
 
 from wemake_python_styleguide.compat import nodes
+from wemake_python_styleguide.logic.nodes import get_context, get_parent
 from wemake_python_styleguide.logic.walk import get_closest_parent
 
 
@@ -17,6 +18,20 @@ def is_doc_string(node: ast.AST) -> bool:
         node.value.value,
         str,
     )
+
+
+def is_doc_string_value(node: ast.AST) -> bool:
+    """
+    Tells whether or not the given node is a docstring's own constant.
+
+    While :func:`is_doc_string` works with statements,
+    this one works with the string constant inside of them.
+    """
+    statement = get_parent(node)
+    if statement is None or not is_doc_string(statement):
+        return False
+    context = get_context(statement)
+    return context is not None and context.body[0] is statement
 
 
 def has_format_string_conversion(component: ast.AST) -> bool:

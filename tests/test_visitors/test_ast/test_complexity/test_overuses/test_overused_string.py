@@ -131,6 +131,44 @@ tstring_same_prefix2 = pytest.param(
     ),
 )
 
+# See:
+# https://github.com/wemake-services/wemake-python-styleguide/issues/3803
+module_docstring = """
+{0}
+"""
+
+function_docstrings = """
+def first():
+    {0}
+
+def second():
+    {0}
+
+class Some:
+    {0}
+
+    def method(self):
+        {0}
+"""
+
+not_a_docstring = '''
+def first():
+    """Docs."""
+    {0}
+
+def second():
+    """Docs."""
+    {0}
+
+def third():
+    """Docs."""
+    {0}
+
+def fourth():
+    """Docs."""
+    {0}
+'''
+
 EXPECTED_LOCATION = (2, 8)
 
 
@@ -328,6 +366,60 @@ def test_common_strings_allowed(
     visitor.run()
 
     assert_errors(visitor, [])
+
+
+@pytest.mark.parametrize(
+    'strings',
+    [
+        module_docstring,
+        function_docstrings,
+    ],
+)
+@pytest.mark.parametrize(
+    'string_value',
+    [
+        '"""Docstring."""',
+        '"Docstring."',
+    ],
+)
+def test_docstrings_not_counted(
+    assert_errors,
+    parse_ast_tree,
+    options,
+    strings,
+    string_value,
+):
+    """Ensures that docstrings do not count against the overuse limit."""
+    tree = parse_ast_tree(strings.format(string_value))
+
+    option_values = options(max_string_usages=0)
+    visitor = StringOveruseVisitor(option_values, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])
+
+
+@pytest.mark.parametrize(
+    'string_value',
+    [
+        '"""Not a docstring."""',
+        '"Not a docstring."',
+    ],
+)
+def test_strings_after_docstrings_counted(
+    assert_errors,
+    parse_ast_tree,
+    options,
+    string_value,
+):
+    """Ensures that only the first string in a body is a docstring."""
+    tree = parse_ast_tree(not_a_docstring.format(string_value))
+
+    option_values = options(max_string_usages=0)
+    visitor = StringOveruseVisitor(option_values, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [OverusedStringViolation])
 
 
 @pytest.mark.parametrize(

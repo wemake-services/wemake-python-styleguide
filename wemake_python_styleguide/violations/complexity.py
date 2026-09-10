@@ -820,6 +820,9 @@ class OverusedStringViolation(MaybeASTViolation):
     single space `' '`, new line `'\n'`, `'\r\n'` and tabulator `'\t'`
     do not count against string literal overuse limit.
 
+    Docstrings are not counted as well,
+    because they document the code and cannot be deduplicated.
+
     The violation points to the first occurrence of the overused string literal.
 
     Reasoning:
