@@ -169,6 +169,50 @@ def fourth():
     {0}
 '''
 
+# See:
+# https://github.com/wemake-services/wemake-python-styleguide/issues/3805
+module_attribute_docstrings = """
+first = 1
+{0}
+
+second: int = 2
+{0}
+
+third: int
+{0}
+"""
+
+class_attribute_docstrings = """
+class Some:
+    first = 1
+    {0}
+
+    second: int = 2
+    {0}
+
+    def __init__(self):
+        self.third = 3
+        {0}
+"""
+
+not_an_attribute_docstring = """
+def first():
+    print(1)
+    {0}
+
+def second():
+    print(2)
+    {0}
+
+def third():
+    print(3)
+    {0}
+
+def fourth():
+    print(4)
+    {0}
+"""
+
 EXPECTED_LOCATION = (2, 8)
 
 
@@ -373,6 +417,8 @@ def test_common_strings_allowed(
     [
         module_docstring,
         function_docstrings,
+        module_attribute_docstrings,
+        class_attribute_docstrings,
     ],
 )
 @pytest.mark.parametrize(
@@ -400,20 +446,28 @@ def test_docstrings_not_counted(
 
 
 @pytest.mark.parametrize(
+    'strings',
+    [
+        not_a_docstring,
+        not_an_attribute_docstring,
+    ],
+)
+@pytest.mark.parametrize(
     'string_value',
     [
         '"""Not a docstring."""',
         '"Not a docstring."',
     ],
 )
-def test_strings_after_docstrings_counted(
+def test_strings_in_other_places_counted(
     assert_errors,
     parse_ast_tree,
     options,
+    strings,
     string_value,
 ):
-    """Ensures that only the first string in a body is a docstring."""
-    tree = parse_ast_tree(not_a_docstring.format(string_value))
+    """Ensures that strings documenting nothing are still counted."""
+    tree = parse_ast_tree(strings.format(string_value))
 
     option_values = options(max_string_usages=0)
     visitor = StringOveruseVisitor(option_values, tree=tree)

@@ -1,6 +1,8 @@
 import ast
+import itertools
 
 from wemake_python_styleguide.compat import nodes
+from wemake_python_styleguide.compat.aliases import AssignNodes
 from wemake_python_styleguide.logic.nodes import get_context, get_parent
 from wemake_python_styleguide.logic.walk import get_closest_parent
 
@@ -26,12 +28,31 @@ def is_doc_string_value(node: ast.AST) -> bool:
 
     While :func:`is_doc_string` works with statements,
     this one works with the string constant inside of them.
+
+    Attribute docstrings count as well: PEP 258 documents
+    an assignment with a string placed right after it.
     """
     statement = get_parent(node)
     if statement is None or not is_doc_string(statement):
         return False
     context = get_context(statement)
-    return context is not None and context.body[0] is statement
+    return context is not None and _is_doc_string_place(
+        context.body,
+        statement,
+    )
+
+
+def _is_doc_string_place(
+    body: list[ast.stmt],
+    statement: ast.AST,
+) -> bool:
+    """Docstrings open a definition's body or follow an assignment."""
+    if body[0] is statement:
+        return True
+    return any(
+        current is statement and isinstance(previous, AssignNodes)
+        for previous, current in itertools.pairwise(body)
+    )
 
 
 def has_format_string_conversion(component: ast.AST) -> bool:
