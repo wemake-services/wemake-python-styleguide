@@ -7,7 +7,7 @@ from wemake_python_styleguide.compat import nodes
 from wemake_python_styleguide.compat.aliases import FunctionNodes
 from wemake_python_styleguide.logic import source, walk
 from wemake_python_styleguide.logic.complexity import overuses
-from wemake_python_styleguide.logic.tree import annotations
+from wemake_python_styleguide.logic.tree import annotations, strings
 from wemake_python_styleguide.types import AnyNodes
 from wemake_python_styleguide.violations import complexity
 from wemake_python_styleguide.visitors import base
@@ -105,6 +105,10 @@ class StringOveruseVisitor(base.BaseNodeVisitor):
         first_nodes: defaultdict[_StrOrBytes, ast.Constant],
     ) -> None:
         if annotations.is_annotation(node):
+            return
+
+        # Docstrings are documentation, not real string usages:
+        if strings.is_doc_string_value(node):
             return
 
         # Part of the f-string or t-string:
