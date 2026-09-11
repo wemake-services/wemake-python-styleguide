@@ -197,7 +197,7 @@ class Some:
 
 not_an_attribute_docstring = """
 def first():
-    print(1)
+    x = y = 1
     {0}
 
 def second():
