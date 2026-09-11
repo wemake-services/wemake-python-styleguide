@@ -3,12 +3,13 @@ import itertools
 from typing import Final
 
 from wemake_python_styleguide.compat import nodes
-from wemake_python_styleguide.compat.aliases import AssignNodes
+from wemake_python_styleguide.compat.aliases import FunctionNodes
 from wemake_python_styleguide.logic.nodes import get_context, get_parent
 from wemake_python_styleguide.logic.walk import get_closest_parent
+from wemake_python_styleguide.types import ContextNodes
 
-#: Nodes that a docstring can document by being placed right after them.
-_DocumentedNodes: Final = (*AssignNodes, nodes.TypeAlias)
+#: Targets that define an attribute a docstring can document.
+_AttributeTargets: Final = (ast.Name, ast.Attribute)
 
 
 def is_doc_string(node: ast.AST) -> bool:
@@ -34,7 +35,7 @@ def is_doc_string_value(node: ast.AST) -> bool:
     this one works with the string constant inside of them.
 
     Attribute docstrings count as well: PEP 258 documents
-    an assignment with a string placed right after it.
+    an attribute with a string placed right after it.
     Type aliases are documented the same way, see
     https://discuss.python.org/t/docstrings-for-type-aliases/108901
     """
@@ -42,23 +43,42 @@ def is_doc_string_value(node: ast.AST) -> bool:
     if statement is None or not is_doc_string(statement):
         return False
     context = get_context(statement)
-    return context is not None and _is_doc_string_place(
-        context.body,
-        statement,
-    )
+    return context is not None and _is_doc_string_place(context, statement)
 
 
 def _is_doc_string_place(
-    body: list[ast.stmt],
+    context: ContextNodes,
     statement: ast.AST,
 ) -> bool:
     """Docstrings open a definition's body or follow what they document."""
-    if body[0] is statement:
+    if context.body[0] is statement:
         return True
     return any(
-        current is statement and isinstance(previous, _DocumentedNodes)
-        for previous, current in itertools.pairwise(body)
+        current is statement and _is_documented(previous, context)
+        for previous, current in itertools.pairwise(context.body)
     )
+
+
+def _is_documented(statement: ast.stmt, context: ContextNodes) -> bool:
+    """Only type aliases and single attribute definitions are documented."""
+    targets = _get_assign_targets(statement)
+    if not targets:  # `type X = int` names things without a target
+        return isinstance(statement, nodes.TypeAlias)
+    if len(targets) != 1:  # `x = y = 1` defines no single attribute
+        return False
+    if isinstance(context, FunctionNodes):
+        # Locals are not attributes, only `self.some = 1` is one.
+        return isinstance(targets[0], ast.Attribute)
+    return isinstance(targets[0], _AttributeTargets)
+
+
+def _get_assign_targets(statement: ast.stmt) -> list[ast.expr]:
+    """Returns what the statement assigns to, if it assigns at all."""
+    if isinstance(statement, ast.Assign):
+        return statement.targets
+    if isinstance(statement, ast.AnnAssign):
+        return [statement.target]
+    return []
 
 
 def has_format_string_conversion(component: ast.AST) -> bool:
