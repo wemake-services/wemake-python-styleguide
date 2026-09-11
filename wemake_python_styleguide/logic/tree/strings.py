@@ -3,7 +3,8 @@ import itertools
 from typing import Final
 
 from wemake_python_styleguide.compat import nodes
-from wemake_python_styleguide.compat.aliases import FunctionNodes
+from wemake_python_styleguide.compat.aliases import AssignNodes, FunctionNodes
+from wemake_python_styleguide.compat.functions import get_assign_targets
 from wemake_python_styleguide.logic.nodes import get_context, get_parent
 from wemake_python_styleguide.logic.walk import get_closest_parent
 from wemake_python_styleguide.types import ContextNodes
@@ -61,24 +62,15 @@ def _is_doc_string_place(
 
 def _is_documented(statement: ast.stmt, context: ContextNodes) -> bool:
     """Only type aliases and single attribute definitions are documented."""
-    targets = _get_assign_targets(statement)
-    if not targets:  # `type X = int` names things without a target
-        return isinstance(statement, nodes.TypeAlias)
+    if not isinstance(statement, AssignNodes):
+        return isinstance(statement, nodes.TypeAlias)  # `type X = int`
+    targets = get_assign_targets(statement)
     if len(targets) != 1:  # `x = y = 1` defines no single attribute
         return False
     if isinstance(context, FunctionNodes):
         # Locals are not attributes, only `self.some = 1` is one.
         return isinstance(targets[0], ast.Attribute)
     return isinstance(targets[0], _AttributeTargets)
-
-
-def _get_assign_targets(statement: ast.stmt) -> list[ast.expr]:
-    """Returns what the statement assigns to, if it assigns at all."""
-    if isinstance(statement, ast.Assign):
-        return statement.targets
-    if isinstance(statement, ast.AnnAssign):
-        return [statement.target]
-    return []
 
 
 def has_format_string_conversion(component: ast.AST) -> bool:
