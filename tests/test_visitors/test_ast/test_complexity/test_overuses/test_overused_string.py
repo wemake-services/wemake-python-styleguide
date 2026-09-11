@@ -205,7 +205,7 @@ def second():
     {0}
 
 def third():
-    print(3)
+    y: int = 0
     {0}
 
 def fourth():
