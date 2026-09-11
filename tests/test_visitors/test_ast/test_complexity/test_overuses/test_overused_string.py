@@ -201,7 +201,7 @@ def first():
     {0}
 
 def second():
-    print(2)
+    x, y = call()
     {0}
 
 def third():
