@@ -209,7 +209,7 @@ def third():
     {0}
 
 def fourth():
-    print(4)
+    x = 1
     {0}
 """
 
