@@ -1,6 +1,6 @@
 import pytest
 
-from wemake_python_styleguide.compat.constants import PY314
+from wemake_python_styleguide.compat.constants import PY312, PY314
 from wemake_python_styleguide.violations.complexity import (
     OverusedStringViolation,
 )
@@ -213,6 +213,36 @@ def fourth():
     {0}
 """
 
+# Type aliases are documented the very same way, see:
+# https://discuss.python.org/t/docstrings-for-type-aliases/108901
+explicit_type_alias_docstrings = """
+Timeout: TypeAlias = float
+{0}
+
+Retries: TypeAlias = int
+{0}
+
+Backoff: TypeAlias = float
+{0}
+"""
+
+type_alias_docstrings = pytest.param(
+    """
+    type Timeout = float | None
+    {0}
+
+    type Retries = int
+    {0}
+
+    type Backoff = float
+    {0}
+    """,
+    marks=pytest.mark.skipif(
+        not PY312,
+        reason='`type` aliases are only in Python 3.12+',
+    ),
+)
+
 EXPECTED_LOCATION = (2, 8)
 
 
@@ -419,6 +449,8 @@ def test_common_strings_allowed(
         function_docstrings,
         module_attribute_docstrings,
         class_attribute_docstrings,
+        explicit_type_alias_docstrings,
+        type_alias_docstrings,
     ],
 )
 @pytest.mark.parametrize(

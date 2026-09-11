@@ -1,10 +1,14 @@
 import ast
 import itertools
+from typing import Final
 
 from wemake_python_styleguide.compat import nodes
 from wemake_python_styleguide.compat.aliases import AssignNodes
 from wemake_python_styleguide.logic.nodes import get_context, get_parent
 from wemake_python_styleguide.logic.walk import get_closest_parent
+
+#: Nodes that a docstring can document by being placed right after them.
+_DocumentedNodes: Final = (*AssignNodes, nodes.TypeAlias)
 
 
 def is_doc_string(node: ast.AST) -> bool:
@@ -31,6 +35,8 @@ def is_doc_string_value(node: ast.AST) -> bool:
 
     Attribute docstrings count as well: PEP 258 documents
     an assignment with a string placed right after it.
+    Type aliases are documented the same way, see
+    https://discuss.python.org/t/docstrings-for-type-aliases/108901
     """
     statement = get_parent(node)
     if statement is None or not is_doc_string(statement):
@@ -46,11 +52,11 @@ def _is_doc_string_place(
     body: list[ast.stmt],
     statement: ast.AST,
 ) -> bool:
-    """Docstrings open a definition's body or follow an assignment."""
+    """Docstrings open a definition's body or follow what they document."""
     if body[0] is statement:
         return True
     return any(
-        current is statement and isinstance(previous, AssignNodes)
+        current is statement and isinstance(previous, _DocumentedNodes)
         for previous, current in itertools.pairwise(body)
     )
 

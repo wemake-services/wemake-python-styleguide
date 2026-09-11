@@ -822,8 +822,9 @@ class OverusedStringViolation(MaybeASTViolation):
 
     Docstrings are not counted as well,
     because they document the code and cannot be deduplicated.
-    This includes attribute docstrings from PEP 258,
-    the ones placed right after an assignment.
+    This includes attribute docstrings from PEP 258
+    and type alias docstrings,
+    the ones placed right after an assignment or a ``type`` statement.
 
     The violation points to the first occurrence of the overused string literal.
 
