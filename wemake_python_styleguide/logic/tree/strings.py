@@ -1,16 +1,13 @@
 import ast
 import itertools
-from typing import Final
 
 from wemake_python_styleguide.compat import nodes
 from wemake_python_styleguide.compat.aliases import AssignNodes, FunctionNodes
 from wemake_python_styleguide.compat.functions import get_assign_targets
 from wemake_python_styleguide.logic.nodes import get_context, get_parent
+from wemake_python_styleguide.logic.tree.attributes import is_special_attr
 from wemake_python_styleguide.logic.walk import get_closest_parent
 from wemake_python_styleguide.types import ContextNodes
-
-#: Targets that define an attribute a docstring can document.
-_AttributeTargets: Final = (ast.Name, ast.Attribute)
 
 
 def is_doc_string(node: ast.AST) -> bool:
@@ -67,10 +64,14 @@ def _is_documented(statement: ast.stmt, context: ContextNodes) -> bool:
     targets = get_assign_targets(statement)
     if len(targets) != 1:  # `x = y = 1` defines no single attribute
         return False
+    target = targets[0]
     if isinstance(context, FunctionNodes):
-        # Locals are not attributes, only `self.some = 1` is one.
-        return isinstance(targets[0], ast.Attribute)
-    return isinstance(targets[0], _AttributeTargets)
+        # Locals are not attributes. Only `self.some = 1` defines one,
+        # while `x.some = 1` documents an attribute of some other object.
+        return isinstance(target, ast.Attribute) and is_special_attr(target)
+    # Modules and classes define their attributes by plain names,
+    # `x.some = 1` here belongs to `x`, not to this module or class.
+    return isinstance(target, ast.Name)
 
 
 def has_format_string_conversion(component: ast.AST) -> bool:

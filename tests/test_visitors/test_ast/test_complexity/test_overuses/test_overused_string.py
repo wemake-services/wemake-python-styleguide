@@ -213,6 +213,26 @@ def fourth():
     {0}
 """
 
+# `x.some = 1` defines an attribute of `x`, not of the module, the class,
+# or the instance we are in. So, there's nothing here to document.
+foreign_attribute_docstrings = """
+x.some = 1
+{0}
+
+def first():
+    x.some = 1
+    {0}
+
+class Some:
+    def second(self, x):
+        x.some = 1
+        {0}
+
+    def third(self):
+        self.some.other = 1
+        {0}
+"""
+
 # Type aliases are documented the very same way, see:
 # https://discuss.python.org/t/docstrings-for-type-aliases/108901
 explicit_type_alias_docstrings = """
@@ -482,6 +502,7 @@ def test_docstrings_not_counted(
     [
         not_a_docstring,
         not_an_attribute_docstring,
+        foreign_attribute_docstrings,
     ],
 )
 @pytest.mark.parametrize(
