@@ -23,6 +23,7 @@ Semantic versioning in our case means:
 
 - Count overused str and bytes separately for `WPS226`, 3782
 - Do not count docstrings for `WPS226`, #3803
+- Do not count attribute and type alias docstrings for `WPS226`, #3805
 - Adds direct links to violations when searching by code, #3790
 
 ### Misc

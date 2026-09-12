@@ -1,8 +1,13 @@
 import ast
+import itertools
 
 from wemake_python_styleguide.compat import nodes
+from wemake_python_styleguide.compat.aliases import AssignNodes, FunctionNodes
+from wemake_python_styleguide.compat.functions import get_assign_targets
 from wemake_python_styleguide.logic.nodes import get_context, get_parent
+from wemake_python_styleguide.logic.tree.attributes import is_special_attr
 from wemake_python_styleguide.logic.walk import get_closest_parent
+from wemake_python_styleguide.types import ContextNodes
 
 
 def is_doc_string(node: ast.AST) -> bool:
@@ -26,12 +31,47 @@ def is_doc_string_value(node: ast.AST) -> bool:
 
     While :func:`is_doc_string` works with statements,
     this one works with the string constant inside of them.
+
+    Attribute docstrings count as well: PEP 258 documents
+    an attribute with a string placed right after it.
+    Type aliases are documented the same way, see
+    https://discuss.python.org/t/docstrings-for-type-aliases/108901
     """
     statement = get_parent(node)
     if statement is None or not is_doc_string(statement):
         return False
     context = get_context(statement)
-    return context is not None and context.body[0] is statement
+    return context is not None and _is_doc_string_place(context, statement)
+
+
+def _is_doc_string_place(
+    context: ContextNodes,
+    statement: ast.AST,
+) -> bool:
+    """Docstrings open a definition's body or follow what they document."""
+    if context.body[0] is statement:
+        return True
+    return any(
+        current is statement and _is_documented(previous, context)
+        for previous, current in itertools.pairwise(context.body)
+    )
+
+
+def _is_documented(statement: ast.stmt, context: ContextNodes) -> bool:
+    """Only type aliases and single attribute definitions are documented."""
+    if not isinstance(statement, AssignNodes):
+        return isinstance(statement, nodes.TypeAlias)  # `type X = int`
+    targets = get_assign_targets(statement)
+    if len(targets) != 1:  # `x = y = 1` defines no single attribute
+        return False
+    target = targets[0]
+    if isinstance(context, FunctionNodes):
+        # Locals are not attributes. Only `self.some = 1` defines one,
+        # while `x.some = 1` documents an attribute of some other object.
+        return isinstance(target, ast.Attribute) and is_special_attr(target)
+    # Modules and classes define their attributes by plain names,
+    # `x.some = 1` here belongs to `x`, not to this module or class.
+    return isinstance(target, ast.Name)
 
 
 def has_format_string_conversion(component: ast.AST) -> bool:
