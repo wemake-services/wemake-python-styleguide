@@ -2,30 +2,26 @@
 build-backend = "poetry.core.masonry.api"
 requires = [ "poetry-core>=2.2" ]
 
+
 [tool.poetry]
 name = "wemake-python-styleguide"
-version = "1.8.0"
+version = "1.8.1"
 description = "The strictest and most opinionated python linter ever"
 license = "MIT"
-requires-poetry = ">=2.4"
-
 authors = [
   "Nikita Sobolev <mail@sobolevn.me>",
 ]
-
 readme = "README.md"
-
 keywords = [
-  "flake8",
-  "flake8-plugin",
-  "flake8-formatter",
-  "linter",
-  "wemake.services",
-  "styleguide",
   "code quality",
+  "flake8",
+  "flake8-formatter",
+  "flake8-plugin",
+  "linter",
   "pycqa",
+  "styleguide",
+  "wemake.services",
 ]
-
 classifiers = [
   "Development Status :: 5 - Production/Stable",
   "Environment :: Console",
@@ -36,11 +32,50 @@ classifiers = [
   "Topic :: Software Development :: Quality Assurance",
   "Typing :: Typed",
 ]
+requires-poetry = ">=2.4"
 
-[tool.poetry.urls]
-Homepage = "https://wemake-python-styleguide.rtfd.io"
-Repository = "https://github.com/wemake-services/wemake-python-styleguide"
-Funding = "https://opencollective.com/wemake-python-styleguide"
+[tool.poetry.dependencies]
+python = "^3.10"
+attrs = "*"
+flake8 = "^7.3"
+mcp = { version = "^2.0", extras = [ "cli" ], optional = true }
+pygments = "^2.19"
+
+[tool.poetry.group.dev.dependencies]
+astpath = "^0.9"
+covdefaults = "^2.3"
+hypothesis = "^6.164"
+hypothesmith = "^0.3"
+import-linter = "^2.10"
+lxml = "^6.0"
+mypy = "^2.3"
+nbqa = "^1.2"
+pytest = "^9.1"
+pytest-cov = "^7.0"
+pytest-randomly = ">=4.1,<6.0"
+pytest-xdist = "^3.8"
+ruff = "^0.16"
+syrupy = ">=5,<7"
+types-flake8 = "^7.3"
+
+[tool.poetry.group.docs]
+optional = true
+
+[tool.poetry.group.docs.dependencies]
+added-value = "^0.24"
+furo = "^2025.12"
+myst-parser = "^4.0"
+sphinx = "^8.1"
+sphinx-autodoc-typehints = "^3.0"
+sphinx-llms-txt = "^0.7"
+sphinxcontrib-mermaid = ">=1,<3"
+tomli = "^2.0"
+
+[tool.poetry.extras]
+mcp = [ "mcp" ]
+
+[tool.poetry.scripts]
+wps = "wemake_python_styleguide.cli.cli_app:main"
 
 [tool.poetry.plugins."flake8.extension"]
 WPS = "wemake_python_styleguide.checker:Checker"
@@ -48,56 +83,13 @@ WPS = "wemake_python_styleguide.checker:Checker"
 [tool.poetry.plugins."flake8.report"]
 wemake = "wemake_python_styleguide.formatter:WemakeFormatter"
 
-[tool.poetry.dependencies]
-python = "^3.10"
-
-flake8 = "^7.3"
-attrs = "*"
-pygments = "^2.19"
-mcp = { version = "^2.0", extras = ["cli"], optional = true }
-
-[tool.poetry.extras]
-mcp = ["mcp"]
-
-[tool.poetry.group.dev.dependencies]
-pytest = "^9.1"
-pytest-cov = "^7.0"
-pytest-randomly = ">=4.1,<6.0"
-pytest-xdist = "^3.8"
-covdefaults = "^2.3"
-syrupy = ">=5,<7"
-hypothesis = "^6.164"
-hypothesmith = "^0.3"
-
-mypy = "^2.3"
-types-flake8 = "^7.3"
-
-import-linter = "^2.10"
-
-astpath = "^0.9"
-lxml = "^6.0"
-nbqa = "^1.2"
-ruff = "^0.16"
-
-[tool.poetry.group.docs]
-optional = true
-
-[tool.poetry.group.docs.dependencies]
-sphinx = "^8.1"
-sphinx-autodoc-typehints = "^3.0"
-sphinxcontrib-mermaid = ">=1,<3"
-sphinx-llms-txt = "^0.7"
-furo = "^2025.12"
-added-value = "^0.24"
-tomli = "^2.0"
-myst-parser = "^4.0"
+[tool.poetry.urls]
+Funding = "https://opencollective.com/wemake-python-styleguide"
+Homepage = "https://wemake-python-styleguide.rtfd.io"
+Repository = "https://github.com/wemake-services/wemake-python-styleguide"
 
 
 [tool.ruff]
-# Ruff config: https://docs.astral.sh/ruff/settings
-preview = true
-fix = true
-output-prefer-rule-codes = true
 target-version = "py310"
 line-length = 80
 extend-exclude = [
@@ -105,11 +97,27 @@ extend-exclude = [
   "tests/**/__snapshots__/**",
   "tests/fixtures/**",
 ]
+# Ruff config: https://docs.astral.sh/ruff/settings
+preview = true
+fix = true
+output-prefer-rule-codes = true
 
 [tool.ruff.format]
 quote-style = "single"
 # This is only required because we have invalid on-purpose code in docstrings:
 docstring-code-format = false
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*.py" = [
+  "S101", # asserts
+  "S105", # hardcoded passwords
+  "S404", # subprocess calls are for tests
+  "S603", # do not require `shell=True`
+  "S607", # partial executable paths
+]
+"wemake_python_styleguide/compat/nodes.py" = [ "ICN003", "PLC0414" ]
+"wemake_python_styleguide/types.py" = [ "D102" ]
+"wemake_python_styleguide/visitors/ast/*.py" = [ "N802" ]
 
 [tool.ruff.lint]
 select = [
@@ -154,7 +162,7 @@ select = [
   "YTT",  # flake8-2020
 ]
 ignore = [
-  "A005",   # allow to shadow stdlib and builtin module names
+  "A005",    # allow to shadow stdlib and builtin module names
   # Different doc rules that we don't really care about:
   "D100",
   "D104",
@@ -164,7 +172,7 @@ ignore = [
   "D401",
   "D404",
   "D405",
-  "D418",  # We should be able to add docstrings to `@overload` decorators
+  "D418",    # We should be able to add docstrings to `@overload` decorators
   "ISC001",  # implicit string concat conflicts with `ruff format`
   "ISC003",  # prefer explicit string concat over implicit concat
   "PLR09",   # we have our own complexity rules
@@ -177,34 +185,84 @@ ignore = [
   "TRY003",  # long exception messages from `tryceratops`
 ]
 external = [ "WPS" ]
-
+flake8-import-conventions.aliases = { datetime = "dt" }
 # Plugin configs:
 flake8-import-conventions.banned-from = [ "ast", "datetime" ]
-flake8-import-conventions.aliases = { datetime = "dt" }
 flake8-quotes.inline-quotes = "single"
 mccabe.max-complexity = 6
 pydocstyle.convention = "google"
 
-[tool.ruff.lint.per-file-ignores]
-"tests/*.py" = [
-  "S101", # asserts
-  "S105", # hardcoded passwords
-  "S404", # subprocess calls are for tests
-  "S603", # do not require `shell=True`
-  "S607", # partial executable paths
+
+[tool.codespell]
+ignore-words-list = [
+  "NotIn",
 ]
-"wemake_python_styleguide/compat/nodes.py" = [ "ICN003", "PLC0414" ]
-"wemake_python_styleguide/types.py" = [ "D102" ]
-"wemake_python_styleguide/visitors/ast/*.py" = [ "N802" ]
+# codespell configuration: https://github.com/codespell-project/codespell
+skip = [
+  "*.lock",
+  ".mypy_cache",
+  "__pycache__",
+  "_build",
+  "tests/whitelist.txt",
+]
+
+
+[tool.pyproject-fmt]
+# Docs: https://pyproject-fmt.readthedocs.io/en/latest/configuration.html
+column_width = 80
+generate_python_version_classifiers = false
+table_format = "long"
+sub_table_spacing = "\n"
+separate_root_table = "\n\n"
+
+
+[tool.typos.files]
+# typos configuration: https://github.com/crate-ci/typos/
+extend-exclude = [
+  "__pycache__",
+  "_build",
+  ".mypy_cache",
+  "*.lock",
+  "tests/whitelist.txt",
+]
+
+
+[tool.mypy]
+# The mypy configurations: http://bit.ly/2zEl9WI
+ignore_missing_imports = true
+warn_unreachable = true
+disable_error_code = [
+  "no-untyped-def", # TODO: fix
+]
+enable_error_code = [
+  "deprecated",
+  "exhaustive-match",
+  # "ignore-without-code",
+  "possibly-undefined",
+  "redundant-expr",
+  "redundant-self",
+  "truthy-bool",
+  "truthy-iterable",
+  # "explicit-override",
+  # "mutable-override",
+  "unimported-reveal",
+  "unused-awaitable",
+]
+strict_equality_for_none = true
+strict = true
+
+[[tool.mypy.overrides]]
+module = "wemake_python_styleguide.compat.nodes"
+# We allow explicit `Any` only in this file, because of the compatibility:
+disallow_any_explicit = false
+
+[[tool.mypy.overrides]]
+module = "wemake_python_styleguide.compat.packaging"
+# We allow unused `ignore` comments, because we cannot sync it between versions:
+warn_unused_ignores = false
+
 
 [tool.pytest.ini_options]
-# pytest config: http://doc.pytest.org/en/latest/customize.html
-
-# Strict `@xfail` by default:
-xfail_strict = true
-# Fail on warnings:
-filterwarnings = [ "error" ]
-
 addopts = [
   "--strict-config",
   "--strict-markers",
@@ -223,10 +281,15 @@ addopts = [
   "--ignore=tests/fixtures",
   "--ignore=docs",
 ]
+# pytest config: http://doc.pytest.org/en/latest/customize.html
+# Strict `@xfail` by default:
+xfail_strict = true
+# Fail on warnings:
+filterwarnings = [ "error" ]
+
 
 [tool.coverage.run]
 # Coverage configuration: https://coverage.readthedocs.io/
-
 # We don't need to cover some files. They are fully checked with mypy.
 # And don't contain any logic.
 omit = [
@@ -235,77 +298,11 @@ omit = [
   "tests/**/*313.py",
   "tests/**/*315.py",
 ]
-
 # Here we specify plugins for coverage to be used:
 plugins = [
   "covdefaults",
 ]
-
 # Required since 7.10:
 patch = [
   "subprocess",
 ]
-
-[tool.mypy]
-# The mypy configurations: http://bit.ly/2zEl9WI
-ignore_missing_imports = true
-strict = true
-strict_equality_for_none = true
-warn_unreachable = true
-
-enable_error_code = [
-  "truthy-bool",
-  "truthy-iterable",
-  "redundant-expr",
-  "unused-awaitable",
-  # "ignore-without-code",
-  "possibly-undefined",
-  "redundant-self",
-  # "explicit-override",
-  # "mutable-override",
-  "unimported-reveal",
-  "deprecated",
-  "exhaustive-match",
-]
-
-disable_error_code = [
-  "no-untyped-def", # TODO: fix
-]
-
-[[tool.mypy.overrides]]
-module = "wemake_python_styleguide.compat.nodes"
-# We allow explicit `Any` only in this file, because of the compatibility:
-disallow_any_explicit = false
-
-[[tool.mypy.overrides]]
-module = "wemake_python_styleguide.compat.packaging"
-# We allow unused `ignore` comments, because we cannot sync it between versions:
-warn_unused_ignores = false
-
-[tool.codespell]
-# codespell configuration: https://github.com/codespell-project/codespell
-skip = [
-  "__pycache__",
-  "_build",
-  ".mypy_cache",
-  "*.lock",
-  "tests/whitelist.txt",
-]
-ignore-words-list = [
-  "NotIn",
-]
-
-
-[tool.typos.files]
-# typos configuration: https://github.com/crate-ci/typos/
-extend-exclude = [
-  "__pycache__",
-  "_build",
-  ".mypy_cache",
-  "*.lock",
-  "tests/whitelist.txt",
-]
-
-
-[tool.poetry.scripts]
-wps = "wemake_python_styleguide.cli.cli_app:main"
