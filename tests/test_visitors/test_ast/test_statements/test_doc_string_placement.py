@@ -62,6 +62,14 @@ some.first = 1
 'Docs.'
 """
 
+instance_attribute_outside_constructor = """
+class Some:
+    def method(self):
+        'Method docs.'
+        self.first = 1
+        'Docs.'
+"""
+
 local_variable = """
 def some():
     'Function docs.'
@@ -129,6 +137,7 @@ def test_documenting_string(
     'code',
     [
         foreign_attribute,
+        instance_attribute_outside_constructor,
         local_variable,
         multiple_targets,
         inside_condition,

@@ -3128,7 +3128,7 @@ class WrongDocStringPlacementViolation(ASTViolation):
 
     1. as the first statement of a module, class, or function body
     2. after an assignment to a plain name in a module or a class
-    3. after an assignment to ``self`` inside a method
+    3. after an assignment to ``self`` inside a constructor
     4. after a ``type`` alias on ``python3.12+``
 
     Anywhere else it does nothing at runtime,

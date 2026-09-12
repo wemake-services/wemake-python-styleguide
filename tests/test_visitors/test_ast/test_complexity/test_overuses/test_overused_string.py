@@ -213,6 +213,27 @@ def fourth():
     {0}
 """
 
+# Only a constructor defines instance attributes, other methods just
+# assign to an object that is already made, there's nothing to document.
+not_a_constructor_docstring = """
+class Some:
+    def first(self):
+        self.field = 1
+        {0}
+
+    def second(self):
+        self.field = 2
+        {0}
+
+    def third(self):
+        self.field = 3
+        {0}
+
+    def fourth(self):
+        self.field = 4
+        {0}
+"""
+
 # `x.some = 1` defines an attribute of `x`, not of the module, the class,
 # or the instance we are in. So, there's nothing here to document.
 foreign_attribute_docstrings = """
@@ -502,6 +523,7 @@ def test_docstrings_not_counted(
     [
         not_a_docstring,
         not_an_attribute_docstring,
+        not_a_constructor_docstring,
         foreign_attribute_docstrings,
     ],
 )
