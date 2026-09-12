@@ -38,6 +38,24 @@ class Some:
     {0}
 """
 
+dataclass_attribute = """
+@dataclass
+class Some:
+    'Class docs.'
+
+    first: int
+    {0}
+"""
+
+dataclass_attribute_with_default = """
+@dataclass
+class Some:
+    'Class docs.'
+
+    first: int = 0
+    {0}
+"""
+
 instance_attribute = """
 class Some:
     def __init__(self):
@@ -68,6 +86,33 @@ type_alias = pytest.param(
 foreign_attribute = """
 some.first = 1
 {0}
+"""
+
+# A docstring goes after the attribute it documents, never before it.
+before_module_attribute = """
+'Module docs.'
+
+{0}
+first = 1
+"""
+
+before_class_attribute = """
+class Some:
+    'Class docs.'
+
+    {0}
+    first: int
+"""
+
+between_attributes = """
+class Some:
+    'Class docs.'
+
+    first = 1
+    'Documents first.'
+
+    {0}
+    second = 2
 """
 
 instance_attribute_outside_constructor = """
@@ -122,6 +167,8 @@ def some():
         module_attribute,
         annotated_module_attribute,
         class_attribute,
+        dataclass_attribute,
+        dataclass_attribute_with_default,
         instance_attribute,
         instance_attribute_in_new,
         type_alias,
@@ -156,6 +203,9 @@ def test_documenting_string(
     'code',
     [
         foreign_attribute,
+        before_module_attribute,
+        before_class_attribute,
+        between_attributes,
         instance_attribute_outside_constructor,
         local_variable,
         multiple_targets,

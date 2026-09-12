@@ -3143,12 +3143,17 @@ class WrongDocStringPlacementViolation(ASTViolation):
     Solution:
         Move the string to a place where it documents something,
         or turn it into a regular ``#`` comment.
+        A docstring goes after the attribute it documents, never before it.
 
     Example::
 
         # Correct:
         first = 1
         '''Documents ``first``.'''
+
+        # Wrong:
+        '''Documents nothing, a docstring goes after the attribute.'''
+        first = 1
 
         # Wrong:
         some.first = 1
