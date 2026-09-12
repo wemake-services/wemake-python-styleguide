@@ -19,6 +19,11 @@ Semantic versioning in our case means:
 
 ## WIP
 
+### Features
+
+- Adds `WPS484`: forbid strings that look like docstrings
+  but document nothing, #3808
+
 ### Bugfixes
 
 - Count overused str and bytes separately for `WPS226`, 3782

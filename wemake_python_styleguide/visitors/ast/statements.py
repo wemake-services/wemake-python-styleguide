@@ -10,12 +10,14 @@ from wemake_python_styleguide.compat.aliases import (
 from wemake_python_styleguide.compat.nodes import TryStar
 from wemake_python_styleguide.logic.arguments import call_args
 from wemake_python_styleguide.logic.naming import name_nodes
+from wemake_python_styleguide.logic.tree import strings
 from wemake_python_styleguide.logic.tree.collections import (
     first,
     sequence_of_node,
 )
 from wemake_python_styleguide.violations.best_practices import (
     UnreachableCodeViolation,
+    WrongDocStringPlacementViolation,
     WrongNamedKeywordViolation,
 )
 from wemake_python_styleguide.violations.consistency import (
@@ -358,3 +360,19 @@ class WrongMethodArgumentsVisitor(BaseNodeVisitor):
             if isinstance(arg, self._no_tuples_collections):
                 self.add_violation(NotATupleArgumentViolation(node))
                 break
+
+
+@final
+class DocStringPlacementVisitor(BaseNodeVisitor):
+    """Restricts strings that look like docstrings, but document nothing."""
+
+    def visit_Expr(self, node: ast.Expr) -> None:
+        """Checks that a string statement documents something."""
+        self._check_doc_string_place(node)
+        self.generic_visit(node)
+
+    def _check_doc_string_place(self, node: ast.Expr) -> None:
+        if strings.is_doc_string(node) and not strings.is_doc_string_value(
+            node.value,
+        ):
+            self.add_violation(WrongDocStringPlacementViolation(node))

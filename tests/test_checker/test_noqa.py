@@ -258,6 +258,7 @@ SHOULD_BE_RAISED = make_immutable(
         'WPS481': 10,
         'WPS482': 0,  # enabled only in python 3.15+
         'WPS483': 0,  # enabled only in python 3.15+
+        'WPS484': 1,
         'WPS500': 1,
         'WPS501': 1,
         'WPS502': 0,  # disabled since 1.0.0

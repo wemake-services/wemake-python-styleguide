@@ -789,3 +789,6 @@ finally:
 
 if not user in users:  # noqa: WPS364
     my_print('legacy not-in style')
+
+some_sequence.first = 1
+'Documents nothing.'  # noqa: WPS484
