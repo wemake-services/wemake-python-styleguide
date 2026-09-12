@@ -1,14 +1,17 @@
 import ast
 import itertools
+from typing import Final
 
 from wemake_python_styleguide.compat import nodes
 from wemake_python_styleguide.compat.aliases import AssignNodes, FunctionNodes
 from wemake_python_styleguide.compat.functions import get_assign_targets
-from wemake_python_styleguide.constants import INIT
 from wemake_python_styleguide.logic.nodes import get_context, get_parent
 from wemake_python_styleguide.logic.tree.attributes import is_special_attr
 from wemake_python_styleguide.logic.walk import get_closest_parent
 from wemake_python_styleguide.types import ContextNodes
+
+#: Methods that define the instance attributes a docstring can document.
+_ConstructorMethods: Final = frozenset(('__init__', '__new__'))
 
 
 def is_doc_string(node: ast.AST) -> bool:
@@ -70,7 +73,7 @@ def _is_documented(statement: ast.stmt, context: ContextNodes) -> bool:
         # Only a constructor defines the instance attributes. Locals are
         # not attributes, and `x.some = 1` belongs to some other object.
         return (
-            context.name == INIT
+            context.name in _ConstructorMethods
             and isinstance(target, ast.Attribute)
             and is_special_attr(target)
         )

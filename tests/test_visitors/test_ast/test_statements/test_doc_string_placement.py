@@ -8,26 +8,26 @@ from wemake_python_styleguide.visitors.ast.statements import (
     DocStringPlacementVisitor,
 )
 
-module_docstring = "'Docs.'"
+module_docstring = '{0}'
 
 function_docstring = """
 def some():
-    'Docs.'
+    {0}
 """
 
 class_docstring = """
 class Some:
-    'Docs.'
+    {0}
 """
 
 module_attribute = """
 first = 1
-'Docs.'
+{0}
 """
 
 annotated_module_attribute = """
 first: int = 1
-'Docs.'
+{0}
 """
 
 class_attribute = """
@@ -35,7 +35,7 @@ class Some:
     'Class docs.'
 
     first = 1
-    'Docs.'
+    {0}
 """
 
 instance_attribute = """
@@ -43,13 +43,21 @@ class Some:
     def __init__(self):
         'Method docs.'
         self.first = 1
-        'Docs.'
+        {0}
+"""
+
+instance_attribute_in_new = """
+class Some:
+    def __new__(cls):
+        'Method docs.'
+        cls.first = 1
+        {0}
 """
 
 type_alias = pytest.param(
     """
     type Some = int
-    'Docs.'
+    {0}
     """,
     marks=pytest.mark.skipif(
         not PY312,
@@ -59,7 +67,7 @@ type_alias = pytest.param(
 
 foreign_attribute = """
 some.first = 1
-'Docs.'
+{0}
 """
 
 instance_attribute_outside_constructor = """
@@ -67,26 +75,26 @@ class Some:
     def method(self):
         'Method docs.'
         self.first = 1
-        'Docs.'
+        {0}
 """
 
 local_variable = """
 def some():
     'Function docs.'
     first = 1
-    'Docs.'
+    {0}
 """
 
 multiple_targets = """
 first = second = 1
-'Docs.'
+{0}
 """
 
 inside_condition = """
 def some(arg):
     'Function docs.'
     if arg:
-        'Docs.'
+        {0}
         return 1
     return 0
 """
@@ -95,13 +103,13 @@ after_call = """
 def some():
     'Function docs.'
     print(1)
-    'Docs.'
+    {0}
 """
 
 after_doc_string = """
 def some():
     'Function docs.'
-    'Docs.'
+    {0}
 """
 
 
@@ -115,7 +123,17 @@ def some():
         annotated_module_attribute,
         class_attribute,
         instance_attribute,
+        instance_attribute_in_new,
         type_alias,
+    ],
+)
+@pytest.mark.parametrize(
+    'string_value',
+    [
+        '"Doc"',
+        "'Doc'",
+        '"""Doc"""',
+        "'''Doc'''",
     ],
 )
 def test_documenting_string(
@@ -123,9 +141,10 @@ def test_documenting_string(
     parse_ast_tree,
     default_options,
     code,
+    string_value,
 ):
     """Testing that strings documenting something are allowed."""
-    tree = parse_ast_tree(code)
+    tree = parse_ast_tree(code.format(string_value))
 
     visitor = DocStringPlacementVisitor(default_options, tree=tree)
     visitor.run()
@@ -145,14 +164,24 @@ def test_documenting_string(
         after_doc_string,
     ],
 )
+@pytest.mark.parametrize(
+    'string_value',
+    [
+        '"Doc"',
+        "'Doc'",
+        '"""Doc"""',
+        "'''Doc'''",
+    ],
+)
 def test_string_documenting_nothing(
     assert_errors,
     parse_ast_tree,
     default_options,
     code,
+    string_value,
 ):
     """Testing that strings documenting nothing are forbidden."""
-    tree = parse_ast_tree(code)
+    tree = parse_ast_tree(code.format(string_value))
 
     visitor = DocStringPlacementVisitor(default_options, tree=tree)
     visitor.run()

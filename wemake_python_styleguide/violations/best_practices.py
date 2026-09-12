@@ -3148,11 +3148,11 @@ class WrongDocStringPlacementViolation(ASTViolation):
 
         # Correct:
         first = 1
-        """Documents ``first``."""
+        '''Documents ``first``.'''
 
         # Wrong:
         some.first = 1
-        \"\"\"Documents nothing, ``first`` belongs to ``some``.\"\"\"
+        '''Documents nothing, ``first`` belongs to ``some``.'''
 
     .. versionadded:: 1.9.0
 
