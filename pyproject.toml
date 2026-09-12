@@ -90,6 +90,7 @@ Repository = "https://github.com/wemake-services/wemake-python-styleguide"
 
 
 [tool.ruff]
+# Ruff config: https://docs.astral.sh/ruff/settings
 target-version = "py310"
 line-length = 80
 extend-exclude = [
@@ -97,7 +98,6 @@ extend-exclude = [
   "tests/**/__snapshots__/**",
   "tests/fixtures/**",
 ]
-# Ruff config: https://docs.astral.sh/ruff/settings
 preview = true
 fix = true
 output-prefer-rule-codes = true
@@ -194,10 +194,10 @@ pydocstyle.convention = "google"
 
 
 [tool.codespell]
+# codespell configuration: https://github.com/codespell-project/codespell
 ignore-words-list = [
   "NotIn",
 ]
-# codespell configuration: https://github.com/codespell-project/codespell
 skip = [
   "*.lock",
   ".mypy_cache",
@@ -263,6 +263,7 @@ warn_unused_ignores = false
 
 
 [tool.pytest.ini_options]
+# pytest config: http://doc.pytest.org/en/latest/customize.html
 addopts = [
   "--strict-config",
   "--strict-markers",
@@ -281,7 +282,6 @@ addopts = [
   "--ignore=tests/fixtures",
   "--ignore=docs",
 ]
-# pytest config: http://doc.pytest.org/en/latest/customize.html
 # Strict `@xfail` by default:
 xfail_strict = true
 # Fail on warnings:
