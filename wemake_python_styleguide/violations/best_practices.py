@@ -3148,7 +3148,7 @@ class WrongDocStringPlacementViolation(ASTViolation):
 
         # Correct:
         first = 1
-        \"\"\"Documents ``first``.\"\"\"
+        """Documents ``first``."""
 
         # Wrong:
         some.first = 1
