@@ -17,6 +17,14 @@ Semantic versioning in our case means:
   change the client facing API, change code conventions significantly, etc.
 
 
+## WIP
+
+### Features
+
+- Adds `WPS484`: forbid strings that look like docstrings
+  but document nothing, #3808
+
+
 ## 1.8.1
 
 ### Bugfixes

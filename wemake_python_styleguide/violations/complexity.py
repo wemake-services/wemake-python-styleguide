@@ -825,7 +825,9 @@ class OverusedStringViolation(MaybeASTViolation):
     This includes attribute docstrings from PEP 258
     and type alias docstrings, the ones placed right after
     an attribute definition or a ``type`` statement.
-    Local variables are not attributes, so they are still counted.
+    Instance attributes are only defined in a constructor,
+    and local variables are not attributes at all,
+    so both of these are still counted.
 
     The violation points to the first occurrence of the overused string literal.
 

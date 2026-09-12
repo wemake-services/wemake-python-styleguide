@@ -32,6 +32,7 @@ PRESET: Final = (
     statements.WrongNamedKeywordVisitor,
     statements.AssignmentPatternsVisitor,
     statements.WrongMethodArgumentsVisitor,
+    statements.DocStringPlacementVisitor,
     keywords.WrongRaiseVisitor,
     keywords.WrongKeywordVisitor,
     keywords.WrongContextManagerVisitor,

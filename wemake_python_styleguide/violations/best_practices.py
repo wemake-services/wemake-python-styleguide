@@ -3117,3 +3117,51 @@ class ForbidMappingProxyTypeViolation(ASTViolation):
         'Found a `types.MappingProxyType` usage, prefer `frozendict` on 3.15+'
     )
     code = 483
+
+
+@final
+class WrongDocStringPlacementViolation(ASTViolation):
+    """
+    Forbid strings that look like docstrings, but document nothing.
+
+    A string statement documents something only when it is placed:
+
+    1. as the first statement of a module, class, or function body
+    2. after an assignment to a plain name in a module or a class
+    3. after an assignment to ``self`` inside a constructor
+    4. after a ``type`` alias on ``python3.12+``
+
+    Anywhere else it does nothing at runtime,
+    while still reading like documentation.
+
+    Reasoning:
+        Such strings are dead code that looks alive.
+        A reader takes them for documentation of the line above,
+        while no tool will ever render them,
+        and the code they seem to describe can change without notice.
+
+    Solution:
+        Move the string to a place where it documents something,
+        or turn it into a regular ``#`` comment.
+        A docstring goes after the attribute it documents, never before it.
+
+    Example::
+
+        # Correct:
+        first = 1
+        '''Documents ``first``.'''
+
+        # Wrong:
+        '''Documents nothing, a docstring goes after the attribute.'''
+        first = 1
+
+        # Wrong:
+        some.first = 1
+        '''Documents nothing, ``first`` belongs to ``some``.'''
+
+    .. versionadded:: 1.9.0
+
+    """
+
+    error_template = 'Found a string that documents nothing'
+    code = 484
