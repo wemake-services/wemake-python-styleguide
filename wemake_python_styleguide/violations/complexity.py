@@ -844,6 +844,9 @@ class OverusedStringViolation(MaybeASTViolation):
         :str:`wemake_python_styleguide.options.defaults.MAX_STRING_USAGES`
 
     .. versionadded:: 0.10.0
+    .. versionchanged:: 1.8.1
+        Now counts bytes and strings separately.
+        Do not count docstrings as repeated strings.
 
     """
 
