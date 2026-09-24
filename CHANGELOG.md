@@ -24,6 +24,10 @@ Semantic versioning in our case means:
 - Adds `WPS484`: forbid strings that look like docstrings
   but document nothing, #3808
 
+### Bugfixes
+
+- Fix `wps explain`: now we replace RST roles with readable plain text, #3787
+
 
 ## 1.8.1
 

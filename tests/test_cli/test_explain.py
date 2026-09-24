@@ -51,3 +51,41 @@ def test_no_command_specified(snapshot):
     assert process.returncode != 0, (stdout, stderr)
     assert not stdout
     assert stderr == snapshot
+
+
+@pytest.mark.parametrize(
+    ('command', 'expected', 'unexpected'),
+    [
+        (
+            'wps explain WPS211',
+            'Default: `5`',
+            ':str:`wemake_python_styleguide.options.defaults.MAX_ARGUMENTS`',
+        ),
+        (
+            'wps explain WPS110',
+            'wemake_python_styleguide.constants.VARIABLE_NAMES_BLACKLIST.',
+            ':str:`wemake_python_styleguide.options.defaults.FORBIDDEN_DOMAIN_NAMES`',
+        ),
+        (
+            'wps explain WPS202',
+            'Default:\n    `7`',
+            ':str:`wemake_python_styleguide.options.defaults.MAX_MODULE_MEMBERS`',
+        ),
+        (
+            'wps explain WPS101',
+            "`('__init__', '__main__')`",
+            ':py:data:`~wemake_python_styleguide.constants.MAGIC_MODULE_NAMES_WHITELIST`',
+        ),
+        (
+            'wps explain WPS124',
+            "`('0O', '1I', '1l', 'O0')`",
+            ':py:data:`~wemake_python_styleguide.constants.UNREADABLE_CHARACTER_COMBINATIONS`',
+        ),
+    ],
+)
+def test_command_on_replace_rst(command, expected, unexpected):
+    """Test command with replace_rst."""
+    process, stdout, stderr = _popen_in_shell(command)
+    assert process.returncode == 0, (stdout, stderr)
+    assert expected in stdout
+    assert unexpected not in stdout
