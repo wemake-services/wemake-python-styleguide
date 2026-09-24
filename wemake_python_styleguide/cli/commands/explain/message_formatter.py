@@ -8,7 +8,9 @@ from wemake_python_styleguide.cli.commands.explain.violation_loader import (
 )
 from wemake_python_styleguide.constants import SHORTLINK_TEMPLATE
 
-_RST_ROLE_PATTERN: Final = re.compile(r':(str|py:data|py:class|py:func):`~?([\w.]+)`')
+_RST_ROLE_PATTERN: Final = re.compile(
+    r':(str|py:data|py:class|py:func):`~?([\w.]+)`',
+)
 _MAX_INLINE_ITEMS: Final = 8
 
 
