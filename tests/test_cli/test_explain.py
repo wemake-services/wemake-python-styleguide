@@ -73,7 +73,7 @@ def test_no_command_specified(snapshot):
         ),
         (
             'wps explain WPS101',
-            "('__init__', '__main__')",
+            "`('__init__', '__main__')`",
             ':py:data:`~wemake_python_styleguide.constants.MAGIC_MODULE_NAMES_WHITELIST`',
         ),
         (
