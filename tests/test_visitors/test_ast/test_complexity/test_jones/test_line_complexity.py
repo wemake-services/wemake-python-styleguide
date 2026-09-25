@@ -69,7 +69,14 @@ regression1216 = 'call.endswith(post) and len(node.args) == self._post[post]'
 
 # See
 # https://github.com/wemake-services/wemake-python-styleguide/issues/3350
+# https://github.com/wemake-services/wemake-python-styleguide/issues/3820
 regression3350 = 'x = f"Values: {a}, {b}, {c}, {d}"'
+regression3820_trailing = (
+    'tuple(f\'/{pref.strip("/")}/\' for pref in (prefix, *prefixes))'
+)
+regression3820_no_trailing = (
+    'tuple(f\'/{pref.strip("/")}\' for pref in (prefix, *prefixes))'
+)
 regression3350_tstring = pytest.param(
     'x = t"Values: {a}, {b}, {c}, {d}"',
     marks=pytest.mark.skipif(
@@ -188,8 +195,10 @@ def test_same_complexity(parse_ast_tree, default_options):
         (line_with_comprehension, 6),
         (line_with_math, 9),
         (regression1216, 15),
-        (regression3350, 10),  # used to be 15
-        _with_values(regression3350_tstring, 10),  # used to be 15
+        (regression3350, 11),  # used to be 15, then 10 before #3820
+        _with_values(regression3350_tstring, 11),  # used to be 15, then 10
+        (regression3820_trailing, 15),
+        (regression3820_no_trailing, 15),
     ],
 )
 def test_exact_complexity(parse_ast_tree, default_options, code, complexity):
