@@ -646,7 +646,8 @@ class LineComplexityViolation(ASTViolation):
     1. modules
     2. function and classes, since they are checked differently
     3. type annotations, since they do not increase the complexity
-    4. f-string and t-string nodes themselves: instead, each ``{}``
+    4. f-string and t-string nodes themselves: instead, each formatted
+       part (a ``{...}`` placeholder like ``{name}``, not an empty dict)
        counts as one, its contents are counted as usual, and all literal
        string parts of the string, format specs included, count as one
        in total, so adding text to a string does not add complexity
@@ -670,8 +671,9 @@ class LineComplexityViolation(ASTViolation):
 
     .. versionadded:: 0.1.0
     .. versionchanged:: 1.9.0
-       Count each ``{}`` in f-strings and t-strings as one node
-       and all their literal string parts as one node in total.
+       Count each formatted part (``{...}`` placeholder) in f-strings
+       and t-strings as one node and all their literal string parts
+       as one node in total.
 
     See also:
         https://github.com/Miserlou/JonesComplexity

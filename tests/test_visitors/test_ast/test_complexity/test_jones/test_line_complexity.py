@@ -93,6 +93,8 @@ fstring_many_string_parts = "x = f'a{a}b{b}c'"
 fstring_format_spec = "x = f'{a:>10}'"
 fstring_nested_placeholders_in_spec = "x = f'{a:{w}.{p}}x'"
 fstring_nested_fstring = 'x = f\'{f"{a}b"}c\''
+fstring_twice_on_line = "x = f'a{a}b' + f'c{c}d'"
+fstring_in_annotation = "x: Literal[f'a{a}b'] = 1"
 tstring_many_string_parts = pytest.param(
     "x = t'a{a}b{b}c'",
     marks=pytest.mark.skipif(
@@ -220,6 +222,8 @@ def test_same_complexity(parse_ast_tree, default_options):
         (fstring_format_spec, 5),
         (fstring_nested_placeholders_in_spec, 9),
         (fstring_nested_fstring, 7),
+        (fstring_twice_on_line, 9),
+        (fstring_in_annotation, 3),
         _with_values(tstring_many_string_parts, 7),
     ],
 )

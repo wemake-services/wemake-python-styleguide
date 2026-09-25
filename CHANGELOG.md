@@ -28,8 +28,8 @@ Semantic versioning in our case means:
 
 - Fix `wps explain`: now we replace RST roles with readable plain text, #3787
 - Fix `WPS221` counting literal parts of f-strings and t-strings one by one:
-  now each `{}` counts as one and all literal parts count as one in total,
-  #3820
+  now each formatted part (`{...}` placeholder) counts as one
+  and all literal parts count as one in total, #3820
 
 
 ## 1.8.1
