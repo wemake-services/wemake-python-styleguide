@@ -9,17 +9,26 @@ Original project is licensed under MIT.
 
 import ast
 from collections import defaultdict
+from collections.abc import Iterator
 from statistics import median
-from typing import final
+from typing import ClassVar, TypeAlias, final
 
 from wemake_python_styleguide.compat import nodes
 from wemake_python_styleguide.compat.aliases import FunctionNodes
 from wemake_python_styleguide.compat.nodes import TypeAlias as ast_TypeAlias
+from wemake_python_styleguide.types import AnyNodes
 from wemake_python_styleguide.violations.complexity import (
     JonesScoreViolation,
     LineComplexityViolation,
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
+
+_AnyFormattedString: TypeAlias = ast.JoinedStr | nodes.TemplateStr
+_AnyPlaceholder: TypeAlias = ast.FormattedValue | nodes.Interpolation
+_FormattedStringTypes: TypeAlias = tuple[
+    type[ast.JoinedStr],
+    type[nodes.TemplateStr],
+]
 
 
 @final
@@ -33,18 +42,22 @@ class JonesComplexityVisitor(BaseNodeVisitor):
 
     Some nodes are ignored because there's no sense in analyzing them.
     Some nodes like type annotations are not affecting line complexity,
-    so we do not count them. FormattedValue, JoinedStr, Interpolation, and
-    TemplateStr nodes are not counted, because they have no visible impact
-    on source code.
+    so we do not count them.
+
+    f-strings and t-strings count 1 for every formatted part
+    (a ``{...}`` placeholder, not an empty dict),
+    plus the regular score of the expressions inside the placeholders.
+    All their literal string parts, including format specs,
+    count as 1 in total, no matter how many there are.
     """
 
-    _ignored_nodes = (
+    _ignored_nodes: ClassVar[AnyNodes] = (
         ast.ClassDef,
         *FunctionNodes,
         ast.expr_context,
-        ast.FormattedValue,
+    )
+    _formatted_strings: ClassVar[_FormattedStringTypes] = (
         ast.JoinedStr,
-        nodes.Interpolation,
         nodes.TemplateStr,
     )
 
@@ -60,16 +73,11 @@ class JonesComplexityVisitor(BaseNodeVisitor):
 
         Then calculates the median value of all line results.
         """
-        line_number = getattr(node, 'lineno', None)
-        is_ignored = isinstance(node, self._ignored_nodes)
+        if isinstance(node, self._formatted_strings):
+            self._visit_formatted_string(node)
+            return
 
-        if (
-            line_number is not None
-            and not is_ignored
-            and not self._maybe_ignore_child(node)
-        ):
-            self._lines[line_number].append(node)
-
+        self._count(node)
         self.generic_visit(node)
 
     def _post_visit(self) -> None:
@@ -107,3 +115,41 @@ class JonesComplexityVisitor(BaseNodeVisitor):
         if isinstance(node, ast_TypeAlias):  # pragma: >=3.12 cover
             self._to_ignore.update(ast.walk(node.value))
         return node in self._to_ignore
+
+    def _count(self, node: ast.AST) -> None:
+        line_number = getattr(node, 'lineno', None)
+        is_ignored = isinstance(node, self._ignored_nodes)
+
+        if (
+            line_number is not None
+            and not is_ignored
+            and not self._maybe_ignore_child(node)
+        ):
+            self._lines[line_number].append(node)
+
+    def _visit_formatted_string(self, node: _AnyFormattedString) -> None:
+        parts = tuple(_formatted_string_parts(node))
+        first_string_part = next(
+            (part for part in parts if isinstance(part, ast.Constant)),
+            None,
+        )
+        if first_string_part is not None:
+            self._count(first_string_part)
+
+        for part in parts:
+            if not isinstance(part, ast.Constant):
+                self._count(part)
+                self.visit(part.value)
+
+
+def _formatted_string_parts(
+    node: _AnyFormattedString,
+) -> Iterator[ast.Constant | _AnyPlaceholder]:
+    """Yields literal and formatted parts, including ones in format specs."""
+    for part in node.values:
+        if isinstance(part, ast.Constant):
+            yield part
+        elif isinstance(part, (ast.FormattedValue, nodes.Interpolation)):
+            yield part
+            if isinstance(part.format_spec, ast.JoinedStr):
+                yield from _formatted_string_parts(part.format_spec)

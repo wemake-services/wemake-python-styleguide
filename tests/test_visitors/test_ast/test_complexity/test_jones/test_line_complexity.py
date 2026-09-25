@@ -77,6 +77,31 @@ regression3350_tstring = pytest.param(
         reason='t-strings are only in Python 3.14+',
     ),
 )
+# Used to be 15, then 10 until #3820 counted each `{}` placeholder:
+regression3350_complexity = 11
+
+# See
+# https://github.com/wemake-services/wemake-python-styleguide/issues/3820
+regression3820_trailing = (
+    'tuple(f\'/{pref.strip("/")}/\' for pref in (prefix, *prefixes))'
+)
+regression3820_no_trailing = (
+    'tuple(f\'/{pref.strip("/")}\' for pref in (prefix, *prefixes))'
+)
+fstring_only_placeholder = "x = f'{a}'"
+fstring_many_string_parts = "x = f'a{a}b{b}c'"
+fstring_format_spec = "x = f'{a:>10}'"
+fstring_nested_placeholders_in_spec = "x = f'{a:{w}.{p}}x'"
+fstring_nested_fstring = 'x = f\'{f"{a}b"}c\''
+fstring_twice_on_line = "x = f'a{a}b' + f'c{c}d'"
+fstring_in_annotation = "x: Literal[f'a{a}b'] = 1"
+tstring_many_string_parts = pytest.param(
+    "x = t'a{a}b{b}c'",
+    marks=pytest.mark.skipif(
+        not PY314,
+        reason='t-strings are only in Python 3.14+',
+    ),
+)
 
 
 def _with_values(pytest_param, *extra):
@@ -188,8 +213,18 @@ def test_same_complexity(parse_ast_tree, default_options):
         (line_with_comprehension, 6),
         (line_with_math, 9),
         (regression1216, 15),
-        (regression3350, 10),  # used to be 15
-        _with_values(regression3350_tstring, 10),  # used to be 15
+        (regression3350, regression3350_complexity),
+        _with_values(regression3350_tstring, regression3350_complexity),
+        (regression3820_trailing, 15),
+        (regression3820_no_trailing, 15),
+        (fstring_only_placeholder, 4),
+        (fstring_many_string_parts, 7),
+        (fstring_format_spec, 5),
+        (fstring_nested_placeholders_in_spec, 9),
+        (fstring_nested_fstring, 7),
+        (fstring_twice_on_line, 9),
+        (fstring_in_annotation, 3),
+        _with_values(tstring_many_string_parts, 7),
     ],
 )
 def test_exact_complexity(parse_ast_tree, default_options, code, complexity):
@@ -201,6 +236,38 @@ def test_exact_complexity(parse_ast_tree, default_options, code, complexity):
 
     assert len(visitor._lines) == 1  # noqa: SLF001
     assert len(visitor._lines[1]) == complexity  # noqa: SLF001
+
+
+@pytest.mark.parametrize(
+    ('first', 'second'),
+    [
+        (regression3820_trailing, regression3820_no_trailing),
+        ("x = f'-{a}{b}'", "x = f'-{a}-{b}-'"),
+        ("x = f'{a:>10}'", "x = f'{a:>10}.'"),
+    ],
+)
+def test_string_parts_count_once(
+    parse_ast_tree,
+    default_options,
+    first,
+    second,
+):
+    """Ensures that literal parts of f-strings count as one in total."""
+    first_visitor = JonesComplexityVisitor(
+        default_options,
+        tree=parse_ast_tree(first),
+    )
+    second_visitor = JonesComplexityVisitor(
+        default_options,
+        tree=parse_ast_tree(second),
+    )
+
+    first_visitor.run()
+    second_visitor.run()
+
+    assert len(first_visitor._lines[1]) == len(  # noqa: SLF001
+        second_visitor._lines[1],  # noqa: SLF001
+    )
 
 
 @pytest.mark.parametrize(
