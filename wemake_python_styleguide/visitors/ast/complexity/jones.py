@@ -9,6 +9,7 @@ Original project is licensed under MIT.
 
 import ast
 from collections import defaultdict
+from collections.abc import Iterator
 from statistics import median
 from typing import final
 
@@ -33,20 +34,22 @@ class JonesComplexityVisitor(BaseNodeVisitor):
 
     Some nodes are ignored because there's no sense in analyzing them.
     Some nodes like type annotations are not affecting line complexity,
-    so we do not count them. FormattedValue, JoinedStr, Interpolation, and
-    TemplateStr nodes are not counted, because they have no visible impact
-    on source code.
+    so we do not count them.
+
+    f-strings and t-strings count 1 for every ``{}`` placeholder,
+    plus the regular score of the expressions inside the placeholders.
+    All their literal string parts, including format specs,
+    count as 1 in total, no matter how many there are.
     """
 
     _ignored_nodes = (
         ast.ClassDef,
         *FunctionNodes,
         ast.expr_context,
-        ast.FormattedValue,
         ast.JoinedStr,
-        nodes.Interpolation,
         nodes.TemplateStr,
     )
+    _string_templates = (ast.JoinedStr, nodes.TemplateStr)
 
     def __init__(self, *args, **kwargs) -> None:
         """Initializes line number counter."""
@@ -60,6 +63,9 @@ class JonesComplexityVisitor(BaseNodeVisitor):
 
         Then calculates the median value of all line results.
         """
+        if isinstance(node, self._string_templates):
+            self._count_string_parts_once(node)
+
         line_number = getattr(node, 'lineno', None)
         is_ignored = isinstance(node, self._ignored_nodes)
 
@@ -107,3 +113,25 @@ class JonesComplexityVisitor(BaseNodeVisitor):
         if isinstance(node, ast_TypeAlias):  # pragma: >=3.12 cover
             self._to_ignore.update(ast.walk(node.value))
         return node in self._to_ignore
+
+    def _count_string_parts_once(
+        self,
+        node: ast.JoinedStr | nodes.TemplateStr,
+    ) -> None:
+        if node in self._to_ignore:  # a format spec, handled with its parent
+            return
+        string_parts = list(self._string_parts(node))
+        self._to_ignore.update(string_parts[1:])
+
+    def _string_parts(
+        self,
+        node: ast.JoinedStr | nodes.TemplateStr,
+    ) -> Iterator[ast.Constant]:
+        for part in node.values:
+            if isinstance(part, ast.Constant):
+                yield part
+                continue
+            format_spec = getattr(part, 'format_spec', None)
+            if format_spec is not None:
+                self._to_ignore.add(format_spec)
+                yield from self._string_parts(format_spec)
