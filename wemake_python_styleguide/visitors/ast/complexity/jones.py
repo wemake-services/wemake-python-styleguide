@@ -11,7 +11,7 @@ import ast
 from collections import defaultdict
 from collections.abc import Iterator
 from statistics import median
-from typing import ClassVar, TypeAlias, final
+from typing import ClassVar, TypeAlias, cast, final
 
 from wemake_python_styleguide.compat import nodes
 from wemake_python_styleguide.compat.aliases import FunctionNodes
@@ -149,7 +149,9 @@ def _formatted_string_parts(
     for part in node.values:
         if isinstance(part, ast.Constant):
             yield part
-        elif isinstance(part, (ast.FormattedValue, nodes.Interpolation)):
-            yield part
-            if isinstance(part.format_spec, ast.JoinedStr):
-                yield from _formatted_string_parts(part.format_spec)
+        else:
+            # Any other part of a formatted string is a placeholder:
+            placeholder = cast(_AnyPlaceholder, part)
+            yield placeholder
+            if isinstance(placeholder.format_spec, ast.JoinedStr):
+                yield from _formatted_string_parts(placeholder.format_spec)
