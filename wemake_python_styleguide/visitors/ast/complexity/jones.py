@@ -25,10 +25,6 @@ from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
 _AnyFormattedString: TypeAlias = ast.JoinedStr | nodes.TemplateStr
 _AnyPlaceholder: TypeAlias = ast.FormattedValue | nodes.Interpolation
-_FormattedStringTypes: TypeAlias = tuple[
-    type[ast.JoinedStr],
-    type[nodes.TemplateStr],
-]
 
 
 @final
@@ -56,7 +52,7 @@ class JonesComplexityVisitor(BaseNodeVisitor):
         *FunctionNodes,
         ast.expr_context,
     )
-    _formatted_strings: ClassVar[_FormattedStringTypes] = (
+    _formatted_strings: ClassVar[AnyNodes] = (
         ast.JoinedStr,
         nodes.TemplateStr,
     )
@@ -74,7 +70,9 @@ class JonesComplexityVisitor(BaseNodeVisitor):
         Then calculates the median value of all line results.
         """
         if isinstance(node, self._formatted_strings):
-            self._visit_formatted_string(node)
+            # `generic_visit` is not called on purpose:
+            # `_visit_formatted_string` counts and visits the parts itself.
+            self._visit_formatted_string(cast(_AnyFormattedString, node))
             return
 
         self._count(node)
@@ -128,18 +126,15 @@ class JonesComplexityVisitor(BaseNodeVisitor):
             self._lines[line_number].append(node)
 
     def _visit_formatted_string(self, node: _AnyFormattedString) -> None:
-        parts = tuple(_formatted_string_parts(node))
-        first_string_part = next(
-            (part for part in parts if isinstance(part, ast.Constant)),
-            None,
-        )
-        if first_string_part is not None:
-            self._count(first_string_part)
-
-        for part in parts:
+        has_string_part = False
+        for part in _formatted_string_parts(node):
             if not isinstance(part, ast.Constant):
                 self._count(part)
                 self.visit(part.value)
+            elif not has_string_part:
+                # All literal string parts count as 1 in total:
+                self._count(part)
+                has_string_part = True
 
 
 def _formatted_string_parts(
