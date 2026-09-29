@@ -26,6 +26,7 @@ Semantic versioning in our case means:
 
 ### Bugfixes
 
+- Fixes `WPS235`: ignore imports from typing and typing_extensions, #3824
 - Fix `wps explain`: now we replace RST roles with readable plain text, #3787
 
 
