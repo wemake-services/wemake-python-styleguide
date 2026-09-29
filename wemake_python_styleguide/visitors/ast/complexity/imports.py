@@ -27,6 +27,9 @@ class _ImportFromMembersValidator:
         self._check_import_from_names_count(node)
 
     def _check_import_from_names_count(self, node: ast.ImportFrom) -> None:
+        if node.module in {'typing', 'typing_extensions'}:
+            return
+
         imported_names_number = len(node.names)
         if imported_names_number > self._options.max_import_from_members:
             self._error_callback(

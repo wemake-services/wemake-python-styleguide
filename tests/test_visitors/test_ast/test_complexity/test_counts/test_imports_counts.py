@@ -21,6 +21,10 @@ from sys import version
 """
 
 import_from_multiple_names = 'from module import name0, name1, name2'
+typing_imports = (
+    'from typing import name0, name1, name2',
+    'from typing_extensions import name0, name1, name2',
+)
 reexport_init_module_with_docstring = '''
 """Reexport module."""
 from package import some as some
@@ -151,6 +155,23 @@ def test_import_from_too_many_members(
 
     assert_errors(visitor, [TooManyImportedModuleMembersViolation])
     assert_error_text(visitor, '3', option_values.max_import_from_members)
+
+
+@pytest.mark.parametrize('code', typing_imports)
+def test_typing_imports_skip_too_many_members_check(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    options,
+):
+    """WPS235 does not apply to imports from typing modules."""
+    tree = parse_ast_tree(code)
+
+    option_values = options(max_import_from_members=2)
+    visitor = ImportMembersVisitor(option_values, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [])
 
 
 @pytest.mark.parametrize(
