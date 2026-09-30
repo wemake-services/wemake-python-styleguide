@@ -118,7 +118,6 @@ def test_module_imported_names_counts_violation(
 )
 def test_import_from_correct_number_of_names(
     assert_errors,
-    assert_error_text,
     parse_ast_tree,
     code,
     options,
@@ -158,7 +157,7 @@ def test_import_from_too_many_members(
 
 
 @pytest.mark.parametrize('code', typing_imports)
-def test_typing_imports_skip_too_many_members_check(
+def test_typing_imports_skip_too_many_members(
     assert_errors,
     parse_ast_tree,
     code,
@@ -167,7 +166,7 @@ def test_typing_imports_skip_too_many_members_check(
     """WPS235 does not apply to imports from typing modules."""
     tree = parse_ast_tree(code)
 
-    option_values = options(max_import_from_members=2)
+    option_values = options(max_import_from_members=1)
     visitor = ImportMembersVisitor(option_values, tree=tree)
     visitor.run()
 
