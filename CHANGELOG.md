@@ -27,6 +27,7 @@ Semantic versioning in our case means:
 ### Bugfixes
 
 - Fix `wps explain`: now we replace RST roles with readable plain text, #3787
+- Jones complexity no longer treats extra f-string / t-string literal fragments as extra complexity, #3820
 
 
 ## 1.8.1
