@@ -3909,14 +3909,14 @@ shellingham = ">=1.3.0"
 
 [[package]]
 name = "types-flake8"
-version = "7.3.0.20260508"
+version = "7.4.0.20260923"
 description = "Typing stubs for flake8"
 optional = false
 python-versions = ">=3.10"
 groups = ["dev"]
 files = [
-    {file = "types_flake8-7.3.0.20260508-py3-none-any.whl", hash = "sha256:41356a7f022feee1bb33a3a9a0ec97a2297d4dd8b6228c11589a5aa83f755bde"},
-    {file = "types_flake8-7.3.0.20260508.tar.gz", hash = "sha256:c3103f0afe52e2bb52911e816216807af367d3d1d2cc02a7ffa15062b79ba854"},
+    {file = "types_flake8-7.4.0.20260923-py3-none-any.whl", hash = "sha256:c25f1161e26dc200e332045a42efaf043e46d64416425852cf08e8e35e44562b"},
+    {file = "types_flake8-7.4.0.20260923.tar.gz", hash = "sha256:b3d4abcdd45ebc2eced5f82669af03a8bd03d8918a417faab785e3042b947569"},
 ]
 
 [package.dependencies]
