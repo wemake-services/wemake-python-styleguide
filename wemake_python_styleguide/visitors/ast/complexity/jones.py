@@ -33,18 +33,22 @@ class JonesComplexityVisitor(BaseNodeVisitor):
 
     Some nodes are ignored because there's no sense in analyzing them.
     Some nodes like type annotations are not affecting line complexity,
-    so we do not count them. FormattedValue, JoinedStr, Interpolation, and
-    TemplateStr nodes are not counted, because they have no visible impact
-    on source code.
+    so we do not count them.
+
+    Formatted strings are counted as:
+    - ``1`` for all literal string parts combined
+    - ``1`` per every ``{}`` interpolation
+    - regular complexity for expressions inside interpolations
     """
 
     _ignored_nodes = (
         ast.ClassDef,
         *FunctionNodes,
         ast.expr_context,
-        ast.FormattedValue,
+    )
+
+    _formatted_string_nodes = (
         ast.JoinedStr,
-        nodes.Interpolation,
         nodes.TemplateStr,
     )
 
@@ -106,4 +110,16 @@ class JonesComplexityVisitor(BaseNodeVisitor):
             self._to_ignore.update(ast.walk(node.annotation))
         if isinstance(node, ast_TypeAlias):  # pragma: >=3.12 cover
             self._to_ignore.update(ast.walk(node.value))
+        if isinstance(node, self._formatted_string_nodes):
+            # All literal parts of an f-string / t-string count as 1 total
+            # (the JoinedStr / TemplateStr node itself). Do not count
+            # each Constant fragment separately.
+            self._to_ignore.update(
+                part
+                for part in getattr(node, 'values', ())
+                if not isinstance(
+                    part,
+                    (ast.FormattedValue, nodes.Interpolation),
+                )
+            )
         return node in self._to_ignore
