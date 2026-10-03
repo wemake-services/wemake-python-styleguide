@@ -32,6 +32,11 @@ Semantic versioning in our case means:
   now each formatted part (`{...}` placeholder) counts as one
   and all literal parts count as one in total, #3820
 
+### Misc
+
+- Moves `_formatted_string_parts` to `logic.tree.strings`
+  as `formatted_string_parts`, #3836
+
 
 ## 1.8.1
 
