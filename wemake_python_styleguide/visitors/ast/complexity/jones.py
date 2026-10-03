@@ -9,13 +9,13 @@ Original project is licensed under MIT.
 
 import ast
 from collections import defaultdict
-from collections.abc import Iterator
 from statistics import median
 from typing import ClassVar, TypeAlias, cast, final
 
 from wemake_python_styleguide.compat import nodes
 from wemake_python_styleguide.compat.aliases import FunctionNodes
 from wemake_python_styleguide.compat.nodes import TypeAlias as ast_TypeAlias
+from wemake_python_styleguide.logic.tree.strings import formatted_string_parts
 from wemake_python_styleguide.types import AnyNodes
 from wemake_python_styleguide.violations.complexity import (
     JonesScoreViolation,
@@ -24,7 +24,6 @@ from wemake_python_styleguide.violations.complexity import (
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
 _AnyFormattedString: TypeAlias = ast.JoinedStr | nodes.TemplateStr
-_AnyPlaceholder: TypeAlias = ast.FormattedValue | nodes.Interpolation
 
 
 @final
@@ -127,7 +126,7 @@ class JonesComplexityVisitor(BaseNodeVisitor):
 
     def _visit_formatted_string(self, node: _AnyFormattedString) -> None:
         has_string_part = False
-        for part in _formatted_string_parts(node):
+        for part in formatted_string_parts(node):
             if not isinstance(part, ast.Constant):
                 self._count(part)
                 self.visit(part.value)
@@ -135,18 +134,3 @@ class JonesComplexityVisitor(BaseNodeVisitor):
                 # All literal string parts count as 1 in total:
                 self._count(part)
                 has_string_part = True
-
-
-def _formatted_string_parts(
-    node: _AnyFormattedString,
-) -> Iterator[ast.Constant | _AnyPlaceholder]:
-    """Yields literal and formatted parts, including ones in format specs."""
-    for part in node.values:
-        if isinstance(part, ast.Constant):
-            yield part
-        else:
-            # Any other part of a formatted string is a placeholder:
-            placeholder = cast(_AnyPlaceholder, part)
-            yield placeholder
-            if isinstance(placeholder.format_spec, ast.JoinedStr):
-                yield from _formatted_string_parts(placeholder.format_spec)

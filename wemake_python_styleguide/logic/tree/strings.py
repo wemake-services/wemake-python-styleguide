@@ -1,6 +1,7 @@
 import ast
 import itertools
-from typing import Final
+from collections.abc import Iterator
+from typing import Final, TypeAlias, cast
 
 from wemake_python_styleguide.compat import nodes
 from wemake_python_styleguide.compat.aliases import AssignNodes, FunctionNodes
@@ -9,6 +10,9 @@ from wemake_python_styleguide.logic.nodes import get_context, get_parent
 from wemake_python_styleguide.logic.tree.attributes import is_special_attr
 from wemake_python_styleguide.logic.walk import get_closest_parent
 from wemake_python_styleguide.types import ContextNodes
+
+_AnyFormattedString: TypeAlias = ast.JoinedStr | nodes.TemplateStr
+_AnyPlaceholder: TypeAlias = ast.FormattedValue | nodes.Interpolation
 
 #: Methods that define the instance attributes a docstring can document.
 _ConstructorMethods: Final = frozenset(('__init__', '__new__'))
@@ -95,3 +99,18 @@ def has_format_string_conversion(component: ast.AST) -> bool:
         )
         and formatted_component.conversion != -1
     )
+
+
+def formatted_string_parts(
+    node: _AnyFormattedString,
+) -> Iterator[ast.Constant | _AnyPlaceholder]:
+    """Yields literal and formatted parts, including ones in format specs."""
+    for part in node.values:
+        if isinstance(part, ast.Constant):
+            yield part
+        else:
+            # Any other part of a formatted string is a placeholder:
+            placeholder = cast(_AnyPlaceholder, part)
+            yield placeholder
+            if isinstance(placeholder.format_spec, ast.JoinedStr):
+                yield from formatted_string_parts(placeholder.format_spec)
