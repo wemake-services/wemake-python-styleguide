@@ -26,17 +26,17 @@ class TextNodes(ast.AST, metaclass=_TextNodesMeta):
     value: str | bytes  # noqa: WPS110
 
 
-#: We need this tuple to easily check that this is a real assign node.
 AssignNodes: Final = (ast.Assign, ast.AnnAssign)
+"""We need this tuple to easily check that this is a real assign node."""
 
-#: We need this tuple for cases where we use full assign power.
 AssignNodesWithWalrus: Final = (*AssignNodes, ast.NamedExpr)
+"""We need this tuple for cases where we use full assign power."""
 
-#: We need this tuple since ``async def`` now has its own ast class.
 FunctionNodes: Final = (ast.FunctionDef, ast.AsyncFunctionDef)
+"""We need this tuple since ``async def`` now has its own ast class."""
 
-#: We need this tuple since ``ast.AsyncFor``` was introduced.
 ForNodes: Final = (ast.For, ast.AsyncFor)
+"""We need this tuple since ``ast.AsyncFor``` was introduced."""
 
-#: We need this tuple since ``ast.AsyncWith`` was introduced.
 WithNodes: Final = (ast.With, ast.AsyncWith)
+"""We need this tuple since ``ast.AsyncWith`` was introduced."""

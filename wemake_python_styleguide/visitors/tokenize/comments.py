@@ -35,6 +35,9 @@ from wemake_python_styleguide.violations.best_practices import (
     WrongDocCommentViolation,
     WrongMagicCommentViolation,
 )
+from wemake_python_styleguide.violations.consistency import (
+    WrongAttributeDocstringViolation,
+)
 from wemake_python_styleguide.visitors.base import BaseTokenVisitor
 
 EMPTY_STRING: Final = ''
@@ -67,6 +70,7 @@ class WrongCommentVisitor(BaseTokenVisitor):
         self._check_typed_ast(token)
         self._check_empty_doc_comment(token)
         self._check_cover_comments(token)
+        self._check_attribute_docstring_comment(token)
 
     def _check_typed_ast(self, token: tokenize.TokenInfo) -> None:
         comment_text = get_comment_text(token)
@@ -100,6 +104,14 @@ class WrongCommentVisitor(BaseTokenVisitor):
                     baseline=MAX_NO_COVER_COMMENTS,
                 ),
             )
+
+    def _check_attribute_docstring_comment(
+        self,
+        token: tokenize.TokenInfo,
+    ) -> None:
+        comment_text = get_comment_text(token)
+        if comment_text.startswith(':'):
+            self.add_violation(WrongAttributeDocstringViolation(token))
 
 
 @final

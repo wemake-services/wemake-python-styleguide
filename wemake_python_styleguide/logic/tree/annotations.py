@@ -4,10 +4,9 @@ from typing import Final
 from wemake_python_styleguide.compat.aliases import FunctionNodes
 from wemake_python_styleguide.logic import walk
 
-#: Nodes that can be directly annotated.
 _AnnNodes: Final = (ast.AnnAssign, ast.arg)
+"""Nodes that can be directly annotated."""
 
-#: Nodes that can be a part of an annotation.
 _AnnParts: Final = (
     ast.Name,
     ast.Attribute,
@@ -16,6 +15,7 @@ _AnnParts: Final = (
     ast.Subscript,
     ast.BinOp,  # new styled unions, like: `str | int`
 )
+"""Nodes that can be a part of an annotation."""
 
 
 def is_annotation(node: ast.AST) -> bool:

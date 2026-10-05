@@ -39,8 +39,8 @@ from wemake_python_styleguide.visitors.decorators import alias
 class OffsetVisitor(BaseNodeVisitor):
     """Checks offset values for several nodes."""
 
-    #: Maximum number of blocks to nest different structures:
     _max_offset_blocks: ClassVar[int] = 5
+    """ Maximum number of blocks to nest different structures"""
 
     def visit_line_expression(self, node: ast.AST) -> None:
         """

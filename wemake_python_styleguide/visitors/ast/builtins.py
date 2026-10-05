@@ -33,11 +33,11 @@ from wemake_python_styleguide.violations import (
 )
 from wemake_python_styleguide.visitors import base, decorators
 
-#: Items that can be inside a hash.
 _HashItems: TypeAlias = Sequence[ast.AST | None]
+"""Items that can be inside a hash."""
 
-#: Any formatted string node (f-string or t-string).
 _AnyFormattedString: TypeAlias = ast.JoinedStr | nodes.TemplateStr
+"""Any formatted string node (f-string or t-string)."""
 
 
 @final

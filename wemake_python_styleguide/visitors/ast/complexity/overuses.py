@@ -12,10 +12,11 @@ from wemake_python_styleguide.types import AnyNodes
 from wemake_python_styleguide.violations import complexity
 from wemake_python_styleguide.visitors import base
 
-#: We use these types to store the number of nodes usage in different contexts.
 _Expressions: TypeAlias = defaultdict[str, list[ast.AST]]
 _FunctionExpressions: TypeAlias = defaultdict[ast.AST, _Expressions]
 _StrOrBytes = TypeVar('_StrOrBytes', str, bytes)
+"""We use these types to store the number of
+ nodes usage in different contexts."""
 
 
 @final

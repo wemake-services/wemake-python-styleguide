@@ -35,8 +35,8 @@ from wemake_python_styleguide.violations.refactoring import (
 )
 from wemake_python_styleguide.visitors import base, decorators
 
-#: Type alias to specify how we check different containers in loops.
 _ContainerSpec: TypeAlias = Mapping[type[ast.AST], Sequence[str]]
+"""Type alias to specify how we check different containers in loops."""
 
 
 @final

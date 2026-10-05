@@ -3,6 +3,9 @@ import pytest
 from wemake_python_styleguide.violations.best_practices import (
     WrongDocCommentViolation,
 )
+from wemake_python_styleguide.violations.consistency import (
+    WrongAttributeDocstringViolation,
+)
 from wemake_python_styleguide.visitors.tokenize.comments import (
     WrongCommentVisitor,
 )
@@ -33,7 +36,7 @@ class SomeClass:
         'text with :',
     ],
 )
-def test_correct_comments(
+def test_incorrect_doc_comment(
     parse_tokens,
     assert_errors,
     default_options,
@@ -46,7 +49,7 @@ def test_correct_comments(
     visitor = WrongCommentVisitor(default_options, file_tokens=file_tokens)
     visitor.run()
 
-    assert_errors(visitor, [])
+    assert_errors(visitor, [WrongAttributeDocstringViolation])
 
 
 @pytest.mark.parametrize(
@@ -64,7 +67,7 @@ def test_correct_comments(
         '    ',
     ],
 )
-def test_incorrect_doc_comment(
+def test_incorrect_empty_doc(
     parse_tokens,
     assert_errors,
     default_options,
@@ -77,4 +80,7 @@ def test_incorrect_doc_comment(
     visitor = WrongCommentVisitor(default_options, file_tokens=file_tokens)
     visitor.run()
 
-    assert_errors(visitor, [WrongDocCommentViolation])
+    assert_errors(
+        visitor,
+        [WrongDocCommentViolation, WrongAttributeDocstringViolation],
+    )

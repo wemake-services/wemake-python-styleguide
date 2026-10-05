@@ -45,8 +45,8 @@ from wemake_python_styleguide.violations.refactoring import (
 )
 from wemake_python_styleguide.visitors import base, decorators
 
-#: Things we treat as local variables.
 _LocalVariable: TypeAlias = ast.Name | ast.ExceptHandler
+"""Things we treat as local variables."""
 
 
 @final

@@ -5,16 +5,14 @@ from typing import Final, TypeAlias
 from wemake_python_styleguide.compat.constants import make_immutable
 from wemake_python_styleguide.logic import source
 
-#: Type to represent multiple simple operators.
 _MultipleCompareOperators: TypeAlias = tuple[type[ast.cmpop], ...]
+"""Type to represent multiple simple operators."""
 
-#: Type to represent `_SIMILAR_OPERATORS` constant.
 _ComparesMapping: TypeAlias = Mapping[
     type[ast.cmpop],
     _MultipleCompareOperators,
 ]
-
-#: Constant to define similar operators.
+"""Type to represent `_SIMILAR_OPERATORS` constant."""
 
 _SIMILAR_OPERATORS: Final[_ComparesMapping] = make_immutable(
     {
@@ -24,6 +22,7 @@ _SIMILAR_OPERATORS: Final[_ComparesMapping] = make_immutable(
         ast.LtE: (ast.Lt, ast.LtE),
     },
 )
+"""Constant to define similar operators."""
 
 
 def get_similar_operators(

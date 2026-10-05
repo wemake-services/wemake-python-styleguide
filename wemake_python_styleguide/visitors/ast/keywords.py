@@ -30,10 +30,10 @@ from wemake_python_styleguide.violations.consistency import (
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
-#: Utility type to work with violations easier.
 _ReturningViolations: TypeAlias = (
     type[InconsistentReturnViolation] | type[InconsistentYieldViolation]
 )
+"""Utility type to work with violations easier."""
 
 
 @final

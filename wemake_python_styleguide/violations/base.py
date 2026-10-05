@@ -56,11 +56,12 @@ import tokenize
 from collections.abc import Callable
 from typing import ClassVar, TypeAlias, final
 
-#: General type for all possible nodes where error happens.
 ErrorNode: TypeAlias = ast.AST | tokenize.TokenInfo | None
+"""General type for all possible nodes where error happens."""
 
-#: We use this type to define helper classes with callbacks to add violations.
 ErrorCallback: TypeAlias = Callable[['BaseViolation'], None]
+"""We use this type to define helper classes
+ with callbacks to add violations."""
 
 
 @enum.unique

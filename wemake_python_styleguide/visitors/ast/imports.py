@@ -24,8 +24,8 @@ from wemake_python_styleguide.violations.consistency import (
 )
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 
-#: We use `.` to separate module names.
 _MODULE_MEMBERS_SEPARATOR: Final = '.'
+"""We use `.` to separate module names."""
 
 _NameAndContext: TypeAlias = tuple[str, ast.AST | None]
 

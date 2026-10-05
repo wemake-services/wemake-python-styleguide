@@ -43,10 +43,9 @@ UNUSED_PLACEHOLDER: Final = '_'
 # Values beyond this line are public and should be used.
 # ------------------------------------------------------
 
-#: This url points to the specific violation page.
 SHORTLINK_TEMPLATE: Final = 'https://pyflak.es/{0}'
+"""This url points to the specific violation page."""
 
-#: List of functions we forbid to use.
 FUNCTIONS_BLACKLIST: Final = frozenset(
     (
         # Code generation:
@@ -82,8 +81,8 @@ FUNCTIONS_BLACKLIST: Final = frozenset(
         'reveal_locals',
     ),
 )
+"""List of functions we forbid to use."""
 
-#: List of module metadata we forbid to use.
 MODULE_METADATA_VARIABLES_BLACKLIST: Final = frozenset(
     (
         '__author__',
@@ -94,7 +93,6 @@ MODULE_METADATA_VARIABLES_BLACKLIST: Final = frozenset(
     ),
 )
 
-#: List of variable names we forbid to use.
 VARIABLE_NAMES_BLACKLIST: Final = frozenset(
     (
         # Meaningless words:
@@ -139,8 +137,8 @@ VARIABLE_NAMES_BLACKLIST: Final = frozenset(
         'temp',
     ),
 )
+"""List of module metadata we forbid to use."""
 
-#: List of character sequences that are hard to read.
 UNREADABLE_CHARACTER_COMBINATIONS: Final = frozenset(
     (
         '1l',
@@ -151,8 +149,8 @@ UNREADABLE_CHARACTER_COMBINATIONS: Final = frozenset(
         # Because these names are quite common in real words.
     ),
 )
+"""List of character sequences that are hard to read."""
 
-#: List of special names that are used only as first argument in methods.
 SPECIAL_ARGUMENT_NAMES_WHITELIST: Final = frozenset(
     (
         'self',
@@ -160,8 +158,8 @@ SPECIAL_ARGUMENT_NAMES_WHITELIST: Final = frozenset(
         'mcs',
     ),
 )
+"""List of special names that are used only as first argument in methods."""
 
-#: List of all magic methods from the python docs.
 ALL_MAGIC_METHODS: Final = frozenset(
     (
         '__new__',
@@ -300,8 +298,8 @@ ALL_MAGIC_METHODS: Final = frozenset(
         '__sizeof__',
     ),
 )
+"""List of all magic methods from the python docs."""
 
-#: List of magic methods that are forbidden to use.
 MAGIC_METHODS_BLACKLIST: Final = frozenset(
     (
         # Since we don't use `del`:
@@ -315,8 +313,8 @@ MAGIC_METHODS_BLACKLIST: Final = frozenset(
         '__delattr__',  # since we don't use `delattr()`
     ),
 )
+"""List of magic methods that are forbidden to use."""
 
-#: List of magic methods that are not allowed to be generators.
 YIELD_MAGIC_METHODS_BLACKLIST: Final = ALL_MAGIC_METHODS.difference(
     {
         # Allowed to be used with ``yield`` keyword:
@@ -325,8 +323,8 @@ YIELD_MAGIC_METHODS_BLACKLIST: Final = ALL_MAGIC_METHODS.difference(
         '__aiter__',
     },
 )
+"""List of magic methods that are not allowed to be generators."""
 
-#: List of magic methods that are not allowed to be async.
 ASYNC_MAGIC_METHODS_BLACKLIST: Final = ALL_MAGIC_METHODS.difference(
     {
         # In order of appearance on
@@ -339,16 +337,16 @@ ASYNC_MAGIC_METHODS_BLACKLIST: Final = ALL_MAGIC_METHODS.difference(
         '__call__',
     },
 )
+"""List of magic methods that are not allowed to be async."""
 
-#: List of builtin classes that are allowed to subclass.
 ALLOWED_BUILTIN_CLASSES: Final = frozenset(
     (
         'type',
         'object',
     ),
 )
+"""List of builtin classes that are allowed to subclass."""
 
-#: List of nested functions' names we allow to use.
 NESTED_FUNCTIONS_WHITELIST: Final = frozenset(
     (
         'decorator',
@@ -356,16 +354,16 @@ NESTED_FUNCTIONS_WHITELIST: Final = frozenset(
         'wrapper',
     ),
 )
+"""List of nested functions' names we allow to use."""
 
-#: List of allowed ``__future__`` imports.
 FUTURE_IMPORTS_WHITELIST: Final = frozenset(
     (
         'annotations',
         'generator_stop',
     ),
 )
+"""List of allowed ``__future__`` imports."""
 
-#: List of blacklisted module names.
 MODULE_NAMES_BLACKLIST: Final = frozenset(
     (
         'util',
@@ -374,27 +372,27 @@ MODULE_NAMES_BLACKLIST: Final = frozenset(
         'helpers',
     ),
 )
+"""List of blacklisted module names."""
 
-#: List of allowed module magic names.
 MAGIC_MODULE_NAMES_WHITELIST: Final = frozenset(
     (
         '__init__',
         '__main__',
     ),
 )
+"""List of allowed module magic names."""
 
-#: List of bad magic module functions.
 MAGIC_MODULE_NAMES_BLACKLIST: Final = frozenset(
     (
         '__getattr__',
         '__dir__',
     ),
 )
+"""List of bad magic module functions."""
 
-#: Regex pattern to name modules.
 MODULE_NAME_PATTERN: Final = re.compile(r'^_?_?[a-z][a-z\d_]*[a-z\d](__)?$')
+"""Regex pattern to name modules."""
 
-#: Common numbers that are allowed to be used without being called "magic".
 MAGIC_NUMBERS_WHITELIST: Final = frozenset(
     (
         0,  # both int and float
@@ -409,23 +407,23 @@ MAGIC_NUMBERS_WHITELIST: Final = frozenset(
         1j,  # imaginary part of a complex number
     ),
 )
+"""Common numbers that are allowed to be used without being called "magic"."""
 
-#: Maximum amount of ``pragma`` no-cover comments per module.
 MAX_NO_COVER_COMMENTS: Final = 5
+"""Maximum amount of ``pragma`` no-cover comments per module."""
 
-#: Maximum length of ``yield`` or ``return`` ``tuple`` expressions.
 MAX_LEN_TUPLE_OUTPUT: Final = 5
+"""Maximum length of ``yield`` or ``return`` ``tuple`` expressions."""
 
-#: Maximum number of compare nodes in a single expression.
 MAX_COMPARES: Final = 2
+"""Maximum number of compare nodes in a single expression."""
 
-#: Maximum number of `elif` blocks in a single `if` condition:
 MAX_ELIFS: Final = 3
+"""Maximum number of `elif` blocks in a single `if` condition:"""
 
-#: Maximum number of ``except`` cases in a single ``try`` clause.
 MAX_EXCEPT_CASES: Final = 3
+"""Maximum number of ``except`` cases in a single ``try`` clause."""
 
-#: Approximate constants which real values should be imported from math module.
 MATH_APPROXIMATE_CONSTANTS: Final = frozenset(
     (
         math.pi,
@@ -433,8 +431,9 @@ MATH_APPROXIMATE_CONSTANTS: Final = frozenset(
         math.tau,
     ),
 )
+"""Approximate constants which real values
+should be imported from math module."""
 
-#: List of vague method names that may cause confusion if imported as is:
 VAGUE_IMPORTS_BLACKLIST: Final = frozenset(
     (
         'read',
@@ -452,11 +451,11 @@ VAGUE_IMPORTS_BLACKLIST: Final = frozenset(
         'safe_dump_all',
     ),
 )
+"""List of vague method names that may cause confusion if imported as is:"""
 
-#: List of functions in which arguments must be tuples.
 TUPLE_ARGUMENTS_METHODS: Final = frozenset(('frozenset',))
+"""List of functions in which arguments must be tuples."""
 
-#: List of commonly used aliases
 ALIAS_NAMES_WHITELIST: Final = frozenset(
     (
         'np',
@@ -468,3 +467,4 @@ ALIAS_NAMES_WHITELIST: Final = frozenset(
         'cv',
     ),
 )
+"""List of commonly used aliases"""

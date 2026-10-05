@@ -1,8 +1,8 @@
 import re
 from typing import Final
 
-#: Used as a special name patterns for unused variables, like `_` and `__`.
 _UNUSED_VARIABLE_REGEX: Final = re.compile(r'^_+$')
+"""Used as a special name patterns for unused variables, like `_` and `__`."""
 
 
 def is_unused(name: str) -> bool:

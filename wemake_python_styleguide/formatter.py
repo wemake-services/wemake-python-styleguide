@@ -39,14 +39,15 @@ from pygments.lexers import PythonLexer
 from wemake_python_styleguide.constants import SHORTLINK_TEMPLATE
 from wemake_python_styleguide.version import pkg_version
 
-#: That url is generated and hosted by Sphinx.
 _DOCS_URL_TEMPLATE: Final = (
     'https://wemake-python-styleguide.rtfd.io/en/{0}/pages/usage/violations/'
 )
+"""That url is generated and hosted by Sphinx."""
 
-#: Option to disable any code highlight and text output format.
-#: See https://no-color.org
+
 _NO_COLOR: Final = os.environ.get('NO_COLOR', '0') == '1'
+"""Option to disable any code highlight and text output format.
+See https://no-color.org"""
 
 
 class WemakeFormatter(BaseFormatter):  # noqa: WPS214

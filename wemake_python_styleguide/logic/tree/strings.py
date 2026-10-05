@@ -14,8 +14,8 @@ from wemake_python_styleguide.types import ContextNodes
 _AnyFormattedString: TypeAlias = ast.JoinedStr | nodes.TemplateStr
 _AnyPlaceholder: TypeAlias = ast.FormattedValue | nodes.Interpolation
 
-#: Methods that define the instance attributes a docstring can document.
 _ConstructorMethods: Final = frozenset(('__init__', '__new__'))
+"""Methods that define the instance attributes a docstring can document."""
 
 
 def is_doc_string(node: ast.AST) -> bool:

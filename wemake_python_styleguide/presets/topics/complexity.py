@@ -15,7 +15,6 @@ from wemake_python_styleguide.visitors.ast.complexity import (  # noqa: WPS235
     pm,
 )
 
-#: Used to store all complexity related visitors to be later passed to checker:
 PRESET: Final = (
     function.FunctionComplexityVisitor,
     function.CognitiveComplexityVisitor,
@@ -40,3 +39,5 @@ PRESET: Final = (
     pm.MatchSubjectsVisitor,
     pm.MatchCasesVisitor,
 )
+"""Used to store all complexity related visitors
+ to be later passed to checker:"""

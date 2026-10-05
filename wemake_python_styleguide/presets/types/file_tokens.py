@@ -8,7 +8,6 @@ from wemake_python_styleguide.visitors.tokenize import (
     syntax,
 )
 
-#: Used to store all token related visitors to be later passed to checker:
 PRESET: Final = (
     comments.WrongCommentVisitor,
     comments.ShebangVisitor,
@@ -22,3 +21,4 @@ PRESET: Final = (
     conditions.IfElseVisitor,
     primitives.MultilineFormattedStringTokenVisitor,
 )
+"""Used to store all token related visitors to be later passed to checker"""

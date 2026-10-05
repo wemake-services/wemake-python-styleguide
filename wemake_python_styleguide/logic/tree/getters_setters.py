@@ -9,11 +9,11 @@ from wemake_python_styleguide.logic.naming import name_nodes
 from wemake_python_styleguide.logic.tree import classes
 from wemake_python_styleguide.types import AnyFunctionDef
 
-#: Prefixes that usually define getters and setters.
 _GetterSetterPrefixes: Final = frozenset(('get_', 'set_'))
+"""Prefixes that usually define getters and setters."""
 
-#: Fixes length of a getter/setter.
 GETTER_LENGTH: Final = 4
+"""Fixes length of a getter/setter."""
 
 
 def find_paired_getters_and_setters(

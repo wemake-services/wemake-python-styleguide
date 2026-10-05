@@ -38,55 +38,56 @@ Reference
 import ast
 from typing import TypeAlias
 
-#: In cases we need to work with both import types.
 AnyImport: TypeAlias = ast.Import | ast.ImportFrom
+"""In cases we need to work with both import types."""
 
-#: In cases we need to work with both function definitions.
 AnyFunctionDef: TypeAlias = ast.FunctionDef | ast.AsyncFunctionDef
+"""In cases we need to work with both function definitions."""
 
-#: In cases we need to work with all function definitions (including lambdas).
 AnyFunctionDefAndLambda: TypeAlias = AnyFunctionDef | ast.Lambda
+"""In cases we need to work with all
+ function definitions (including lambdas)."""
 
-#: In cases we need to work with both forms of if functions.
 AnyIf: TypeAlias = ast.If | ast.IfExp
+"""In cases we need to work with both forms of if functions."""
 
-#: In cases we need to work with both sync and async loops.
 AnyFor: TypeAlias = ast.For | ast.AsyncFor
+"""In cases we need to work with both sync and async loops."""
 
-#: In case we need to work with any loop: sync, async, and while.
 AnyLoop: TypeAlias = AnyFor | ast.While
+"""In case we need to work with any loop: sync, async, and while."""
 
-#: This is how you can define a variable in Python.
 AnyVariableDef: TypeAlias = ast.Name | ast.Attribute | ast.ExceptHandler
+"""This is how you can define a variable in Python."""
 
-#: All different comprehension types in one place.
 AnyComprehension: TypeAlias = (
     ast.ListComp | ast.DictComp | ast.SetComp | ast.GeneratorExp
 )
+"""All different comprehension types in one place."""
 
-#: In cases we need to work with both sync and async context managers.
 AnyWith: TypeAlias = ast.With | ast.AsyncWith
+"""In cases we need to work with both sync and async context managers."""
 
-#: When we search for assign elements, we also need typed assign.
 AnyAssign: TypeAlias = ast.Assign | ast.AnnAssign
+"""When we search for assign elements, we also need typed assign."""
 
-#: When we search for assign elements, we also need typed assign.
 AnyAssignWithWalrus: TypeAlias = AnyAssign | ast.NamedExpr
+"""When we search for assign elements, we also need typed assign."""
 
-#: In cases we need to work with both access types.
 AnyAccess: TypeAlias = ast.Attribute | ast.Subscript
+"""In cases we need to work with both access types."""
 
-#: In case we need to handle types that can be chained.
 AnyChainable: TypeAlias = ast.Attribute | ast.Subscript | ast.Call
+"""In case we need to handle types that can be chained."""
 
-#: Tuple of AST node types for declarative syntax.
 AnyNodes: TypeAlias = tuple[type[ast.AST], ...]
+"""Tuple of AST node types for declarative syntax."""
 
-#: We use this type to work with any text-like values. Related to `AnyText`.
 AnyTextPrimitive: TypeAlias = str | bytes
+"""We use this type to work with any text-like values. Related to `AnyText`."""
 
-#: That's how we define context of operations.
 ContextNodes: TypeAlias = ast.Module | ast.ClassDef | AnyFunctionDef
+"""That's how we define context of operations."""
 
-#: Flake8 API format to return error messages.
 CheckResult: TypeAlias = tuple[int, int, str, type]
+"""Flake8 API format to return error messages."""

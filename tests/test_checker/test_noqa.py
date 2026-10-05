@@ -25,10 +25,9 @@ from wemake_python_styleguide.compat.constants import (
     make_immutable,
 )
 
-#: Used to find violations' codes in output.
 ERROR_PATTERN = re.compile(r'(WPS\d{3})')
+"""Used to find violations' codes in output."""
 
-#: List of ignored violations that we do not cover with `noqa` comments.
 IGNORED_VIOLATIONS = (
     'WPS201',  # it is a module level violation
     'WPS202',  # since our test case is complex, that's fine
@@ -38,14 +37,14 @@ IGNORED_VIOLATIONS = (
     'WPS400',  # it is a module level violation
     'WPS402',  # we obviously use a lot of `noqa` comments
 )
+"""List of ignored violations that we do not cover with `noqa` comments."""
 
-#: List of ignored violations on python 3.13+.
 IGNORED_VIOLATIONS3_13 = ()
+"""List of ignored violations on python 3.13+."""
 
-#: List of ignored violations on python 3.15+.
 IGNORED_VIOLATIONS3_15 = ()
+"""List of ignored violations on python 3.15+."""
 
-#: Number and count of violations that would be raised.
 SHOULD_BE_RAISED = make_immutable(
     {
         'WPS000': 0,  # logically unacceptable.
@@ -174,6 +173,7 @@ SHOULD_BE_RAISED = make_immutable(
         'WPS364': 1,
         'WPS365': 2,
         'WPS366': 1,
+        'WPS367': 1,
         'WPS400': 0,  # defined in ignored violations.
         'WPS401': 0,  # logically unacceptable.
         'WPS402': 0,  # defined in ignored violations.
@@ -316,11 +316,11 @@ SHOULD_BE_RAISED = make_immutable(
         'WPS617': 1,
     },
 )
-
-#: Number and count of violations that would be raised.
+"""Number and count of violations that would be raised."""
 
 SHOULD_BE_RAISED3_13 = make_immutable({'WPS477': 1})
 SHOULD_BE_RAISED3_15 = make_immutable({'WPS482': 1, 'WPS483': 1})
+"""Number and count of violations that would be raised."""
 
 
 def _assert_errors_count_in_output(

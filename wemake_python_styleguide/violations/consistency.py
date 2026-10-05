@@ -2540,3 +2540,26 @@ class MeaninglessBooleanOperationViolation(ASTViolation):
 
     error_template = 'Found meaningless boolean operation'
     code = 366
+
+
+@final
+class WrongAttributeDocstringViolation(TokenizeViolation):
+    """
+    Disallows using ``#:`` comments for attribute and value docstrings.
+
+    Reasoning:
+        ``#:`` is less consistent with the rest of the project, while
+        `\"\"\"Docs.\"\"\"` is the preferred and clearer docstring style.
+
+    Solution:
+        Use a normal docstring literal instead of `#:` comments.
+
+    ... versionadded:: 1.9.0
+
+    """
+
+    error_template = (
+        'Use a normal docstring literal instead of `#:` comments; '
+        'prefer `"""Docs."""`'
+    )
+    code = 367
