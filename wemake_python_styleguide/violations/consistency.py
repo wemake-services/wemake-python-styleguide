@@ -2554,6 +2554,16 @@ class WrongAttributeDocstringViolation(TokenizeViolation):
     Solution:
         Use a normal docstring literal instead of `#:` comments.
 
+    Example::
+
+        # Correct:
+        SOME_CONSTANT = 12
+        \"\"\"Some constant docs\"\"\"
+
+        # Wrong:
+        #: Some constant docs
+        SOME_CONSTANT = 12
+
     See also:
         https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html#doc-comments-and-docstrings
 
