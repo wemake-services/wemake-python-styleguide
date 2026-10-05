@@ -2567,7 +2567,7 @@ class WrongAttributeDocstringViolation(TokenizeViolation):
     See also:
         https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html#doc-comments-and-docstrings
 
-    ... versionadded:: 1.9.0
+    .. versionadded:: 1.9.0
 
     """
 
