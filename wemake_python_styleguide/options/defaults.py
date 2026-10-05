@@ -18,150 +18,150 @@ from typing import Final
 # General:
 # ========
 
-#: Minimum variable's name length.
 MIN_NAME_LENGTH: Final = 2  # reasonable enough
+"""Minimum variable's name length."""
 
-#: Maximum variable and module name length:
 MAX_NAME_LENGTH: Final = 45  # reasonable enough
+"""Maximum variable and module name length."""
 
-#: Maximum amount of ``noqa`` comments per module.
 MAX_NOQA_COMMENTS: Final = 10  # guessed
+"""Maximum amount of ``noqa`` comments per module."""
 
-#: List of nested classes' names we allow to use.
 NESTED_CLASSES_WHITELIST: Final = (
     'Meta',  # django forms, models, drf, etc
     'Params',  # factoryboy specific
     'Config',  # pydantic specific
 )
+"""List of nested classes' names we allow to use."""
 
-#: List of additional enum-like base class names.
 KNOWN_ENUM_BASES: Final = ()
+"""List of additional enum-like base class names."""
 
-#: Domain names that are removed from variable names' blacklist.
 ALLOWED_DOMAIN_NAMES: Final = ()
+"""Domain names that are removed from variable names' blacklist."""
 
-#: Domain names that extends variable names' blacklist.
 FORBIDDEN_DOMAIN_NAMES: Final = ()
+"""Domain names that extends variable names' blacklist."""
 
-#: Violation codes that are forbidden to use.
 FORBIDDEN_INLINE_IGNORE: Final = ()
+"""Violation codes that are forbidden to use."""
 
-#: Count of available expressions for one empty line in function or method body.
 EXPS_FOR_ONE_EMPTY_LINE: Final = 2
+"""Count of available expressions for one empty line
+in function or method body."""
 
-#: List of module metadata we allow to use.
 ALLOWED_MODULE_METADATA: Final = ()
+"""List of module metadata we allow to use."""
 
-#: List of module metadata we forbid to use.
 FORBIDDEN_MODULE_METADATA: Final = ()
+"""List of module metadata we forbid to use."""
 
 # ===========
 # Complexity:
 # ===========
 
-#: Maximum amount of `finally` block body length.
 MAX_LINES_IN_FINALLY: Final = 2  # best practice
+"""Maximum amount of `finally` block body length."""
 
-#: Maximum number of `return` statements allowed in a single function.
 MAX_RETURNS: Final = 5  # 7-2
+"""Maximum number of `return` statements allowed in a single function."""
 
-#: Maximum number of local variables in a function.
 MAX_LOCAL_VARIABLES: Final = 5  # 7-2
+"""Maximum number of local variables in a function."""
 
-#: Maximum number of expressions in a single function.
 MAX_EXPRESSIONS: Final = 9  # 7+2
+"""Maximum number of expressions in a single function."""
 
-#: Maximum number of arguments for functions or methods.
 MAX_ARGUMENTS: Final = 5  # 7-2
+"""Maximum number of arguments for functions or methods."""
 
-#: Maximum number of classes and functions in a single module.
 MAX_MODULE_MEMBERS: Final = 7  # 7
+"""Maximum number of classes and functions in a single module."""
 
-#: Maximum number of methods in a single class.
 MAX_METHODS: Final = 7  # the same as module members
+"""Maximum number of methods in a single class."""
 
-#: Maximum line complexity.
 MAX_LINE_COMPLEXITY: Final = 14  # 7 * 2, also almost guessed
+"""Maximum line complexity."""
 
-#: Maximum median module Jones complexity.
 MAX_JONES_SCORE: Final = 12  # guessed
+"""Maximum median module Jones complexity."""
 
-#: Maximum number of imports in a single module.
 MAX_IMPORTS: Final = 12  # guessed
+"""Maximum number of imports in a single module."""
 
-#: Maximum number of imported names in a single module.
 MAX_IMPORTED_NAMES: Final = 50  # guessed
+"""Maximum number of imported names in a single module."""
 
-#: Maximum number of base classes.
 MAX_BASE_CLASSES: Final = 3  # guessed
+"""Maximum number of base classes."""
 
-#: Maximum number of decorators.
 MAX_DECORATORS: Final = 5  # 7-2
+"""Maximum number of decorators."""
 
-#: Maximum number of same string usage in code.
 MAX_STRING_USAGES: Final = 3  # guessed
+"""Maximum number of same string usage in code."""
 
-#: Maximum number of ``await`` expressions for functions or methods.
 MAX_AWAITS: Final = 5  # the same as returns
+"""Maximum number of ``await`` expressions for functions or methods."""
 
-#: Maximum amount of ``try`` node body length.
 MAX_TRY_BODY_LENGTH: Final = 1  # best practice
+"""Maximum amount of ``try`` node body length."""
 
-#: Maximum amount of same expressions per module.
 MAX_MODULE_EXPRESSIONS: Final = 7  # the same as module elements
+"""Maximum amount of same expressions per module."""
 
-#: Maximum amount of same expressions per function.
 MAX_FUNCTION_EXPRESSIONS: Final = 4  # guessed
+"""Maximum amount of same expressions per function."""
 
-#: Maximum number of ``assert`` statements in a function.
 MAX_ASSERTS: Final = 5  # 7-2
+"""Maximum number of ``assert`` statements in a function."""
 
-#: Maximum number of access level in an expression.
 MAX_ACCESS_LEVEL: Final = 4  # guessed
+"""Maximum number of access level in an expression."""
 
-#: Maximum number of public attributes in a single class.
 MAX_ATTRIBUTES: Final = 6  # guessed
+"""Maximum number of public attributes in a single class."""
 
-#: Maximum number of raises in a function.
 MAX_RAISES: Final = 3  # guessed
+"""Maximum number of raises in a function."""
 
-#: Maximum number of exceptions in `except`.
 MAX_EXCEPT_EXCEPTIONS: Final = 3  # guessed
+"""Maximum number of exceptions in `except`."""
 
-#: Maximum amount of cognitive complexity per function.
 MAX_COGNITIVE_SCORE: Final = 12  # based on this code statistics
+"""Maximum amount of cognitive complexity per function."""
 
-#: Maximum amount of average cognitive complexity per module.
 MAX_COGNITIVE_AVERAGE: Final = 8  # based on this code statistics
+"""Maximum amount of average cognitive complexity per module."""
 
-#: Maximum number of call chains.
 MAX_CALL_LEVEL: Final = 3  # reasonable enough
+"""Maximum number of call chains."""
 
-#: Maximum number of nested annotations.
 MAX_ANN_COMPLEXITY: Final = 3  # reasonable enough
+"""Maximum number of nested annotations."""
 
-#: Maximum number of names that can be imported from module.
 MAX_IMPORT_FROM_MEMBERS: Final = 8  # guessed
+"""Maximum number of names that can be imported from module."""
 
-#: Maximum number of variables in a ``tuple`` unpacking statement.
 MAX_TUPLE_UNPACK_LENGTH: Final = 4  # guessed
+"""Maximum number of variables in a ``tuple`` unpacking statement."""
 
-#: Maximum number of PEP695 type parameters.
 MAX_TYPE_PARAMS: Final = 6  # 7-1, guessed
+"""Maximum number of PEP695 type parameters."""
 
-#: Maximum number of subjects in a ``match`` statement.
 MAX_MATCH_SUBJECTS: Final = 7  # 7 +- 0, guessed
+"""Maximum number of subjects in a ``match`` statement."""
 
-#: Maximum number of subjects in match statement.
 MAX_MATCH_CASES: Final = 7  # guessed
+"""Maximum number of subjects in match statement."""
 
-#: Maximum number of conditions in a single ``if`` or ``while`` statement.
 MAX_CONDITIONS: Final = 4  # reasonable enough
-
+"""Maximum number of conditions in a single ``if`` or ``while`` statement."""
 
 # ==========
 # Formatter:
 # ==========
 
-#: Whether to show violation shortlinks in the formatter output.
 SHOW_VIOLATION_LINKS: Final = False
+"""Whether to show violation shortlinks in the formatter output."""

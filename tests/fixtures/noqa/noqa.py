@@ -72,6 +72,8 @@ phone_number = 8_83_134_43  # noqa:  WPS303
 float_zero = 0.0  # noqa: WPS358
 formatted_string_complex = f'1+1={1 + 1}'  # noqa: WPS237
 
+#: CONST INFO # noqa: WPS367
+_MY_CONST = 10
 
 def __getattr__():  # noqa: WPS413
     # See:

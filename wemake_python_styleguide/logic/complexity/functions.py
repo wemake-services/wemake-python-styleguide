@@ -8,14 +8,14 @@ from wemake_python_styleguide.types import (
     AnyFunctionDefAndLambda,
 )
 
-#: Function complexity counter.
 FunctionCounter: TypeAlias = defaultdict[AnyFunctionDef, int]
+"""Function complexity counter."""
 
-#: Function and lambda complexity counter.
 FunctionCounterWithLambda: TypeAlias = defaultdict[AnyFunctionDefAndLambda, int]
+"""Function and lambda complexity counter."""
 
-#: Function and their variables.
 FunctionNames: TypeAlias = defaultdict[AnyFunctionDef, list[str]]
+"""Function and their variables."""
 
 
 def _default_factory() -> FunctionCounter:

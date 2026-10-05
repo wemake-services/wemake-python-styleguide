@@ -33,7 +33,6 @@ from wemake_python_styleguide.violations.refactoring import (
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 from wemake_python_styleguide.visitors.decorators import alias
 
-#: Statements that do have `.body` attribute.
 _StatementWithBody: TypeAlias = (
     ast.If
     | types.AnyFor
@@ -47,6 +46,7 @@ _StatementWithBody: TypeAlias = (
     | ast.Module
     | ast.match_case
 )
+"""Statements that do have `.body` attribute."""
 
 
 @final

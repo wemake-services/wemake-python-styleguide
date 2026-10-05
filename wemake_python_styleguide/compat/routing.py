@@ -3,7 +3,6 @@ from typing import Final
 
 from wemake_python_styleguide.compat.constants import make_immutable
 
-#: That's how python types and ast types map to each other, copied from ast.
 _CONST_NODE_TYPE_NAMES: Final = make_immutable(
     {
         bool: 'NameConstant',  # should be before int
@@ -16,6 +15,7 @@ _CONST_NODE_TYPE_NAMES: Final = make_immutable(
         type(...): 'Ellipsis',
     },
 )
+"""That's how python types and ast types map to each other, copied from ast."""
 
 
 def route_visit(self: ast.NodeVisitor, node: ast.AST) -> None:

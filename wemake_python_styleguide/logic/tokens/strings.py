@@ -1,7 +1,6 @@
 import tokenize
 from typing import Final
 
-#: All tokens that don't really mean anything for user.
 _UTILITY_TOKENS: Final = frozenset((
     tokenize.NEWLINE,
     tokenize.INDENT,
@@ -9,6 +8,7 @@ _UTILITY_TOKENS: Final = frozenset((
     tokenize.NL,
     tokenize.COMMENT,
 ))
+"""All tokens that don't really mean anything for user."""
 
 
 def split_prefixes(string: str) -> tuple[str, str]:

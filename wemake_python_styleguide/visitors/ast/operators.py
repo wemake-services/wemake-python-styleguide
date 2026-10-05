@@ -69,10 +69,10 @@ class UselessOperatorsVisitor(base.BaseNodeVisitor):  # noqa: WPS214
         ),
     }
 
-    #: Used to ignore some special cases like `1 / x`:
     _left_special_cases: ClassVar[_MeaninglessOperators] = {
         1: (ast.Div, ast.FloorDiv),
     }
+    """Used to ignore some special cases like `1 / x`."""
 
     _zero_divisors: ClassVar[AnyNodes] = (
         ast.Div,

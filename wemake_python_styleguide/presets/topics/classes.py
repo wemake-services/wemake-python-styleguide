@@ -6,7 +6,6 @@ from wemake_python_styleguide.visitors.ast.classes import (
     methods,
 )
 
-#: Used to store all classes related visitors to be later passed to checker:
 PRESET: Final = (
     classdef.WrongClassDefVisitor,
     classdef.WrongClassBodyVisitor,
@@ -17,3 +16,4 @@ PRESET: Final = (
     methods.BuggySuperCallVisitor,
     classdef.ConsecutiveDefaultTypeVarsVisitor,
 )
+"""Used to store all classes related visitors to be later passed to checker."""

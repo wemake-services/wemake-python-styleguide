@@ -10,18 +10,18 @@ from wemake_python_styleguide.types import (
     AnyFunctionDefAndLambda,
 )
 
-#: Expressions that causes control transfer from a routine
 _AnyControlTransfers: TypeAlias = ast.Return | ast.Yield | ast.YieldFrom
+"""Expressions that causes control transfer from a routine."""
 
-#: Type annotation for an iterable of control transfer nodes
 _ControlTransferIterable: TypeAlias = Iterable[_AnyControlTransfers]
+"""Type annotation for an iterable of control transfer nodes."""
 
-#: That's what we expect from `@overload` decorator:
 _OVERLOAD_EXCEPTIONS: Final = frozenset((
     'overload',
     'typing.overload',
     'typing_extensions.overload',
 ))
+"""That's what we expect from `@overload` decorator."""
 
 _STATICMETHOD_NAMES: Final = frozenset(('staticmethod',))
 

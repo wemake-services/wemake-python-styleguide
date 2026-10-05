@@ -21,7 +21,6 @@ from collections.abc import Callable
 from wemake_python_styleguide.logic.tree import bools, recursion
 from wemake_python_styleguide.types import AnyFunctionDef, AnyNodes
 
-#: Control flow nodes that increment and can be nested.
 _CONTROL_FLOW_BREAKERS: AnyNodes = (
     ast.If,
     ast.For,
@@ -30,20 +29,21 @@ _CONTROL_FLOW_BREAKERS: AnyNodes = (
     ast.IfExp,
     ast.match_case,
 )
+"""Control flow nodes that increment and can be nested."""
 
-#: Control flow nodes that increment.
 _SHORT_CIRCUITS: AnyNodes = (
     ast.Break,
     ast.Continue,
     ast.Raise,
 )
+"""Control flow nodes that increment."""
 
-#: Basic nodes to be counted as `1`.
 _INCREMENTERS: AnyNodes = (
     ast.FunctionDef,
     ast.AsyncFunctionDef,
     ast.Lambda,
 )
+"""Basic nodes to be counted as `1`."""
 
 
 def _process_child_nodes(

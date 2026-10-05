@@ -2540,3 +2540,39 @@ class MeaninglessBooleanOperationViolation(ASTViolation):
 
     error_template = 'Found meaningless boolean operation'
     code = 366
+
+
+@final
+class WrongAttributeDocstringViolation(TokenizeViolation):
+    '''
+    Disallows using ``#:`` comments for attribute and value docstrings.
+
+    Reasoning:
+        ``#:`` is less consistent with the rest of the project, while
+        ``"""Docs."""`` is the preferred and clearer docstring style.
+
+    Solution:
+        Use a normal docstring literal instead of `#:` comments.
+
+    Example::
+
+        # Correct:
+        SOME_CONSTANT = 12
+        """Some constant docs"""
+
+        # Wrong:
+        #: Some constant docs
+        SOME_CONSTANT = 12
+
+    See also:
+        https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html#doc-comments-and-docstrings
+
+    .. versionadded:: 1.9.0
+
+    '''
+
+    error_template = (
+        'Use a normal docstring literal instead of `#:` comments; '
+        'prefer `"""Docs."""`'
+    )
+    code = 367

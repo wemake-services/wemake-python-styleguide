@@ -7,10 +7,9 @@ from wemake_python_styleguide.logic import nodes, source
 from wemake_python_styleguide.logic.naming.builtins import is_builtin_name
 from wemake_python_styleguide.types import AnyAssign
 
-#: Type alias for the attributes we return from class inspection.
 _AllAttributes: TypeAlias = tuple[list[AnyAssign], list[ast.Attribute]]
+"""Type alias for the attributes we return from class inspection."""
 
-#: Names that can define a dataclass.
 _DATACLASS_NAMES: Final = frozenset((
     # stdlib:
     'dataclasses.dataclass',
@@ -26,11 +25,12 @@ _DATACLASS_NAMES: Final = frozenset((
     'attr.dataclass',
     # pydantic also has `dataclass` and `dataclasses.dataclass`
 ))
+"""Names that can define a dataclass."""
 
-#: Short form of dataclass decorators without module names.
 _SHORT_DATACLASS_NAMES: Final = frozenset(
     dataclass_name.split('.')[1] for dataclass_name in _DATACLASS_NAMES
 )
+"""Short form of dataclass decorators without module names."""
 
 
 def is_forbidden_super_class(class_name: str | None) -> bool:
