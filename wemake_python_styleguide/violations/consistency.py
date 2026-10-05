@@ -2549,10 +2549,13 @@ class WrongAttributeDocstringViolation(TokenizeViolation):
 
     Reasoning:
         ``#:`` is less consistent with the rest of the project, while
-        `\"\"\"Docs.\"\"\"` is the preferred and clearer docstring style.
+        ``\"\"\"Docs.\"\"\"`` is the preferred and clearer docstring style.
 
     Solution:
         Use a normal docstring literal instead of `#:` comments.
+
+    See also:
+        https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html#doc-comments-and-docstrings
 
     ... versionadded:: 1.9.0
 

@@ -90,4 +90,4 @@ PRESET: Final = (
     *naming.PRESET,
     *classes.PRESET,
 )
-"""Used to store all general visitors to be later passed to checker"""
+"""Used to store all general visitors to be later passed to checker."""

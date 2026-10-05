@@ -8,4 +8,4 @@ PRESET: Final = (
     variables.UnusedVariableUsageVisitor,
     variables.UnusedVariableDefinitionVisitor,
 )
-"""Used to store all naming related visitors to be later passed to checker"""
+"""Used to store all naming related visitors to be later passed to checker."""

@@ -40,7 +40,7 @@ class OffsetVisitor(BaseNodeVisitor):
     """Checks offset values for several nodes."""
 
     _max_offset_blocks: ClassVar[int] = 5
-    """ Maximum number of blocks to nest different structures"""
+    """Maximum number of blocks to nest different structures."""
 
     def visit_line_expression(self, node: ast.AST) -> None:
         """

@@ -22,7 +22,7 @@ MIN_NAME_LENGTH: Final = 2  # reasonable enough
 """Minimum variable's name length."""
 
 MAX_NAME_LENGTH: Final = 45  # reasonable enough
-"""Maximum variable and module name length:"""
+"""Maximum variable and module name length."""
 
 MAX_NOQA_COMMENTS: Final = 10  # guessed
 """Maximum amount of ``noqa`` comments per module."""

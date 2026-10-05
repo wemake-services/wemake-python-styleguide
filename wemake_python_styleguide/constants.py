@@ -8,7 +8,10 @@ Then, we automatically have to add it here and document it.
 Other constants that are not used across modules
 and does not require to be documented can be defined where they are used.
 
-All values here must be documented with ``#:`` comments.
+All values here must be documented with ``\"\"\"Docs.\"\"\"`` style.
+
+See also:
+    https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html#doc-comments-and-docstrings
 """
 
 import math
@@ -24,18 +27,17 @@ from typing import Final
 # They are not publicly documented since they are not used by the end user.
 # But, we still need them to be defined here.
 
-# Used as a default filename, when it is not passed by flake8:
 STDIN: Final = 'stdin'
+"""Used as a default filename, when it is not passed by flake8."""
 
-# Used to specify as a placeholder for `__init__`:
 INIT: Final = '__init__'
+"""Used to specify as a placeholder for `__init__`."""
 
-# Used to determine when we are running on Windows:
 WINDOWS_OS: Final = 'nt'
+"""Used to determine when we are running on Windows."""
 
-# Used as a placeholder for special `_` variable:
 UNUSED_PLACEHOLDER: Final = '_'
-
+"""Used as a placeholder for special `_` variable."""
 
 # Public variables
 # ================
@@ -419,7 +421,7 @@ MAX_COMPARES: Final = 2
 """Maximum number of compare nodes in a single expression."""
 
 MAX_ELIFS: Final = 3
-"""Maximum number of `elif` blocks in a single `if` condition:"""
+"""Maximum number of `elif` blocks in a single `if` condition."""
 
 MAX_EXCEPT_CASES: Final = 3
 """Maximum number of ``except`` cases in a single ``try`` clause."""
@@ -451,7 +453,7 @@ VAGUE_IMPORTS_BLACKLIST: Final = frozenset(
         'safe_dump_all',
     ),
 )
-"""List of vague method names that may cause confusion if imported as is:"""
+"""List of vague method names that may cause confusion if imported as is."""
 
 TUPLE_ARGUMENTS_METHODS: Final = frozenset(('frozenset',))
 """List of functions in which arguments must be tuples."""
@@ -467,4 +469,4 @@ ALIAS_NAMES_WHITELIST: Final = frozenset(
         'cv',
     ),
 )
-"""List of commonly used aliases"""
+"""List of commonly used aliases."""

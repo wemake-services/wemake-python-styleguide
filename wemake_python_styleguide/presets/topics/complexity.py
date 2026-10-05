@@ -40,4 +40,4 @@ PRESET: Final = (
     pm.MatchCasesVisitor,
 )
 """Used to store all complexity related visitors
- to be later passed to checker:"""
+ to be later passed to checker."""

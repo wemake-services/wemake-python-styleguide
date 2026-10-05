@@ -21,4 +21,4 @@ PRESET: Final = (
     conditions.IfElseVisitor,
     primitives.MultilineFormattedStringTokenVisitor,
 )
-"""Used to store all token related visitors to be later passed to checker"""
+"""Used to store all token related visitors to be later passed to checker."""

@@ -16,4 +16,4 @@ PRESET: Final = (
     methods.BuggySuperCallVisitor,
     classdef.ConsecutiveDefaultTypeVarsVisitor,
 )
-"""Used to store all classes related visitors to be later passed to checker"""
+"""Used to store all classes related visitors to be later passed to checker."""

@@ -13,4 +13,4 @@ NamedMatch: TypeAlias = ast.MatchAs | ast.MatchStar
 NodeWithTypeParams: TypeAlias = (
     ast.ClassDef | ast.FunctionDef | ast.AsyncFunctionDef | TypeAliasNode
 )
-"""These nodes have `.type_params` on python3.12+:"""
+"""These nodes have `.type_params` on python3.12+."""
