@@ -2544,12 +2544,12 @@ class MeaninglessBooleanOperationViolation(ASTViolation):
 
 @final
 class WrongAttributeDocstringViolation(TokenizeViolation):
-    """
+    '''
     Disallows using ``#:`` comments for attribute and value docstrings.
 
     Reasoning:
         ``#:`` is less consistent with the rest of the project, while
-        ``\"\"\"Docs.\"\"\"`` is the preferred and clearer docstring style.
+        ``"""Docs."""`` is the preferred and clearer docstring style.
 
     Solution:
         Use a normal docstring literal instead of `#:` comments.
@@ -2558,7 +2558,7 @@ class WrongAttributeDocstringViolation(TokenizeViolation):
 
         # Correct:
         SOME_CONSTANT = 12
-        \"\"\"Some constant docs\"\"\"
+        """Some constant docs"""
 
         # Wrong:
         #: Some constant docs
@@ -2569,7 +2569,7 @@ class WrongAttributeDocstringViolation(TokenizeViolation):
 
     .. versionadded:: 1.9.0
 
-    """
+    '''
 
     error_template = (
         'Use a normal docstring literal instead of `#:` comments; '
