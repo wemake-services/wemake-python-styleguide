@@ -66,7 +66,7 @@ run inside the Claude code:
   /plugin marketplace add wemake-services/wemake-python-styleguide
   /plugin install wps@wemake-python-styleguide
 
-Or just copy `the skill file <https://github.com/wemake-services/wemake-python-styleguide/blob/master/.agents/skills/wps/SKILL.md>`_.
+Or just copy `the skill file <https://github.com/wemake-services/wemake-python-styleguide/blob/master/wemake_python_styleguide/.agents/skills/wps/SKILL.md>`_.
 
 MCP
 ~~~

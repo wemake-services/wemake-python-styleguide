@@ -33,6 +33,10 @@ Semantic versioning in our case means:
   now each formatted part (`{...}` placeholder) counts as one
   and all literal parts count as one in total, #3820
 
+### Misc
+
+- Bundle the `wps` agent skill inside the Python package for Library Skills discovery.
+
 
 ## 1.8.1
 
