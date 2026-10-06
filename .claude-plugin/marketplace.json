@@ -8,7 +8,7 @@
   "plugins": [
     {
       "name": "wps",
-      "source": "./.agents/skills/wps",
+      "source": "./wemake_python_styleguide/.agents/skills/wps",
       "description": "Write code that passes wemake-python-styleguide",
       "author": {
         "name": "wemake-services",
