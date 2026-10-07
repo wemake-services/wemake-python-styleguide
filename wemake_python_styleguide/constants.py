@@ -1,4 +1,4 @@
-"""
+'''
 This module contains list of white- and black-listed ``python`` members.
 
 We add values here when we want to make them public.
@@ -8,11 +8,11 @@ Then, we automatically have to add it here and document it.
 Other constants that are not used across modules
 and does not require to be documented can be defined where they are used.
 
-All values here must be documented with ``\"\"\"Docs.\"\"\"`` style.
+All values here must be documented with ``"""Docs."""`` style.
 
 See also:
     https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html#doc-comments-and-docstrings
-"""
+'''
 
 import math
 import re
