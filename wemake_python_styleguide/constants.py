@@ -94,6 +94,7 @@ MODULE_METADATA_VARIABLES_BLACKLIST: Final = frozenset(
         '__copyright__',
     ),
 )
+"""List of module metadata we forbid to use."""
 
 VARIABLE_NAMES_BLACKLIST: Final = frozenset(
     (
@@ -140,7 +141,7 @@ VARIABLE_NAMES_BLACKLIST: Final = frozenset(
         'temp',
     ),
 )
-"""List of module metadata we forbid to use."""
+"""List of variable names we forbid to use."""
 
 UNREADABLE_CHARACTER_COMBINATIONS: Final = frozenset(
     (
