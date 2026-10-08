@@ -330,8 +330,7 @@ YIELD_MAGIC_METHODS_BLACKLIST: Final = ALL_MAGIC_METHODS.difference(
 
 ASYNC_MAGIC_METHODS_BLACKLIST: Final = ALL_MAGIC_METHODS.difference(
     {
-        # In order of appearance on
-        # https://docs.python.org/3/reference/datamodel.html#basic-customization
+        # See https://docs.python.org/3/reference/datamodel.html#coroutines
         # Allowed async magic methods are:
         '__anext__',
         '__aenter__',
