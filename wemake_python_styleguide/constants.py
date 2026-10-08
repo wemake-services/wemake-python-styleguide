@@ -51,47 +51,47 @@ SHORTLINK_TEMPLATE: Final = 'https://pyflak.es/{0}'
 FUNCTIONS_BLACKLIST: Final = frozenset(
     (
         # Code generation:
+        'compile',
         'eval',
         'exec',
-        'compile',
         # Termination:
         'exit',
         'quit',
         # Magic:
+        'dir',
         'globals',
         'locals',
         'vars',
-        'dir',
         # IO:
-        'print',
+        'breakpoint',
+        'input',
         'pprint',
         'pprint.pprint',
-        'input',
-        'breakpoint',
+        'print',
         # Attribute access:
         'delattr',
         # Gratis:
         'copyright',
-        'help',
         'credits',
+        'help',
         # Dynamic imports:
         '__import__',
         # OOP:
         'staticmethod',
         # Mypy:
-        'reveal_type',
         'reveal_locals',
+        'reveal_type',
     ),
 )
 """List of functions we forbid to use."""
 
 MODULE_METADATA_VARIABLES_BLACKLIST: Final = frozenset(
     (
-        '__author__',
-        '__all__',
-        '__version__',
         '__about__',
+        '__all__',
+        '__author__',
         '__copyright__',
+        '__version__',
     ),
 )
 """List of module metadata we forbid to use."""
@@ -99,55 +99,55 @@ MODULE_METADATA_VARIABLES_BLACKLIST: Final = frozenset(
 VARIABLE_NAMES_BLACKLIST: Final = frozenset(
     (
         # Meaningless words:
-        'data',
-        'result',
-        'results',
-        'item',
-        'items',
-        'value',
-        'values',
-        'val',
-        'vals',
-        'var',
-        'vars',
-        'variable',
+        'arr',
         'content',
         'contents',
-        'info',
+        'data',
+        'do',
+        'file',
         'handle',
         'handler',
-        'file',
+        'info',
+        'item',
+        'items',
         'obj',
         'objects',
         'objs',
-        'some',
-        'do',
         'param',
-        'params',
         'parameters',
-        'arr',
+        'params',
+        'result',
+        'results',
+        'some',
+        'val',
+        'vals',
+        'value',
+        'values',
+        'var',
+        'variable',
+        'vars',
         # Confusables:
-        'no',
-        'yes',
-        'true',
         'false',
+        'no',
+        'true',
+        'yes',
         # Names from examples:
-        'foo',
         'bar',
         'baz',
-        'spam',
+        'foo',
         'ham',
-        'tmp',
+        'spam',
         'temp',
+        'tmp',
     ),
 )
 """List of variable names we forbid to use."""
 
 UNREADABLE_CHARACTER_COMBINATIONS: Final = frozenset(
     (
-        '1l',
-        '1I',
         '0O',
+        '1I',
+        '1l',
         'O0',
         # Not included: 'lI', 'l1', 'Il'
         # Because these names are quite common in real words.
@@ -269,19 +269,19 @@ ALL_MAGIC_METHODS: Final = frozenset(
         '__aenter__',
         '__aexit__',
         # pickling
-        '__getnewargs_ex__',
+        '__getinitargs__',
         '__getnewargs__',
+        '__getnewargs_ex__',
         '__getstate__',
-        '__setstate__',
         '__reduce__',
         '__reduce_ex__',
-        '__getinitargs__',
+        '__setstate__',
         # Python 2
-        '__long__',
+        '__cmp__',
         '__coerce__',
+        '__long__',
         '__nonzero__',
         '__unicode__',
-        '__cmp__',
         # copy
         '__copy__',
         '__deepcopy__',
@@ -291,9 +291,9 @@ ALL_MAGIC_METHODS: Final = frozenset(
         # dataclasses
         '__post_init__',
         # attrs:
-        '__attrs_pre_init__',
         '__attrs_init__',
         '__attrs_post_init__',
+        '__attrs_pre_init__',
         # inspect
         '__signature__',
         # os.path
@@ -308,13 +308,13 @@ MAGIC_METHODS_BLACKLIST: Final = frozenset(
     (
         # Since we don't use `del`:
         '__del__',
-        '__delitem__',
         '__delete__',
+        '__delitem__',
         # Since we don't use `pickle`:
         '__reduce__',
         '__reduce_ex__',
-        '__dir__',  # since we don't use `dir()`
         '__delattr__',  # since we don't use `delattr()`
+        '__dir__',  # since we don't use `dir()`
     ),
 )
 """List of magic methods that are forbidden to use."""
@@ -322,9 +322,9 @@ MAGIC_METHODS_BLACKLIST: Final = frozenset(
 YIELD_MAGIC_METHODS_BLACKLIST: Final = ALL_MAGIC_METHODS.difference(
     {
         # Allowed to be used with ``yield`` keyword:
+        '__aiter__',
         '__call__',
         '__iter__',
-        '__aiter__',
     },
 )
 """List of magic methods that are not allowed to be generators."""
@@ -333,10 +333,10 @@ ASYNC_MAGIC_METHODS_BLACKLIST: Final = ALL_MAGIC_METHODS.difference(
     {
         # See https://docs.python.org/3/reference/datamodel.html#coroutines
         # Allowed async magic methods are:
-        '__anext__',
         '__aenter__',
         '__aexit__',
         '__aiter__',
+        '__anext__',
         '__call__',
     },
 )
@@ -344,8 +344,8 @@ ASYNC_MAGIC_METHODS_BLACKLIST: Final = ALL_MAGIC_METHODS.difference(
 
 ALLOWED_BUILTIN_CLASSES: Final = frozenset(
     (
-        'type',
         'object',
+        'type',
     ),
 )
 """List of builtin classes that are allowed to subclass."""
@@ -369,10 +369,10 @@ FUTURE_IMPORTS_WHITELIST: Final = frozenset(
 
 MODULE_NAMES_BLACKLIST: Final = frozenset(
     (
-        'util',
-        'utils',
-        'utilities',
         'helpers',
+        'util',
+        'utilities',
+        'utils',
     ),
 )
 """List of blacklisted module names."""
@@ -387,8 +387,8 @@ MAGIC_MODULE_NAMES_WHITELIST: Final = frozenset(
 
 MAGIC_MODULE_NAMES_BLACKLIST: Final = frozenset(
     (
-        '__getattr__',
         '__dir__',
+        '__getattr__',
     ),
 )
 """List of bad magic module functions."""
@@ -402,11 +402,11 @@ MAGIC_NUMBERS_WHITELIST: Final = frozenset(
         0.1,
         0.5,
         1.0,
+        24,  # hours
+        60,  # seconds, minutes
         100,
         1000,
         1024,  # bytes
-        24,  # hours
-        60,  # seconds, minutes
         1j,  # imaginary part of a complex number
     ),
 )
@@ -429,8 +429,8 @@ MAX_EXCEPT_CASES: Final = 3
 
 MATH_APPROXIMATE_CONSTANTS: Final = frozenset(
     (
-        math.pi,
         math.e,
+        math.pi,
         math.tau,
     ),
 )
@@ -439,19 +439,19 @@ should be imported from math module."""
 
 VAGUE_IMPORTS_BLACKLIST: Final = frozenset(
     (
-        'read',
-        'write',
-        'load',
-        'loads',
         'dump',
-        'dumps',
-        'parse',
-        'safe_load',
-        'safe_dump',
-        'load_all',
         'dump_all',
-        'safe_load_all',
+        'dumps',
+        'load',
+        'load_all',
+        'loads',
+        'parse',
+        'read',
+        'safe_dump',
         'safe_dump_all',
+        'safe_load',
+        'safe_load_all',
+        'write',
     ),
 )
 """List of vague method names that may cause confusion if imported as is."""
@@ -461,13 +461,13 @@ TUPLE_ARGUMENTS_METHODS: Final = frozenset(('frozenset',))
 
 ALIAS_NAMES_WHITELIST: Final = frozenset(
     (
+        'cv',
+        'df',
         'np',
         'pd',
-        'df',
         'plt',
         'sns',
         'tf',
-        'cv',
     ),
 )
 """List of commonly used aliases."""
