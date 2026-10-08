@@ -127,6 +127,7 @@ VARIABLE_NAMES_BLACKLIST: Final = frozenset(
         'arr',
         # Confusables:
         'no',
+        'yes',
         'true',
         'false',
         # Names from examples:
