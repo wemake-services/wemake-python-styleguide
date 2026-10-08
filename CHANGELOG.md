@@ -24,6 +24,7 @@ Semantic versioning in our case means:
 - Adds `WPS484`: forbid strings that look like docstrings
   but document nothing, #3808
 - Adds `WPS367`: forbid using ``#:`` comments, #3823
+- Add `yes` to banned names in `WPS110`
 
 ### Bugfixes
 
