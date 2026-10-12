@@ -1120,7 +1120,7 @@ description = "httpx2 transports for Emscripten/Pyodide, backed by the JavaScrip
 optional = true
 python-versions = ">=3.12"
 groups = ["main"]
-markers = "sys_platform == \"emscripten\" and python_version >= \"3.12\" and extra == \"mcp\""
+markers = "sys_platform == \"emscripten\" and extra == \"mcp\" and python_version >= \"3.12\""
 files = [
     {file = "httpx2_jsfetch-1.0-py3-none-any.whl", hash = "sha256:cb916b707601e69a07721aabc8f3f6659be3a6893bc1ff5c6f9e02241df2da32"},
     {file = "httpx2_jsfetch-1.0.tar.gz", hash = "sha256:70a0e3eabfef7cce5ad9c629f7d01ca05e418f586646f4ddf14782e4c1454c60"},
@@ -2103,15 +2103,15 @@ files = [
 
 [[package]]
 name = "mcp"
-version = "2.2.0"
+version = "2.3.0"
 description = "Model Context Protocol SDK"
 optional = true
 python-versions = ">=3.10"
 groups = ["main"]
 markers = "extra == \"mcp\""
 files = [
-    {file = "mcp-2.2.0-py3-none-any.whl", hash = "sha256:bde982589473a060ae145e3406e9a5333fe538c97229ba841f5a7f92be004f81"},
-    {file = "mcp-2.2.0.tar.gz", hash = "sha256:2dc37ecb1974becdcebdbf7561e7c15a07dbbf20ba21ba16c3593b3038b3afbd"},
+    {file = "mcp-2.3.0-py3-none-any.whl", hash = "sha256:dd0c44c089d16453e8ae31a3877a0054d7a2314caaa81f5e0541b9b1734b2377"},
+    {file = "mcp-2.3.0.tar.gz", hash = "sha256:8b147a50441cf059dc88c684e0aeed3687f0aa0f39c6cde7b90330effd2b34d8"},
 ]
 
 [package.dependencies]
@@ -2119,9 +2119,9 @@ anyio = [
     {version = ">=4.9", markers = "python_version < \"3.14\""},
     {version = ">=4.10", markers = "python_version >= \"3.14\""},
 ]
-httpx2 = ">=2.5.0"
+httpx2 = ">=2.10.0"
 jsonschema = ">=4.20.0"
-mcp-types = "2.2.0"
+mcp-types = "2.3.0"
 opentelemetry-api = ">=1.28.0"
 pydantic = ">=2.12.0"
 pyjwt = {version = ">=2.10.1", extras = ["crypto"]}
@@ -2144,15 +2144,15 @@ rich = ["rich (>=13.9.4)"]
 
 [[package]]
 name = "mcp-types"
-version = "2.2.0"
+version = "2.3.0"
 description = "Model Context Protocol wire types"
 optional = true
 python-versions = ">=3.10"
 groups = ["main"]
 markers = "extra == \"mcp\""
 files = [
-    {file = "mcp_types-2.2.0-py3-none-any.whl", hash = "sha256:ea476b73ee86709ab5abc9452385ed36cc05907e582355622e294595c9a04f13"},
-    {file = "mcp_types-2.2.0.tar.gz", hash = "sha256:d3ed53703ddd10d9c6399f29d322bb66f3f67ab41348ac8556ba23e07fedefad"},
+    {file = "mcp_types-2.3.0-py3-none-any.whl", hash = "sha256:968efdbdaedfab06adae40d378a34395f1090c5921d4be3c9cde283aaf76d91d"},
+    {file = "mcp_types-2.3.0.tar.gz", hash = "sha256:d1e46549edb35ee19a94940fcee6d1addd7e589ab7ea92dda83f5d84781fc362"},
 ]
 
 [package.dependencies]
