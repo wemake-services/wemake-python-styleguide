@@ -25,11 +25,11 @@ repos:
       - id: shellcheck
         args: ["--severity=style"]
   - repo: https://github.com/tox-dev/pyproject-fmt
-    rev: "a72ae8edd6eeddb9d942168912362945651212f8"  # frozen: v2.30.1
+    rev: "50e0f3aee9dc5747a5f173f79a7417403c18dda6"  # frozen: v2.30.3
     hooks:
       - id: pyproject-fmt
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: f12be1ebaa5351c1fc76472de98db2c3446c8253  # frozen: v0.16.10
+    rev: 44b5042edab9382aba712eed4f9c7bab7a3d6a3e  # frozen: v0.17.0
     hooks:
       - id: ruff-check
         args: ["--exit-non-zero-on-fix"]
@@ -43,7 +43,7 @@ repos:
       - id: mbake-validate
 
   - repo: https://github.com/crate-ci/typos
-    rev: dd369349b73c245acd4dd4154a4bdf771d052150  # frozen: typos-dict-v0.14.2
+    rev: 9023c1f779400877cafdd98052113fc777e2cfdc  # frozen: v1.51.1
     hooks:
       - id: typos
 
