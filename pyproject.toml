@@ -39,7 +39,8 @@ python = "^3.10"
 attrs = "*"
 flake8 = "^7.3"
 mcp = { version = "^2.0", extras = [ "cli" ], optional = true }
-pygments = "^2.19"
+pygments = ">=2.19"
+typing-extensions = ">=4"
 
 [tool.poetry.group.dev.dependencies]
 astpath = "^0.9"
