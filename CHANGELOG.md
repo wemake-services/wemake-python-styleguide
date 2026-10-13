@@ -37,6 +37,7 @@ Semantic versioning in our case means:
 ### Misc
 
 - Bundle the `wps` agent skill inside the Python package for Library Skills discovery.
+- Adds `typing-extensions` as a direct dependency, #3849
 
 
 ## 1.8.1
