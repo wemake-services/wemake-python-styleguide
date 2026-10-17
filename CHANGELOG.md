@@ -30,6 +30,10 @@ Semantic versioning in our case means:
 
 - Fixes `WPS235`: ignore imports from `typing` and `typing_extensions`, #3824
 - Fix `wps explain`: now we replace RST roles with readable plain text, #3787
+- Fix the MCP server only starting from a repository checkout:
+  now it runs with `python -m wemake_python_styleguide.mcp`
+- Fix the MCP server's missing `[mcp]` extra hint breaking the stdio protocol:
+  now it goes to `stderr`
 - Fix `WPS221` counting literal parts of f-strings and t-strings one by one:
   now each formatted part (`{...}` placeholder) counts as one
   and all literal parts count as one in total, #3820
