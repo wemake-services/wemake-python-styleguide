@@ -71,31 +71,40 @@ Or just copy `the skill file <https://github.com/wemake-services/wemake-python-s
 MCP
 ~~~
 
-The best way to use our MCP is to use our skill
-for your agent, it contains all the information
-about installing and starting the MCP server.
+WPS has an MCP server with one tool, ``explain_violation``.
+It returns the same text as ``wps explain``.
+The WPS skill above tells your agent when to call it.
 
-This command starts a Model Context Protocol server over standard input and
-output. The server exposes an ``explain_violation`` tool that returns the same
-description as ``wps explain``.
+Your agent starts the server from its MCP config,
+for example ``.mcp.json`` in the project root for Claude Code:
 
-Install the optional dependency before starting the server:
+.. code:: json
 
-.. code:: console
+   {
+     "mcpServers": {
+       "wps": {
+         "command": "uvx",
+         "args": [
+           "--from", "wemake-python-styleguide[mcp]",
+           "python", "-m", "wemake_python_styleguide.mcp"
+         ]
+       }
+     }
+   }
 
-   $ pip install 'wemake-python-styleguide[mcp]'
+Or ``pip install 'wemake-python-styleguide[mcp]'``
+and replace ``command`` and ``args`` above,
+using the absolute path to the Python you installed it into:
 
-Next, run the server:
+.. code:: json
 
-.. code:: console
+   "command": "/path/to/venv/bin/python",
+   "args": ["-m", "wemake_python_styleguide.mcp"]
 
-   $ mcp run wemake_python_styleguide/mcp.py:mcp
-
-The MCP SDK command-line tool can also open the server in the MCP Inspector:
+To debug from a repository checkout, open the server in the MCP Inspector:
 
 .. code:: console
 
    $ mcp dev wemake_python_styleguide/mcp.py:mcp
 
-These commands use the standard input and output transport, which does not
-listen on a network port.
+The server uses stdio and opens no network port.
