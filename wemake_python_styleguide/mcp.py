@@ -1,9 +1,12 @@
+import sys
+
 try:
     from mcp.server import MCPServer
 except ImportError:  # pragma: no cover
     print(  # noqa: WPS421
         'Cannot import `mcp` tool, you might need to run '
-        "`pip install 'wemake-python-styleguide[mcp]' to get it",
+        "`pip install 'wemake-python-styleguide[mcp]'` to get it",
+        file=sys.stderr,
     )
     raise
 
