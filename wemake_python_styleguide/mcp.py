@@ -13,3 +13,6 @@ from wemake_python_styleguide.cli.commands.explain.service import (
 
 mcp = MCPServer('wemake-python-styleguide')
 mcp.tool()(explain_violation)
+
+if __name__ == '__main__':
+    mcp.run()
