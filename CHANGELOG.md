@@ -24,23 +24,23 @@ Semantic versioning in our case means:
 - Adds `WPS484`: forbid strings that look like docstrings
   but document nothing, #3808
 - Adds `WPS367`: forbid using ``#:`` comments, #3823
-- Add `yes` to banned names in `WPS110`
+- Adds `yes` to banned names in `WPS110`, #3845
 
 ### Bugfixes
 
 - Fixes `WPS235`: ignore imports from `typing` and `typing_extensions`, #3824
-- Fix `wps explain`: now we replace RST roles with readable plain text, #3787
-- Fix the MCP server only starting from a repository checkout:
-  now it runs with `python -m wemake_python_styleguide.mcp`
-- Fix the MCP server's missing `[mcp]` extra hint breaking the stdio protocol:
-  now it goes to `stderr`
-- Fix `WPS221` counting literal parts of f-strings and t-strings one by one:
+- Fixes `wps explain`: now we replace RST roles with readable plain text, #3787
+- Fixes the MCP server only starting from a repository checkout:
+  now it runs with `python -m wemake_python_styleguide.mcp`, #3859
+- Fixes the missing `[mcp]` extra hint breaking the MCP stdio protocol:
+  now it goes to `stderr`, #3859
+- Fixes `WPS221` counting literal parts of f-strings and t-strings one by one:
   now each formatted part (`{...}` placeholder) counts as one
   and all literal parts count as one in total, #3820
 
 ### Misc
 
-- Bundle the `wps` agent skill inside the Python package for Library Skills discovery.
+- Bundles the `wps` agent skill inside the Python package for Library Skills discovery, #3843
 - Adds `typing-extensions` as a direct dependency, #3849
 
 
@@ -48,14 +48,14 @@ Semantic versioning in our case means:
 
 ### Bugfixes
 
-- Count overused str and bytes separately for `WPS226`, #3782
-- Do not count docstrings for `WPS226`, #3803
-- Do not count attribute and type alias docstrings for `WPS226`, #3805
+- Counts overused str and bytes separately for `WPS226`, #3782
+- Does not count docstrings for `WPS226`, #3803
+- Does not count attribute and type alias docstrings for `WPS226`, #3805
 - Adds direct links to violations when searching by code, #3790
 
 ### Misc
 
-- Fixed claude skill definition and metadata, #3780
+- Fixes Claude skill definition and metadata, #3780
 
 
 ## 1.8.0 aka The Slop Slayer
