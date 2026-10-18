@@ -46,10 +46,10 @@ We highly recommend to also use:
 it is great for improving agents' code quality.
 
 Skills:
-- [`/wps`](https://github.com/wemake-services/wemake-python-styleguide/blob/master/wemake_python_styleguide/.agents/skills/wps/SKILL.md) to run better Python code that passes `wemake-python-styleguide`
+- [`/wps`](https://github.com/wemake-services/wemake-python-styleguide/blob/master/wemake_python_styleguide/.agents/skills/wps/SKILL.md) to run better Python code that passes `wemake-python-styleguide`. Install in Claude Code: `/plugin install wps --marketplace wemake-services/wemake-python-styleguide`
 
 MCPs:
-- [wps](https://wemake-python-styleguide.readthedocs.io/en/latest/pages/usage/cli.html#mcp-server) MCP helps with explaining violations and provide context on how to fix them
+- [wps](https://wemake-python-styleguide.readthedocs.io/en/latest/pages/usage/cli.html#mcp) MCP helps with explaining violations and provides context on how to fix them
 
 Additional contexts for LLMs:
 - [Context7](https://context7.com/wemake-services/wemake-python-styleguide)
