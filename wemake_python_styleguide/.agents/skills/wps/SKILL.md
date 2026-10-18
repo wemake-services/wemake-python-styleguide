@@ -23,4 +23,6 @@ Fix the code, not the config.
 - Leave flake8 config untouched unless the user approves the edit. When one rule fires across many files and fixing each is wrong, propose a config change and wait.
 - Delete a `# noqa: WPS###` once `flake8 --disable-noqa` shows its code no longer fires.
 
-The `explain_violation` tool comes from the WPS MCP server: `pip install 'wemake-python-styleguide[mcp]'`, then register `mcp run wemake_python_styleguide/mcp.py:mcp` as a stdio server.
+## MCP server
+
+The WPS MCP server provides the `explain_violation` tool. Register `uvx --from 'wemake-python-styleguide[mcp]' python -m wemake_python_styleguide.mcp` as a stdio server, or `<python> -m wemake_python_styleguide.mcp`, where `<python>` is the absolute path to the Python with `wemake-python-styleguide[mcp]` installed.

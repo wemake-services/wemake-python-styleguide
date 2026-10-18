@@ -1,4 +1,7 @@
 import asyncio
+import json
+import subprocess
+import sys
 
 import pytest
 from mcp import Client
@@ -60,3 +63,30 @@ def test_server_uses_v2_sdk():
 def test_explanation_tool_over_mcp_protocol():
     """The registered tool can be called by an MCP v2 client."""
     asyncio.run(_assert_explanation_tool_response())
+
+
+def test_server_runs_as_module():
+    """The server starts with ``python -m`` from any directory."""
+    request = {
+        'jsonrpc': '2.0',
+        'id': 1,
+        'method': 'initialize',
+        'params': {
+            'protocolVersion': '2025-06-18',
+            'capabilities': {},
+            'clientInfo': {'name': 'test', 'version': '0'},
+        },
+    }
+    process = subprocess.run(
+        [sys.executable, '-m', 'wemake_python_styleguide.mcp'],
+        input=json.dumps(request),
+        capture_output=True,
+        text=True,
+        check=True,
+        cwd='/',
+    )
+
+    response = json.loads(process.stdout)
+    assert response['result']['serverInfo']['name'] == (
+        'wemake-python-styleguide'
+    )
