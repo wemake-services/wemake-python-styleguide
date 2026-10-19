@@ -55,7 +55,7 @@ pytest = "^9.1"
 pytest-cov = "^7.0"
 pytest-randomly = ">=4.1,<6.0"
 pytest-xdist = "^3.8"
-ruff = "^0.16"
+ruff = ">=0.16,<0.18"
 syrupy = ">=5,<7"
 types-flake8 = "^7.3"
 
