@@ -38,7 +38,7 @@ class WrongDecoratorVisitor(BaseNodeVisitor):
         self,
         options: ValidatedOptions,
         tree: ast.AST,
-        **kwargs,
+        **kwargs: object,
     ) -> None:
         """Creates Decorator Visitor."""
         self.ALLOWED_DECORATOR_TYPES: Final = (

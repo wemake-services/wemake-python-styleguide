@@ -12,7 +12,7 @@ from typing import Final, final
 
 @final
 class _TextNodesMeta(type):
-    def __instancecheck__(cls, instance):
+    def __instancecheck__(cls, instance: object) -> bool:
         return isinstance(instance, ast.Constant) and isinstance(
             instance.value,
             str | bytes,

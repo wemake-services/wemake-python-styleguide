@@ -3,6 +3,7 @@ from itertools import takewhile
 from typing import ClassVar, cast, final
 
 from wemake_python_styleguide.logic.tree import attributes
+from wemake_python_styleguide.options.validation import ValidatedOptions
 from wemake_python_styleguide.types import AnyAccess, AnyNodes
 from wemake_python_styleguide.violations.complexity import (
     TooDeepAccessViolation,
@@ -19,9 +20,14 @@ class AccessVisitor(BaseNodeVisitor):
         ast.Subscript,
     )
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(
+        self,
+        options: ValidatedOptions,
+        tree: ast.AST,
+        **kwargs: object,
+    ) -> None:
         """Keeps visited accesses to not visit them again."""
-        super().__init__(*args, **kwargs)
+        super().__init__(options, tree, **kwargs)
         self._visited_accesses: set[AnyAccess] = set()
 
     def visit_Subscript(self, node: ast.Subscript) -> None:

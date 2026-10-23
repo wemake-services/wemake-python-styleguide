@@ -95,7 +95,7 @@ class BaseViolation(abc.ABC):
         ViolationPostfixes.bigger_than
     )
 
-    def __init_subclass__(cls, **kwargs) -> None:
+    def __init_subclass__(cls, **kwargs: object) -> None:
         """Sets additional values for subclasses."""
         super().__init_subclass__(**kwargs)
         violation_code = getattr(cls, 'code', None)
@@ -232,7 +232,7 @@ class SimpleViolation(BaseViolation):
 
     def __init__(
         self,
-        node=None,
+        node: ErrorNode = None,
         text: str | None = None,
         baseline: int | None = None,
     ) -> None:

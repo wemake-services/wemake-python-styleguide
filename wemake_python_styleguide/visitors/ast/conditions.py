@@ -17,6 +17,7 @@ from wemake_python_styleguide.logic.walk import (
     are_variables_deleted,
     get_names_from_target,
 )
+from wemake_python_styleguide.options.validation import ValidatedOptions
 from wemake_python_styleguide.types import AnyIf, AnyNodes
 from wemake_python_styleguide.violations import (
     best_practices,
@@ -51,9 +52,14 @@ class IfStatementVisitor(BaseNodeVisitor):
         ast.Set,
     )
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(
+        self,
+        options: ValidatedOptions,
+        tree: ast.AST,
+        **kwargs: object,
+    ) -> None:
         """Save visited ``if`` nodes."""
-        super().__init__(*args, **kwargs)
+        super().__init__(options, tree, **kwargs)
         self._finder = ifs.NegatedIfConditions()
 
     def visit_any_if(self, node: AnyIf) -> None:
@@ -115,9 +121,14 @@ class IfStatementVisitor(BaseNodeVisitor):
 class BooleanConditionVisitor(BaseNodeVisitor):
     """Ensures that boolean conditions are correct."""
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(
+        self,
+        options: ValidatedOptions,
+        tree: ast.AST,
+        **kwargs: object,
+    ) -> None:
         """We need to store some bool nodes not to visit them twice."""
-        super().__init__(*args, **kwargs)
+        super().__init__(options, tree, **kwargs)
         self._same_nodes: list[ast.BoolOp] = []
 
     def visit_BoolOp(self, node: ast.BoolOp) -> None:

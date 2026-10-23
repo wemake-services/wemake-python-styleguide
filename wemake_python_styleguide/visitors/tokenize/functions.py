@@ -1,8 +1,9 @@
 import math
 import tokenize
-from collections.abc import Iterable
+from collections.abc import Iterable, Sequence
 from typing import final
 
+from wemake_python_styleguide.options.validation import ValidatedOptions
 from wemake_python_styleguide.violations import best_practices
 from wemake_python_styleguide.visitors import base
 
@@ -139,9 +140,14 @@ class _FileTokens:
 class WrongEmptyLinesCountVisitor(base.BaseTokenVisitor):
     """Restricts empty lines in function or method body."""
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(
+        self,
+        options: ValidatedOptions,
+        file_tokens: Sequence[tokenize.TokenInfo],
+        **kwargs: object,
+    ) -> None:
         """Initializes a counter."""
-        super().__init__(*args, **kwargs)
+        super().__init__(options, file_tokens, **kwargs)
         self._file_tokens: list[tokenize.TokenInfo] = []
 
     def visit(self, token: tokenize.TokenInfo) -> None:

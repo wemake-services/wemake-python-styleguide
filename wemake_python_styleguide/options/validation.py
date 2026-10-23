@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from collections.abc import Callable
 from typing import Any, final
 
 import attr
@@ -8,10 +11,14 @@ from wemake_python_styleguide.options import defaults
 def _min_max(
     min: int | None = None,  # noqa: A002
     max: int | None = None,  # noqa: A002
-):
+) -> Callable[[object, attr.Attribute[Any], int], None]:
     """Validator to check that value is in bounds."""
 
-    def factory(instance, attribute, field_value):
+    def factory(
+        instance: object,
+        attribute: attr.Attribute[Any],
+        field_value: int,
+    ) -> None:
         min_contract = min is not None and field_value < min
         max_contract = max is not None and field_value > max
         if min_contract or max_contract:

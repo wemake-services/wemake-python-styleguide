@@ -93,7 +93,11 @@ class _ImportFromValidator(_BaseImportValidator):
 
             self._check_is_regular_import(alias, node)
 
-    def _check_is_regular_import(self, alias: ast.alias, node: ast.ImportFrom):
+    def _check_is_regular_import(
+        self,
+        alias: ast.alias,
+        node: ast.ImportFrom,
+    ) -> None:
         for name in filter(None, (alias.name, alias.asname)):
             is_regular_import = (
                 alias.asname and name != alias.asname
@@ -185,9 +189,14 @@ class _ImportCollisionValidator:
 class WrongImportVisitor(BaseNodeVisitor):
     """Responsible for finding wrong imports."""
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(
+        self,
+        options: ValidatedOptions,
+        tree: ast.AST,
+        **kwargs: object,
+    ) -> None:
         """Creates a checker for tracked violations."""
-        super().__init__(*args, **kwargs)
+        super().__init__(options, tree, **kwargs)
         self._import_validator = _ImportValidator(
             self.add_violation,
             self.options,
