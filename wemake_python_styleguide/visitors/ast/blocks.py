@@ -6,6 +6,7 @@ from wemake_python_styleguide.compat.aliases import ForNodes, WithNodes
 from wemake_python_styleguide.logic import walk
 from wemake_python_styleguide.logic.naming import name_nodes
 from wemake_python_styleguide.logic.nodes import get_context, get_parent
+from wemake_python_styleguide.options.validation import ValidatedOptions
 from wemake_python_styleguide.types import (
     AnyFor,
     AnyWith,
@@ -33,9 +34,14 @@ _BlockVariables: TypeAlias = defaultdict[
 class AfterBlockVariablesVisitor(base.BaseNodeVisitor):
     """Visitor that ensures that block variables are not used after block."""
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(
+        self,
+        options: ValidatedOptions,
+        tree: ast.AST,
+        **kwargs: object,
+    ) -> None:
         """We need to store complex data about variable usages."""
-        super().__init__(*args, **kwargs)
+        super().__init__(options, tree, **kwargs)
         self._block_variables: _BlockVariables = defaultdict(
             lambda: defaultdict(list),
         )

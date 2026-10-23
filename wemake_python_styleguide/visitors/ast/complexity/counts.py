@@ -8,6 +8,7 @@ from wemake_python_styleguide.compat.nodes import TypeAlias as ast_TypeAlias
 from wemake_python_styleguide.compat.types import AnyTry
 from wemake_python_styleguide.logic.nodes import get_context
 from wemake_python_styleguide.logic.tree import decorators
+from wemake_python_styleguide.options.validation import ValidatedOptions
 from wemake_python_styleguide.types import AnyFunctionDef
 from wemake_python_styleguide.violations import complexity
 from wemake_python_styleguide.visitors.base import BaseNodeVisitor
@@ -31,9 +32,14 @@ _ReturnLikeStatement: TypeAlias = ast.Return | ast.Yield
 class ModuleMembersVisitor(BaseNodeVisitor):
     """Counts classes and functions in a module."""
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(
+        self,
+        options: ValidatedOptions,
+        tree: ast.AST,
+        **kwargs: object,
+    ) -> None:
         """Creates a counter for tracked metrics."""
-        super().__init__(*args, **kwargs)
+        super().__init__(options, tree, **kwargs)
         self._public_items_count = 0
 
     def visit_module_members(self, node: _ModuleMembers) -> None:
@@ -127,9 +133,14 @@ class ConditionsVisitor(BaseNodeVisitor):
 class ElifVisitor(BaseNodeVisitor):
     """Checks the number of ``elif`` cases inside conditions."""
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(
+        self,
+        options: ValidatedOptions,
+        tree: ast.AST,
+        **kwargs: object,
+    ) -> None:
         """Creates internal ``elif`` counter."""
-        super().__init__(*args, **kwargs)
+        super().__init__(options, tree, **kwargs)
         self._if_children: defaultdict[ast.If, list[ast.If]] = defaultdict(
             list,
         )

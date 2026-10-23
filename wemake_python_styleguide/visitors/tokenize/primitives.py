@@ -9,6 +9,7 @@ from wemake_python_styleguide.logic.tokens.numbers import (
 from wemake_python_styleguide.logic.tokens.strings import (
     split_prefixes,
 )
+from wemake_python_styleguide.options.validation import ValidatedOptions
 from wemake_python_styleguide.violations import consistency
 from wemake_python_styleguide.violations.base import TokenizeViolation
 from wemake_python_styleguide.violations.best_practices import (
@@ -166,9 +167,14 @@ class _StringTokenChecker:
 class WrongStringTokenVisitor(BaseTokenVisitor):
     """Checks incorrect string tokens usages."""
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(
+        self,
+        options: ValidatedOptions,
+        file_tokens: Sequence[tokenize.TokenInfo],
+        **kwargs: object,
+    ) -> None:
         """Check string definitions."""
-        super().__init__(*args, **kwargs)
+        super().__init__(options, file_tokens, **kwargs)
         self._checker = _StringTokenChecker(
             self.file_tokens,
             self.add_violation,

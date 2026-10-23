@@ -64,13 +64,22 @@ import abc
 import ast
 import tokenize
 from collections.abc import Sequence
-from typing import final
+from typing import Any, Protocol, final
 
 from wemake_python_styleguide import constants
 from wemake_python_styleguide.compat.routing import route_visit
 from wemake_python_styleguide.logic.filenames import get_stem
 from wemake_python_styleguide.options.validation import ValidatedOptions
 from wemake_python_styleguide.violations.base import BaseViolation
+
+
+class _CheckerProtocol(Protocol):
+    """Minimal checker interface needed to construct visitors."""
+
+    options: ValidatedOptions
+    filename: str
+    tree: ast.AST
+    file_tokens: Sequence[tokenize.TokenInfo]
 
 
 class BaseVisitor(abc.ABC):
@@ -98,7 +107,7 @@ class BaseVisitor(abc.ABC):
     @classmethod
     def from_checker(
         cls: type['BaseVisitor'],
-        checker,
+        checker: _CheckerProtocol,
     ) -> 'BaseVisitor':
         """
         Constructs visitor instance from the checker.
@@ -153,7 +162,7 @@ class BaseNodeVisitor(ast.NodeVisitor, BaseVisitor):
         self,
         options: ValidatedOptions,
         tree: ast.AST,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         """Creates new ``ast`` based instance."""
         super().__init__(options, **kwargs)
@@ -163,7 +172,7 @@ class BaseNodeVisitor(ast.NodeVisitor, BaseVisitor):
     @classmethod
     def from_checker(
         cls: type['BaseNodeVisitor'],
-        checker,
+        checker: _CheckerProtocol,
     ) -> 'BaseNodeVisitor':
         """Constructs visitor instance from the checker."""
         return cls(
@@ -234,7 +243,7 @@ class BaseTokenVisitor(BaseVisitor):
         self,
         options: ValidatedOptions,
         file_tokens: Sequence[tokenize.TokenInfo],
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         """Creates new ``tokenize`` based visitor instance."""
         super().__init__(options, **kwargs)
@@ -245,7 +254,7 @@ class BaseTokenVisitor(BaseVisitor):
     @classmethod
     def from_checker(
         cls: type['BaseTokenVisitor'],
-        checker,
+        checker: _CheckerProtocol,
     ) -> 'BaseTokenVisitor':
         """Constructs ``tokenize`` based visitor instance from the checker."""
         return cls(
@@ -292,7 +301,7 @@ class BaseNodeTokenVisitor(ast.NodeVisitor, BaseVisitor):
         options: ValidatedOptions,
         tree: ast.AST,
         file_tokens: Sequence[tokenize.TokenInfo],
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         """Creates new ``ast`` based instance with tokens."""
         super().__init__(options, **kwargs)
@@ -305,7 +314,7 @@ class BaseNodeTokenVisitor(ast.NodeVisitor, BaseVisitor):
     @classmethod
     def from_checker(
         cls: type['BaseNodeTokenVisitor'],
-        checker,
+        checker: _CheckerProtocol,
     ) -> 'BaseNodeTokenVisitor':
         """Constructs visitor instance from the checker."""
         return cls(

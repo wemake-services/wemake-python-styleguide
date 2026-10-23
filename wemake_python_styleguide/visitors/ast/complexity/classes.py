@@ -5,6 +5,7 @@ from typing import final
 from wemake_python_styleguide.logic.naming import access
 from wemake_python_styleguide.logic.nodes import get_parent
 from wemake_python_styleguide.logic.tree import classes, decorators
+from wemake_python_styleguide.options.validation import ValidatedOptions
 from wemake_python_styleguide.types import AnyFunctionDef
 from wemake_python_styleguide.violations.complexity import (
     TooManyBaseClassesViolation,
@@ -88,9 +89,14 @@ class ClassComplexityVisitor(BaseNodeVisitor):
 class MethodMembersVisitor(BaseNodeVisitor):
     """Counts methods in a single class."""
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(
+        self,
+        options: ValidatedOptions,
+        tree: ast.AST,
+        **kwargs: object,
+    ) -> None:
         """Creates a counter for tracked methods in different classes."""
-        super().__init__(*args, **kwargs)
+        super().__init__(options, tree, **kwargs)
         self._methods: defaultdict[ast.ClassDef, int] = defaultdict(int)
 
     def visit_any_function(self, node: AnyFunctionDef) -> None:

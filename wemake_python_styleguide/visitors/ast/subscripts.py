@@ -34,7 +34,7 @@ class SubscriptVisitor(base.BaseNodeTokenVisitor):
         self._check_slice_assignment(node)
         self.generic_visit(node)
 
-    def _check_consecutive_slices(self, node: ast.Subscript):
+    def _check_consecutive_slices(self, node: ast.Subscript) -> None:
         if not isinstance(node.slice, ast.Slice):
             return
 

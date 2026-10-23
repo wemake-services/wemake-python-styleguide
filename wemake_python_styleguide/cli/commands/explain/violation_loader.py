@@ -48,12 +48,15 @@ def _get_violations_of_submodule(
     ]
 
 
-def _create_violation_info(class_object, submodule_name: str) -> ViolationInfo:
+def _create_violation_info(
+    class_object: type[BaseViolation],
+    submodule_name: str,
+) -> ViolationInfo:
     """Create violation info DTO from violation class and metadata."""
     return ViolationInfo(
         identifier=class_object.__name__,
         code=class_object.code,
-        docstring=class_object.__doc__,
+        docstring=class_object.__doc__ or '',
         section=submodule_name,
     )
 

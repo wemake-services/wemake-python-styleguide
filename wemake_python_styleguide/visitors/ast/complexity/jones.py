@@ -16,6 +16,7 @@ from wemake_python_styleguide.compat import nodes
 from wemake_python_styleguide.compat.aliases import FunctionNodes
 from wemake_python_styleguide.compat.nodes import TypeAlias as ast_TypeAlias
 from wemake_python_styleguide.logic.tree.strings import formatted_string_parts
+from wemake_python_styleguide.options.validation import ValidatedOptions
 from wemake_python_styleguide.types import AnyNodes
 from wemake_python_styleguide.violations.complexity import (
     JonesScoreViolation,
@@ -56,9 +57,14 @@ class JonesComplexityVisitor(BaseNodeVisitor):
         nodes.TemplateStr,
     )
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(
+        self,
+        options: ValidatedOptions,
+        tree: ast.AST,
+        **kwargs: object,
+    ) -> None:
         """Initializes line number counter."""
-        super().__init__(*args, **kwargs)
+        super().__init__(options, tree, **kwargs)
         self._lines: defaultdict[int, list[ast.AST]] = defaultdict(list)
         self._to_ignore: set[ast.AST] = set()
 

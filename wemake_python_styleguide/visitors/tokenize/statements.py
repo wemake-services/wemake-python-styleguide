@@ -1,9 +1,11 @@
 import tokenize
 from collections import defaultdict
+from collections.abc import Sequence
 from operator import attrgetter
 from typing import TypeAlias, final
 
 from wemake_python_styleguide.logic.tokens import strings
+from wemake_python_styleguide.options.validation import ValidatedOptions
 from wemake_python_styleguide.violations import best_practices, consistency
 from wemake_python_styleguide.visitors.base import BaseTokenVisitor
 
@@ -14,9 +16,14 @@ TokenLines: TypeAlias = defaultdict[int, list[tokenize.TokenInfo]]
 class MultilineStringVisitor(BaseTokenVisitor):
     """Checks if multiline strings are used only in assignment or docstrings."""
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(
+        self,
+        options: ValidatedOptions,
+        file_tokens: Sequence[tokenize.TokenInfo],
+        **kwargs: object,
+    ) -> None:
         """Creates line tracking for tokens."""
-        super().__init__(*args, **kwargs)
+        super().__init__(options, file_tokens, **kwargs)
         self._lines: TokenLines = defaultdict(list)
 
     def visit(self, token: tokenize.TokenInfo) -> None:

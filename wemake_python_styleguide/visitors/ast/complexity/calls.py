@@ -3,6 +3,7 @@ from itertools import takewhile
 from typing import final
 
 from wemake_python_styleguide.logic.tree.calls import parts
+from wemake_python_styleguide.options.validation import ValidatedOptions
 from wemake_python_styleguide.violations.complexity import (
     TooLongCallChainViolation,
 )
@@ -13,9 +14,14 @@ from wemake_python_styleguide.visitors.base import BaseNodeVisitor
 class CallChainsVisitor(BaseNodeVisitor):
     """Counts number of consecutive calls."""
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(
+        self,
+        options: ValidatedOptions,
+        tree: ast.AST,
+        **kwargs: object,
+    ) -> None:
         """Keeps visited calls to not visit them again."""
-        super().__init__(*args, **kwargs)
+        super().__init__(options, tree, **kwargs)
         self._visited_calls: set[ast.Call] = set()
 
     def visit_Call(self, node: ast.Call) -> None:

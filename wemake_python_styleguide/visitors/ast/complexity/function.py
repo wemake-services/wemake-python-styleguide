@@ -13,6 +13,7 @@ from wemake_python_styleguide.logic.complexity.functions import (
 from wemake_python_styleguide.logic.naming import access
 from wemake_python_styleguide.logic.nodes import get_context, get_parent
 from wemake_python_styleguide.logic.tree import functions
+from wemake_python_styleguide.options.validation import ValidatedOptions
 from wemake_python_styleguide.types import (
     AnyFunctionDef,
     AnyFunctionDefAndLambda,
@@ -140,9 +141,14 @@ class FunctionComplexityVisitor(BaseNodeVisitor):
 
     """
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(
+        self,
+        options: ValidatedOptions,
+        tree: ast.AST,
+        **kwargs: object,
+    ) -> None:
         """Creates a counter for tracked metrics."""
-        super().__init__(*args, **kwargs)
+        super().__init__(options, tree, **kwargs)
         self._counter = _ComplexityCounter()
 
     def visit_any_function(self, node: AnyFunctionDef) -> None:
@@ -230,9 +236,14 @@ class FunctionComplexityVisitor(BaseNodeVisitor):
 class CognitiveComplexityVisitor(BaseNodeVisitor):
     """Used to count cognitive score and average module complexity."""
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(
+        self,
+        options: ValidatedOptions,
+        tree: ast.AST,
+        **kwargs: object,
+    ) -> None:
         """We use to save all functions' complexity here."""
-        super().__init__(*args, **kwargs)
+        super().__init__(options, tree, **kwargs)
         self._functions: defaultdict[AnyFunctionDef, int] = defaultdict(int)
 
     def visit_any_function(self, node: AnyFunctionDef) -> None:

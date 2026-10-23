@@ -286,9 +286,14 @@ class _ClassBasedNameValidator(_RegularNameValidator):
 class WrongNameVisitor(BaseNodeVisitor):
     """Performs checks based on variable names."""
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(
+        self,
+        options: ValidatedOptions,
+        tree: ast.AST,
+        **kwargs: object,
+    ) -> None:
         """Initializes new naming validator for this visitor."""
-        super().__init__(*args, **kwargs)
+        super().__init__(options, tree, **kwargs)
         self._simple_validator = _SimpleNameValidator(
             self.add_violation,
             self.options,

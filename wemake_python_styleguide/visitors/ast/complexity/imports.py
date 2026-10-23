@@ -50,9 +50,14 @@ class _ImportFromMembersValidator:
 class ImportMembersVisitor(BaseNodeVisitor):
     """Counts imports in a module."""
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(
+        self,
+        options: ValidatedOptions,
+        tree: ast.AST,
+        **kwargs: object,
+    ) -> None:
         """Creates a counter for tracked metrics."""
-        super().__init__(*args, **kwargs)
+        super().__init__(options, tree, **kwargs)
         self._imports_count = 0
         self._imported_names_count = 0
         self._import_from_members_validator = _ImportFromMembersValidator(

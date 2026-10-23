@@ -216,7 +216,7 @@ class BuggySuperCallVisitor(base.BaseNodeVisitor):
         self._check_buggy_super_context(node)
         self.generic_visit(node)
 
-    def _check_buggy_super_context(self, node: ast.Call):
+    def _check_buggy_super_context(self, node: ast.Call) -> None:
         if not isinstance(node.func, ast.Name):
             return
 
