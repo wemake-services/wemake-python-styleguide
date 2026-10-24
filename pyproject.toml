@@ -6,7 +6,7 @@ requires = [ "poetry-core>=2.2" ]
 [tool.poetry]
 name = "wemake-python-styleguide"
 version = "1.8.1"
-description = "The strictest and most opinionated python linter ever"
+description = "The strictest and most opinionated python linter ever!"
 license = "MIT"
 authors = [
   "Nikita Sobolev <mail@sobolevn.me>",
