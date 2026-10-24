@@ -61,13 +61,10 @@ class ClassAttributeVisitor(base.BaseNodeVisitor):
             assigned.value,
             ast.Tuple,
         ):
-            if len(assigned.targets[0].elts) != len(assigned.value.elts):
-                return False
-
             for target, value_node in zip(
                 assigned.targets[0].elts,
                 assigned.value.elts,
-                strict=False,
+                strict=True,
             ):
                 if (
                     isinstance(target, ast.Attribute)
