@@ -1,5 +1,5 @@
 import ast
-from collections.abc import Iterable
+from collections.abc import Iterable, Iterator
 
 from wemake_python_styleguide.constants import SPECIAL_ARGUMENT_NAMES_WHITELIST
 from wemake_python_styleguide.types import AnyNodes, AnyVariableDef
@@ -61,3 +61,21 @@ def is_special_attr(node: ast.Attribute) -> bool:
     if not isinstance(node.value, ast.Name):
         return False
     return node.value.id in SPECIAL_ARGUMENT_NAMES_WHITELIST
+
+
+def assign_pairs(
+    assigned: ast.Assign,
+) -> Iterator[tuple[ast.expr, ast.expr]]:
+    """Yields ``(target, value)`` pairs for the assignment."""
+    if isinstance(assigned.targets[0], ast.Tuple) and isinstance(
+        assigned.value,
+        ast.Tuple,
+    ):
+        yield from zip(
+            assigned.targets[0].elts,
+            assigned.value.elts,
+            strict=True,
+        )
+    else:
+        for target in assigned.targets:
+            yield target, assigned.value

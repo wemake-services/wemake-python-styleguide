@@ -1,6 +1,5 @@
 import ast
 from collections import defaultdict
-from collections.abc import Iterator
 from typing import ClassVar, final
 
 from wemake_python_styleguide import types
@@ -53,23 +52,6 @@ class ClassAttributeVisitor(base.BaseNodeVisitor):
                     ),
                 )
 
-    def _assign_pairs(
-        self,
-        assigned: ast.Assign,
-    ) -> Iterator[tuple[ast.expr, ast.expr]]:
-        if isinstance(assigned.targets[0], ast.Tuple) and isinstance(
-            assigned.value,
-            ast.Tuple,
-        ):
-            yield from zip(
-                assigned.targets[0].elts,
-                assigned.value.elts,
-                strict=True,
-            )
-        else:
-            for target in assigned.targets:
-                yield target, assigned.value
-
     def _contains_lambda(self, value_node: ast.expr) -> bool:
         if isinstance(value_node, ast.Lambda):
             return True
@@ -91,7 +73,7 @@ class ClassAttributeVisitor(base.BaseNodeVisitor):
         ):
             return  # it is not assigned in a method of a class
 
-        for target, value_node in self._assign_pairs(assigned):
+        for target, value_node in attributes.assign_pairs(assigned):
             if (
                 isinstance(target, ast.Attribute)
                 and attributes.is_special_attr(target)
