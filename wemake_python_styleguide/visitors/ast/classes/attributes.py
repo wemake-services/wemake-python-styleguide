@@ -1,5 +1,6 @@
 import ast
 from collections import defaultdict
+from collections.abc import Iterator
 from typing import ClassVar, final
 
 from wemake_python_styleguide import types
@@ -52,32 +53,21 @@ class ClassAttributeVisitor(base.BaseNodeVisitor):
                     ),
                 )
 
-    def _is_multiple_assignment(
-        self,
-        node: ast.Lambda,
-        assigned: ast.Assign,
-    ) -> bool:
+    def _assign_pairs(
+        self, assigned: ast.Assign,
+    ) -> Iterator[tuple[ast.expr, ast.expr]]:
         if isinstance(assigned.targets[0], ast.Tuple) and isinstance(
             assigned.value,
             ast.Tuple,
         ):
-            for target, value_node in zip(
+            yield from zip(
                 assigned.targets[0].elts,
                 assigned.value.elts,
                 strict=True,
-            ):
-                if (
-                    isinstance(target, ast.Attribute)
-                    and attributes.is_special_attr(target)
-                    and isinstance(value_node, ast.Lambda)
-                ):
-                    self.add_violation(
-                        oop.LambdaAttributeAssignedViolation(node),
-                    )
-
-            return True
-
-        return False
+            )
+        else:
+            for target in assigned.targets:
+                yield target, assigned.value
 
     def _check_lambda_attribute(self, node: ast.Lambda) -> None:
         assigned = walk.get_closest_parent(node, AssignNodes)
@@ -91,14 +81,11 @@ class ClassAttributeVisitor(base.BaseNodeVisitor):
         ):
             return  # it is not assigned in a method of a class
 
-        if self._is_multiple_assignment(node, assigned):
-            return
-
-        for attribute in assigned.targets:
+        for target, value_node in self._assign_pairs(assigned):
             if (
-                isinstance(attribute, ast.Attribute)
-                and attributes.is_special_attr(attribute)
-                and isinstance(assigned.value, ast.Lambda)
+                isinstance(target, ast.Attribute)
+                and attributes.is_special_attr(target)
+                and isinstance(value_node, ast.Lambda)
             ):
                 self.add_violation(
                     oop.LambdaAttributeAssignedViolation(node),

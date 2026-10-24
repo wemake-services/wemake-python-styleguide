@@ -47,6 +47,7 @@ def some(other):
     other.api = sorted([], key=lambda x: x * 2)
 """
 
+# TODO: This is not strictly correct, but we won't detect this:
 correct_lambda_attr_assign7 = """
 class User:
     def __init__(self):
