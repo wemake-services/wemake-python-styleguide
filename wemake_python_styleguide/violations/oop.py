@@ -700,7 +700,7 @@ class LambdaAttributeAssignedViolation(ASTViolation):
     .. versionadded:: 1.0.0
     .. versionchanged:: 1.9.0
        Also checks ``lambda`` values assigned via tuple unpacking,
-       and inside tuple values packed into a single attribute
+       and inside tuple values packed into a single attribute.
 
     """
 
