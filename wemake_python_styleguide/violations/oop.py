@@ -686,7 +686,7 @@ class LambdaAttributeAssignedViolation(ASTViolation):
     Example::
 
         # Correct:
-        class Used:
+        class User:
             def login(self): ...
 
         # Wrong:
