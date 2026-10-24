@@ -54,7 +54,8 @@ class ClassAttributeVisitor(base.BaseNodeVisitor):
                 )
 
     def _assign_pairs(
-        self, assigned: ast.Assign,
+        self,
+        assigned: ast.Assign,
     ) -> Iterator[tuple[ast.expr, ast.expr]]:
         if isinstance(assigned.targets[0], ast.Tuple) and isinstance(
             assigned.value,
