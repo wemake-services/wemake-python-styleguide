@@ -686,7 +686,7 @@ class LambdaAttributeAssignedViolation(ASTViolation):
     Example::
 
         # Correct:
-        class Used:
+        class User:
             def login(self): ...
 
         # Wrong:
@@ -698,6 +698,9 @@ class LambdaAttributeAssignedViolation(ASTViolation):
         https://docs.astral.sh/ruff/rules/lambda-assignment
 
     .. versionadded:: 1.0.0
+    .. versionchanged:: 1.9.0
+       Also checks ``lambda`` values assigned via tuple unpacking,
+       and inside tuple values packed into a single attribute.
 
     """
 

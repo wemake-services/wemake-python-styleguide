@@ -83,7 +83,7 @@ SHOULD_BE_RAISED = make_immutable(
         'WPS218': 1,
         'WPS219': 1,
         'WPS220': 1,
-        'WPS221': 2,
+        'WPS221': 3,
         'WPS222': 1,
         'WPS223': 1,
         'WPS224': 1,
@@ -313,7 +313,7 @@ SHOULD_BE_RAISED = make_immutable(
         'WPS614': 1,
         'WPS615': 2,
         'WPS616': 1,
-        'WPS617': 1,
+        'WPS617': 2,
     },
 )
 """Number and count of violations that would be raised."""

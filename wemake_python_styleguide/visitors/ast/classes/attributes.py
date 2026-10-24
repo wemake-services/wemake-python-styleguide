@@ -52,6 +52,15 @@ class ClassAttributeVisitor(base.BaseNodeVisitor):
                     ),
                 )
 
+    def _contains_lambda(self, value_node: ast.expr) -> bool:
+        if isinstance(value_node, ast.Lambda):
+            return True
+        if isinstance(value_node, ast.Tuple):
+            return any(
+                isinstance(node, ast.Lambda) for node in ast.walk(value_node)
+            )
+        return False
+
     def _check_lambda_attribute(self, node: ast.Lambda) -> None:
         assigned = walk.get_closest_parent(node, AssignNodes)
         if not assigned or not isinstance(assigned, ast.Assign):
@@ -64,13 +73,15 @@ class ClassAttributeVisitor(base.BaseNodeVisitor):
         ):
             return  # it is not assigned in a method of a class
 
-        for attribute in assigned.targets:
+        for target, value_node in attributes.assign_pairs(assigned):
             if (
-                isinstance(attribute, ast.Attribute)
-                and attributes.is_special_attr(attribute)
-                and isinstance(assigned.value, ast.Lambda)
+                isinstance(target, ast.Attribute)
+                and attributes.is_special_attr(target)
+                and self._contains_lambda(value_node)
             ):
-                self.add_violation(oop.LambdaAttributeAssignedViolation(node))
+                self.add_violation(
+                    oop.LambdaAttributeAssignedViolation(node),
+                )
 
 
 @final
