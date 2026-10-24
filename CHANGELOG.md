@@ -25,6 +25,7 @@ Semantic versioning in our case means:
   but document nothing, #3808
 - Adds `WPS367`: forbid using ``#:`` comments, #3823
 - Adds `yes` to banned names in `WPS110`, #3845
+- Extends `WPS617` to support checking `lambda` values assigned via tuple unpacking, #3863
 
 ### Bugfixes
 

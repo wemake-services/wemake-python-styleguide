@@ -698,6 +698,10 @@ class LambdaAttributeAssignedViolation(ASTViolation):
         https://docs.astral.sh/ruff/rules/lambda-assignment
 
     .. versionadded:: 1.0.0
+    .. versionchanged:: 1.9.0
+       Also checks ``lambda`` values assigned via tuple unpacking,
+       e.g. ``self.a, self.b = (…, lambda: …)``, instead of only
+       direct ``self.attr = lambda …`` assignments.
 
     """
 

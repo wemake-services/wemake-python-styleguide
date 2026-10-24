@@ -36,23 +36,27 @@ def some(other):
     other.api = lambda x: x * 2
 """
 
-# This is not strictly correct, but we won't detect this:
-# TODO: maybe we should after we can create pairs of assigned values?
 correct_lambda_attr_assign5 = """
-class A:
-    def __init__(self):
-        self._api, self.other = (3, lambda x: x * 2)
-"""
-
-correct_lambda_attr_assign6 = """
 class A:
     def method(self):
         self.other.api = lambda x: x * 2
 """
 
-correct_lambda_attr_assign7 = """
+correct_lambda_attr_assign6 = """
 def some(other):
     other.api = sorted([], key=lambda x: x * 2)
+"""
+
+correct_lambda_attr_assign7 = """
+class User:
+    def __init__(self):
+        self.id, self.login = 1, 'user', lambda x: x + 1
+"""
+
+correct_lambda_attr_assign8 = """
+class User:
+    def __init__(self):
+        self.user_info = 1, 'user', lambda x: x + 1
 """
 
 # Wrong:
@@ -82,6 +86,18 @@ class A:
         self._api = temp = lambda x: x * 2
 """
 
+wrong_lambda_attr_assign5 = """
+class A:
+    def __init__(self):
+        self._api, self.other = (3, lambda x: x * 2)
+"""
+
+wrong_lambda_attr_assign6 = """
+class A:
+    def __init__(self):
+        self.id, self.login, self.other = (3, 'user', lambda x: x * 2)
+"""
+
 
 @pytest.mark.parametrize(
     'code',
@@ -90,6 +106,8 @@ class A:
         wrong_lambda_assign2,
         wrong_lambda_assign3,
         wrong_lambda_assign4,
+        wrong_lambda_attr_assign5,
+        wrong_lambda_attr_assign6,
     ],
 )
 def test_wrong_lambda_assign(
@@ -118,6 +136,7 @@ def test_wrong_lambda_assign(
         correct_lambda_attr_assign5,
         correct_lambda_attr_assign6,
         correct_lambda_attr_assign7,
+        correct_lambda_attr_assign8,
     ],
 )
 def test_correct_lambda_assign(

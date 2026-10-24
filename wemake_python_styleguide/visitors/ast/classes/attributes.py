@@ -52,6 +52,36 @@ class ClassAttributeVisitor(base.BaseNodeVisitor):
                     ),
                 )
 
+    def _is_multiple_assignment(
+        self,
+        node: ast.Lambda,
+        assigned: ast.Assign,
+    ) -> bool:
+        if isinstance(assigned.targets[0], ast.Tuple) and isinstance(
+            assigned.value,
+            ast.Tuple,
+        ):
+            if len(assigned.targets[0].elts) != len(assigned.value.elts):
+                return False
+
+            for target, value_node in zip(
+                assigned.targets[0].elts,
+                assigned.value.elts,
+                strict=False,
+            ):
+                if (
+                    isinstance(target, ast.Attribute)
+                    and attributes.is_special_attr(target)
+                    and isinstance(value_node, ast.Lambda)
+                ):
+                    self.add_violation(
+                        oop.LambdaAttributeAssignedViolation(node),
+                    )
+
+            return True
+
+        return False
+
     def _check_lambda_attribute(self, node: ast.Lambda) -> None:
         assigned = walk.get_closest_parent(node, AssignNodes)
         if not assigned or not isinstance(assigned, ast.Assign):
@@ -64,13 +94,18 @@ class ClassAttributeVisitor(base.BaseNodeVisitor):
         ):
             return  # it is not assigned in a method of a class
 
+        if self._is_multiple_assignment(node, assigned):
+            return
+
         for attribute in assigned.targets:
             if (
                 isinstance(attribute, ast.Attribute)
                 and attributes.is_special_attr(attribute)
                 and isinstance(assigned.value, ast.Lambda)
             ):
-                self.add_violation(oop.LambdaAttributeAssignedViolation(node))
+                self.add_violation(
+                    oop.LambdaAttributeAssignedViolation(node),
+                )
 
 
 @final
