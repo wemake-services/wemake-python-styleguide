@@ -703,7 +703,7 @@ class Antediluvian(Baseline):
 
 class LambdaAssign:
     def __init__(self):
-        self.attribute = lambda self_arg: int(self_arg) + 1  # noqa: WPS617
+        self.attribute = lambda self_arg: int(self_arg) + 1, lambda user_id: user_id + 1  # noqa: WPS617, WPS221
 
 
 # porting noqa38.py
