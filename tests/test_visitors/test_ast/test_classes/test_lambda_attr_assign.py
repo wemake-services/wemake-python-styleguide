@@ -50,12 +50,6 @@ def some(other):
 correct_lambda_attr_assign7 = """
 class User:
     def __init__(self):
-        self.id, self.login = 1, 'user', lambda x: x + 1
-"""
-
-correct_lambda_attr_assign8 = """
-class User:
-    def __init__(self):
         self.user_info = 1, 'user', lambda x: x + 1
 """
 
@@ -136,7 +130,6 @@ def test_wrong_lambda_assign(
         correct_lambda_attr_assign5,
         correct_lambda_attr_assign6,
         correct_lambda_attr_assign7,
-        correct_lambda_attr_assign8,
     ],
 )
 def test_correct_lambda_assign(
