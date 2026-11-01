@@ -92,7 +92,7 @@ We use [import-linter](https://import-linter.readthedocs.io)
 to enforce strict layered architecture.
 
 ```bash
-lint-imports
+poetry run lint-imports
 ```
 
 See `.importlinter` file for contracts definition.
