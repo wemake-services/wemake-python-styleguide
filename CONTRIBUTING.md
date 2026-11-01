@@ -74,13 +74,13 @@ to develop `wemake_python_styleguide`.
 To run all tests:
 
 ```bash
-pytest
+make unit
 ```
 
 To run linting:
 
 ```bash
-flake8 .
+make lint
 ```
 
 These steps are mandatory during the CI.
@@ -92,7 +92,7 @@ We use [import-linter](https://import-linter.readthedocs.io)
 to enforce strict layered architecture.
 
 ```bash
-lint-imports
+poetry run lint-imports
 ```
 
 See `.importlinter` file for contracts definition.
@@ -106,7 +106,7 @@ We use `mypy` to run type checks on our code.
 To use it:
 
 ```bash
-mypy wemake_python_styleguide
+make type-check
 ```
 
 This step is mandatory during the CI.
