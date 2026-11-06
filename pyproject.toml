@@ -57,7 +57,7 @@ pytest-randomly = ">=4.1,<6.0"
 pytest-xdist = "^3.8"
 ruff = ">=0.17.3,<0.18"
 syrupy = ">=5,<7"
-types-flake8 = "^7.3"
+types-flake8 = "^7.5"
 
 [tool.poetry.group.docs]
 optional = true
