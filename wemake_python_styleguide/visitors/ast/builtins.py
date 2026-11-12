@@ -131,14 +131,13 @@ class WrongFormatStringVisitor(base.BaseNodeVisitor):
             if isinstance(
                 string_component,
                 ast.FormattedValue | nodes.Interpolation,
-            ):
-                if not self._is_valid_formatted_value(string_component.value):
-                    self.add_violation(
-                        complexity.TooComplexFormattedStringViolation(
-                            string_component.value,
-                        ),
-                    )
-                    return
+            ) and not self._is_valid_formatted_value(string_component.value):
+                self.add_violation(
+                    complexity.TooComplexFormattedStringViolation(
+                        string_component.value,
+                    ),
+                )
+                return
             # check format complexity for nested JoinedStr
             is_format_complex = parent and (
                 strings.has_format_string_conversion(string_component)
