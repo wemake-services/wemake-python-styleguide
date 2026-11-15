@@ -285,3 +285,24 @@ def test_simple_formatted_string(
     visitor.run()
 
     assert_errors(visitor, [])
+
+
+def test_complex_fstring_implicit_concat_location(
+    assert_errors,
+    assert_error_location,
+    parse_ast_tree,
+    default_options,
+):
+    """Ensures complex formatted string violation points to formatted value."""
+    code = """
+    x = (
+        'plain string '
+        f'complex {func(1, 2, 3, 4)}'
+    )
+    """
+    tree = parse_ast_tree(code)
+    visitor = WrongFormatStringVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(visitor, [TooComplexFormattedStringViolation])
+    assert_error_location(visitor, (4, 15))
