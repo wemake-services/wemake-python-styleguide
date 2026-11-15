@@ -21,7 +21,7 @@ It is also recommended to take a look at these resources:
 
 1. Fork [our repo](https://github.com/wemake-services/wemake-python-styleguide), here's the [guide on forking](https://help.github.com/en/github/getting-started-with-github/fork-a-repo)
 2. [Clone your new repo](https://help.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository) (forked repo) to have a local copy of the code
-3. Apply the required changes! See developer docs on how to work with the code
+3. Apply the required changes! See the sections below on how to work with the code
 4. Send a Pull Request to our original repo. Here's [the helpful guide](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request) on how to do that
 
 
