@@ -143,7 +143,14 @@ class WrongFormatStringVisitor(base.BaseNodeVisitor):
                 return
             # check format complexity for nested JoinedStr
             is_format_complex = parent and (
-                strings.has_format_string_conversion(string_component)
+                (
+                    strings.is_format_spec(node)
+                    and isinstance(
+                        string_component,
+                        ast.FormattedValue | nodes.Interpolation,
+                    )
+                )
+                or strings.has_format_string_conversion(string_component)
                 or len(node.values) > 1
                 or not self._is_const_format_valid(string_component, parent)
             )

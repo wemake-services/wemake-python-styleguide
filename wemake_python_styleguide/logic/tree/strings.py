@@ -86,6 +86,15 @@ def _is_documented(statement: ast.stmt, context: ContextNodes) -> bool:
     return isinstance(target, ast.Name)
 
 
+def is_format_spec(node: _AnyFormattedString) -> bool:
+    """Checks whether a formatted string is a format specifier of a value."""
+    placeholder = get_parent(node)
+    return (
+        isinstance(placeholder, ast.FormattedValue | nodes.Interpolation)
+        and placeholder.format_spec is node
+    )
+
+
 def has_format_string_conversion(component: ast.AST) -> bool:
     """Checks whether formatted string component has a conversion specifier."""
     formatted_component = (

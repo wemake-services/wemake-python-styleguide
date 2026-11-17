@@ -26,6 +26,7 @@ Semantic versioning in our case means:
 - Adds `WPS367`: forbid using ``#:`` comments, #3823
 - Adds `yes` to banned names in `WPS110`, #3845
 - Extends `WPS617` to support checking `lambda` values assigned via tuple unpacking, #3863
+- `WPS237` now forbids nested replacement fields in format specifiers, like `{value:{spec}}`, #3888
 
 ### Bugfixes
 
