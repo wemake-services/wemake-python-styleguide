@@ -29,6 +29,7 @@ Semantic versioning in our case means:
 
 ### Bugfixes
 
+- Fixes `WPS237` reporting single format specifiers like `:b`, `:o`, `:d`, `:.2%`, `:.2g`, `:.2E` as too complex, #3888
 - Fixes `WPS237` reporting violation on the first string component instead of the complex placeholder in implicitly concatenated formatted strings, #3874
 - Fixes `WPS235`: ignore imports from `typing` and `typing_extensions`, #3824
 - Fixes `wps explain`: now we replace RST roles with readable plain text, #3787

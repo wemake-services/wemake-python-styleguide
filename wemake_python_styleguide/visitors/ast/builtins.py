@@ -164,7 +164,7 @@ class WrongFormatStringVisitor(base.BaseNodeVisitor):
         ):
             # check if a string component contains a valid format pattern
             matched = re.match(
-                r'^(\.\d+(?:f|e)|[<^>]\d+|#?[x|X]|[c,])$',
+                r'^(\.\d+[eEfFgGn%]|[<^>]\d+|#[boxX]|[bcdeEfFgGnosxX%,])$',
                 string_component.value,
             )
             return bool(matched)
