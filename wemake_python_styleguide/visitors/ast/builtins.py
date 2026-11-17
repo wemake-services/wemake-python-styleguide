@@ -97,6 +97,9 @@ class WrongStringVisitor(base.BaseNodeVisitor):
 class WrongFormatStringVisitor(base.BaseNodeVisitor):
     """Restricts usage of ``f`` and ``t`` strings."""
 
+    _valid_format_spec: ClassVar[re.Pattern[str]] = re.compile(
+        r'^(\.\d+[eEfFgGn%]|[<^>]\d+|#[boxX]|[bcdeEfFgGnosxX%,])$',
+    )
     _valid_format_index: ClassVar[AnyNodes] = (
         ast.Constant,
         ast.Name,
@@ -163,10 +166,7 @@ class WrongFormatStringVisitor(base.BaseNodeVisitor):
             and isinstance(string_component.value, str)
         ):
             # check if a string component contains a valid format pattern
-            matched = re.match(
-                r'^(\.\d+[eEfFgGn%]|[<^>]\d+|#[boxX]|[bcdeEfFgGnosxX%,])$',
-                string_component.value,
-            )
+            matched = self._valid_format_spec.match(string_component.value)
             return bool(matched)
         return True
 
