@@ -51,16 +51,30 @@ f_format_hex_upper_long = "{0}'{{value:#X}}'"
 f_format_char = "{0}'{{value:c}}'"
 f_format_rounded = "{0}'{{value:.123456f}}'"
 f_format_scientific = "{0}'{{value:.456789e}}'"
-f_format_var_single = "{0}'{{value:{{fmt}}}}'"
-f_format_var_single2 = "{0}'{{value1:{{fmt1}}}} {{value2:{{fmt2}}}}'"
-f_format_var_single_index = "{0}'{{value:{{fmt[0]}}}}'"
-f_format_var_single_call = "{0}'{{value:{{fmt()}}}}'"
+f_format_bin = "{0}'{{value:b}}'"
+f_format_bin_alt = "{0}'{{value:#b}}'"
+f_format_oct = "{0}'{{value:o}}'"
+f_format_oct_alt = "{0}'{{value:#o}}'"
+f_format_int = "{0}'{{value:d}}'"
+f_format_number = "{0}'{{value:n}}'"
+f_format_string = "{0}'{{value:s}}'"
+f_format_fixed_short = "{0}'{{value:f}}'"
+f_format_fixed_upper_short = "{0}'{{value:F}}'"
+f_format_scientific_short = "{0}'{{value:e}}'"
+f_format_scientific_upper_short = "{0}'{{value:E}}'"
+f_format_general_short = "{0}'{{value:g}}'"
+f_format_general_upper_short = "{0}'{{value:G}}'"
+f_format_percent_short = "{0}'{{value:%}}'"
+f_format_scientific_upper = "{0}'{{value:.2E}}'"
+f_format_fixed_upper = "{0}'{{value:.2F}}'"
+f_format_number_precision = "{0}'{{value:.2n}}'"
+f_format_general = "{0}'{{value:.2g}}'"
+f_format_general_upper = "{0}'{{value:.2G}}'"
+f_format_percent = "{0}'{{value:.2%}}'"
 f_format_conversions = "{0}'{{value1!r}} {{value2!s}} {{value3!a}}'"
 f_format_assign = "{0}'{{value=:<8}}'"
 f_format_assign_conversion = "{0}'{{value=!r}}'"
 f_format_assign_attr = "{0}'{{value.attr=:.456e}}'"
-f_format_assign_var_single = "{0}'{{value=:{{fmt}}}}'"
-f_format_assign_var_single2 = "{0}'{{value1=:{{fmt1}}}} {{value2=:{{fmt2}}}}'"
 
 # Disallowed
 f_string = "{0}'x + y = {{2 + 2}}'"
@@ -105,12 +119,24 @@ f_format_hex_upper_long_const = "{0}'{{value:#10X}}'"
 f_format_char_const = "{0}'{{value:10c}}'"
 f_format_round_const = "{0}'{{value:10.4f}}'"
 f_format_scientific_const = "{0}'{{value:10.7e}}'"
+f_format_comma_round_const = "{0}'{{value:,.2f}}'"
+f_format_bin_const = "{0}'{{value:08b}}'"
+f_format_percent_const = "{0}'{{value:>10.2%}}'"
+f_format_pipe = "{0}'{{value:|}}'"
+f_format_alt_pipe = "{0}'{{value:#|}}'"
+f_format_alt_int = "{0}'{{value:#d}}'"
 f_format_useless1 = "{0}'{{value:_}}'"
 f_format_useless2 = "{0}'{{value:_<}}'"
 f_format_assign_const = "{0}'{{value=:_^8.2f}}'"
 f_format_assign_conversion_const = "{0}'{{value=!r:_>11}}'"
 f_format_assign_var_chain = "{0}'{{value=:{{fmt.attr.attr}}}}'"
 f_format_assign_var_multi = "{0}'{{value=:{{fmt1}}{{fmt2}}}}'"
+f_format_var_single = "{0}'{{value:{{fmt}}}}'"
+f_format_var_single2 = "{0}'{{value1:{{fmt1}}}} {{value2:{{fmt2}}}}'"
+f_format_var_single_index = "{0}'{{value:{{fmt[0]}}}}'"
+f_format_var_single_call = "{0}'{{value:{{fmt()}}}}'"
+f_format_assign_var_single = "{0}'{{value=:{{fmt}}}}'"
+f_format_assign_var_single2 = "{0}'{{value1=:{{fmt1}}}} {{value2=:{{fmt2}}}}'"
 
 # regression 1921
 f_string_comma_format = '{0}"Count={{count:,}}"'
@@ -198,12 +224,22 @@ def test_string_normal(
         f_format_char_const,
         f_format_round_const,
         f_format_scientific_const,
+        f_format_comma_round_const,
+        f_format_bin_const,
+        f_format_percent_const,
+        f_format_pipe,
+        f_format_alt_pipe,
+        f_format_alt_int,
         f_format_useless1,
         f_format_useless2,
         f_format_assign_const,
         f_format_assign_conversion_const,
         f_format_assign_var_chain,
         f_format_assign_var_multi,
+        f_format_var_single,
+        f_format_var_single_index,
+        f_format_var_single_call,
+        f_format_assign_var_single,
     ],
 )
 def test_complex_formatted_string(
@@ -222,6 +258,36 @@ def test_complex_formatted_string(
     assert_errors(
         visitor,
         [TooComplexFormattedStringViolation],
+    )
+
+
+@pytest.mark.parametrize('prefix', PREFIXES)
+@pytest.mark.parametrize(
+    'code',
+    [
+        f_format_var_single2,
+        f_format_assign_var_single2,
+    ],
+)
+def test_complex_formatted_string_each_spec(
+    assert_errors,
+    parse_ast_tree,
+    code,
+    prefix,
+    default_options,
+):
+    """Testing that each nested replacement field in a spec is reported."""
+    tree = parse_ast_tree(code.format(prefix))
+
+    visitor = WrongFormatStringVisitor(default_options, tree=tree)
+    visitor.run()
+
+    assert_errors(
+        visitor,
+        [
+            TooComplexFormattedStringViolation,
+            TooComplexFormattedStringViolation,
+        ],
     )
 
 
@@ -259,16 +325,30 @@ def test_complex_formatted_string(
         f_format_char,
         f_format_rounded,
         f_format_scientific,
-        f_format_var_single,
-        f_format_var_single2,
-        f_format_var_single_index,
-        f_format_var_single_call,
+        f_format_bin,
+        f_format_bin_alt,
+        f_format_oct,
+        f_format_oct_alt,
+        f_format_int,
+        f_format_number,
+        f_format_string,
+        f_format_fixed_short,
+        f_format_fixed_upper_short,
+        f_format_scientific_short,
+        f_format_scientific_upper_short,
+        f_format_general_short,
+        f_format_general_upper_short,
+        f_format_percent_short,
+        f_format_scientific_upper,
+        f_format_fixed_upper,
+        f_format_number_precision,
+        f_format_general,
+        f_format_general_upper,
+        f_format_percent,
         f_format_conversions,
         f_format_assign,
         f_format_assign_conversion,
         f_format_assign_attr,
-        f_format_assign_var_single,
-        f_format_assign_var_single2,
     ],
 )
 def test_simple_formatted_string(

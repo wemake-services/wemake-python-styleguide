@@ -1214,10 +1214,10 @@ class TooComplexFormattedStringViolation(ASTViolation):
         # Correct:
         f'smth {user.get_full_name()}'
         f'smth {math_func(1, 2, 3)}'
-        f'smth {value=:.2f}
-        f'smth {value=:{formatspec}}
+        f'smth {value=:.2f}'
 
         # Wrong:
+        f'smth {value=:{formatspec}}'
         f'{reverse("url-name")}?{"&".join("user=" + uid for uid in user_ids)}'
         f'smth {math_func(1, 2, 3, 4)}'
         f'smth {value=:{filler}^{padding}.{precision}f}'
@@ -1227,6 +1227,8 @@ class TooComplexFormattedStringViolation(ASTViolation):
         Complex format specifiers are forbidden.
     .. versionchanged:: 1.8.0
         Added ``t``-strings support.
+    .. versionchanged:: 1.9.0
+        Nested replacement fields in format specifiers are forbidden.
 
     """
 
