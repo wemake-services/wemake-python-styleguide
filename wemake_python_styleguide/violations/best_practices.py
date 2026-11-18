@@ -411,6 +411,8 @@ class WrongModuleMetadataViolation(ASTViolation):
         __version__ = 0.1.2
 
     .. versionadded:: 0.1.0
+    .. versionchanged:: 1.9.0
+        Forbids ``__lazy_modules__``.
 
     """
 

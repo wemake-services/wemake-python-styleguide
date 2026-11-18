@@ -5,7 +5,7 @@ requires = [ "poetry-core>=2.2" ]
 
 [tool.poetry]
 name = "wemake-python-styleguide"
-version = "1.8.1"
+version = "1.9.0"
 description = "The strictest and most opinionated python linter ever!"
 license = "MIT"
 authors = [

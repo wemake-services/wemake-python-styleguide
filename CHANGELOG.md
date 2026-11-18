@@ -17,7 +17,7 @@ Semantic versioning in our case means:
   change the client facing API, change code conventions significantly, etc.
 
 
-## WIP
+## 1.9.0
 
 ### Features
 
@@ -25,13 +25,19 @@ Semantic versioning in our case means:
   but document nothing, #3808
 - Adds `WPS367`: forbid using ``#:`` comments, #3823
 - Adds `yes` to banned names in `WPS110`, #3845
-- Extends `WPS617` to support checking `lambda` values assigned via tuple unpacking, #3863
-- `WPS237` now forbids nested replacement fields in format specifiers, like `{value:{spec}}`, #3888
+- Extends `WPS617` to support checking `lambda` values assigned
+  via tuple unpacking, #3863
+- `WPS237` now forbids nested replacement fields
+  in format specifiers, like `{value:{spec}}`, #3888
+- Disallows `__lazy_modules__` as module metadata, # 3891
 
 ### Bugfixes
 
-- Fixes `WPS237` reporting single format specifiers like `:b`, `:o`, `:d`, `:.2%`, `:.2g`, `:.2E` as too complex, #3888
-- Fixes `WPS237` reporting violation on the first string component instead of the complex placeholder in implicitly concatenated formatted strings, #3874
+- Fixes `WPS237` reporting single format specifiers
+  like `:b`, `:o`, `:d`, `:.2%`, `:.2g`, `:.2E` as too complex, #3888
+- Fixes `WPS237` reporting violation on the first string component
+  instead of the complex placeholder in implicitly concatenated
+  formatted strings, #3874
 - Fixes `WPS235`: ignore imports from `typing` and `typing_extensions`, #3824
 - Fixes `wps explain`: now we replace RST roles with readable plain text, #3787
 - Fixes the MCP server only starting from a repository checkout:
@@ -44,9 +50,9 @@ Semantic versioning in our case means:
 
 ### Misc
 
-- Bundles the `wps` agent skill inside the Python package for Library Skills discovery, #3843
+- Bundles the `wps` agent skill inside the Python package
+  for Library Skills discovery, #3843
 - Adds `typing-extensions` as a direct dependency, #3849
-- Disallows `__lazy_modules__` as module metadata, # 3891
 
 
 ## 1.8.1

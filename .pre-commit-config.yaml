@@ -25,7 +25,7 @@ repos:
       - id: shellcheck
         args: ["--severity=style"]
   - repo: https://github.com/tox-dev/pyproject-fmt
-    rev: "3c6e76e10abcae02303212289efed3413350769c"  # frozen: v2.30.6
+    rev: "44297c38117367c60ae9aeb270694de876ddcddf"  # frozen: v2.31.1
     hooks:
       - id: pyproject-fmt
   - repo: https://github.com/astral-sh/ruff-pre-commit
