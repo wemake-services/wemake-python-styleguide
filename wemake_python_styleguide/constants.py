@@ -92,6 +92,7 @@ MODULE_METADATA_VARIABLES_BLACKLIST: Final = frozenset(
         '__author__',
         '__copyright__',
         '__version__',
+        '__lazy_modules__',
     ),
 )
 """List of module metadata we forbid to use."""
