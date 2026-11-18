@@ -46,7 +46,7 @@ Semantic versioning in our case means:
 
 - Bundles the `wps` agent skill inside the Python package for Library Skills discovery, #3843
 - Adds `typing-extensions` as a direct dependency, #3849
-- Forbid lazy imports
+- Disallows `__lazy_modules__` as module metadata, # 3891
 
 
 ## 1.8.1
