@@ -13,7 +13,7 @@ repos:
         additional_dependencies:
           - "github.com/wasilibs/go-shellcheck/cmd/shellcheck@latest"
   - repo: https://github.com/woodruffw/zizmor-pre-commit
-    rev: 06a39750ec31860bb44f2acf67182c40016cd1e7  # frozen: v1.32.0
+    rev: c7d31dc612dffdd4d3b2f2b88b9660d3ab057ee8  # frozen: v1.33.1
     hooks:
       - id: zizmor
         args:
@@ -25,11 +25,11 @@ repos:
       - id: shellcheck
         args: ["--severity=style"]
   - repo: https://github.com/tox-dev/pyproject-fmt
-    rev: "44297c38117367c60ae9aeb270694de876ddcddf"  # frozen: v2.31.1
+    rev: "02ef6d1c28994054a843e58604e1a343faa42987"  # frozen: v2.31.2
     hooks:
       - id: pyproject-fmt
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: ef6cf06c079dd6b299dfc720b0f14400c9d168e1  # frozen: v0.17.5
+    rev: 9026c9127e153371d7a78dfcb0c45ae2046a3d10  # frozen: v0.17.6
     hooks:
       - id: ruff-check
         args: ["--exit-non-zero-on-fix"]
